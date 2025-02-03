@@ -15,12 +15,20 @@ if ($method !== 'GET') {
 }
 
 if (preg_match('/^\/analytics\/user$/', $uri)) {
+    $headers = getallheaders();
+    $authToken = $headers['Authorization'] ?? null;
     $id = $_GET['id'] ?? null;
     if (!$id) {
         http_response_code(400);
         echo json_encode(["error" => "Invalid or missing 'id' parameter."]);
         exit;
     }
+    if (!$authToken) {
+        http_response_code(401);
+        echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
+        exit;
+    }
+    Database::validateAccessToken(str_replace("Bearer ", "", $authToken));
     echo json_encode(StreamerController::getStreamerById($id));
     exit;
 }
@@ -36,5 +44,5 @@ if (preg_match('/^\/analytics\/streams\/enriched$/', $uri)) {
     exit;
 }
 
-http_response_code(404);
-echo json_encode(["error" => "Not Found"]);
+http_response_code(500);
+echo json_encode(["error" => "Internal server error."]);
