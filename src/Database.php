@@ -1,37 +1,28 @@
 <?php
 class Database {
-    private static $conn;
+    // Esta función ahora valida el token directamente desde Twitch utilizando el OAuth Token almacenado.
+    public static function validateAccessToken() {
+        $url = "https://id.twitch.tv/oauth2/validate";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        // El token de acceso y el Client ID de Twitch se pasan automáticamente
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer " . TwitchConfig::OAUTH_TOKEN
+        ]);
 
-    public static function getConnection() {
-        if (!self::$conn) {
-            $host = "localhost";
-            $dbname = "twitchanalytics";
-            $username = "mytwitchan6c";
-            $password = "63H7S7UU";
-            
-            try {
-                self::$conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-                self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            } catch (PDOException $e) {
-                die(json_encode(["error" => "Database connection failed: " . $e->getMessage()]));
-            }
-        }
-        return self::$conn;
-    }
+        $response = curl_exec($ch);
+        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
 
-    public static function validateAccessToken($token) {
-        $db = self::getConnection();
-        $stmt = $db->prepare("SELECT expires_at FROM tokens WHERE token = ?");
-        $stmt->execute([$token]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        if (!$result || (strtotime($result['expires_at']) < time())) {
+        if ($statusCode !== 200) {
             http_response_code(401);
             echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
             exit;
         }
-    
-        return true;
-    }    
+
+        return json_decode($response, true);
+    }
 }
 ?>

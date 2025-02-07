@@ -1,7 +1,6 @@
 <?php
 header("Content-Type: application/json");
 
-require_once __DIR__ . '/src/TwitchConfig.php';  // Ahora incluimos el archivo de configuración
 require_once __DIR__ . '/src/Database.php';
 require_once __DIR__ . '/src/StreamerController.php';
 require_once __DIR__ . '/src/StreamController.php';
@@ -15,18 +14,21 @@ if ($method !== 'GET') {
     exit;
 }
 
-// Validación del token de acceso
-Database::validateAccessToken();
-
 if (preg_match('/^\/analytics\/user$/', $uri)) {
+    $headers = getallheaders();
+    $authToken = $headers['Authorization'] ?? null;
     $id = $_GET['id'] ?? null;
-
     if (!$id) {
         http_response_code(400);
         echo json_encode(["error" => "Invalid or missing 'id' parameter."]);
         exit;
     }
-
+    if (!$authToken) {
+        http_response_code(401);
+        echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
+        exit;
+    }
+    Database::validateAccessToken(str_replace("Bearer ", "", $authToken));
     echo json_encode(StreamerController::getStreamerById($id));
     exit;
 }
@@ -44,4 +46,3 @@ if (preg_match('/^\/analytics\/streams\/enriched$/', $uri)) {
 
 http_response_code(500);
 echo json_encode(["error" => "Internal server error."]);
-?>
