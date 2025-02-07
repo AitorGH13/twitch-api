@@ -6,11 +6,13 @@ Este proyecto proporciona una API RESTful que permite acceder a información sob
 
 El proyecto contiene los siguientes archivos y carpetas:
 
-- 📄 **.htaccess**: Configura el servidor para que todas las solicitudes se redirijan a `index.php`, habilitando rutas amigables.
-- 📄 **index.php**: El punto de entrada principal de la API. Define las rutas y maneja las solicitudes HTTP.
+- ⚙️ **.htaccess**: Configura el servidor para que todas las solicitudes se redirijan a `index.php`, habilitando rutas amigables.
+- 📄 **Entrega 1.pdf**:  Documentación sobre todas las decisiones y problemas encontrados así como, información relativa a cómo probar la implementación y dónde se encuentra alojada.
+- 🐘 **index.php**: El punto de entrada principal de la API. Define las rutas y maneja las solicitudes HTTP.
+- 🔒 **cacert.pem**: Archivo que almacena certificados de autoridades de certificación (CA).
 ### 📁 Carpeta `src/`
-- 📄 **streamController.php**: Contiene la clase `StreamController`, que proporciona métodos para obtener información sobre los streams.
-- 📄 **streamerController.php**: Contiene la clase `StreamerController`, que proporciona un método para obtener información detallada sobre un streamer.
+- 🐘 **streamController.php**: Contiene la clase `StreamController`, que proporciona métodos para obtener información sobre los streams.
+- 🐘 **streamerController.php**: Contiene la clase `StreamerController`, que proporciona un método para obtener información detallada sobre un streamer.
   
 ## 📌 Guía para Ejecutar la API de Twitch en Local
 
@@ -26,11 +28,13 @@ cd twitchapi
 ```
 ## 🔧 2. Configurar el Entorno
 
-Necesitas PHP y cURL instalados en tu sistema. Puedes verificarlo ejecutando:
+Necesitas PHP y cURL instalados en tu sistema. 
 
 ```bash
-php -v
-php -m | grep curl
+sudo apt install php
+```
+```bash
+sudo apt install curl
 ```
 Si `curl` no está habilitado, edita `php.ini` y descomenta la línea:
 
