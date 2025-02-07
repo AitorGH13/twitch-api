@@ -9,8 +9,8 @@ El proyecto contiene los siguientes archivos y carpetas:
 - 📄 **.htaccess**: Configura el servidor para que todas las solicitudes se redirijan a `index.php`, habilitando rutas amigables.
 - 📄 **index.php**: El punto de entrada principal de la API. Define las rutas y maneja las solicitudes HTTP.
 ### 📁 Carpeta `src/`
-- 📄 **StreamController.php**: Contiene la clase `StreamController`, que proporciona métodos para obtener información sobre los streams.
-- 📄 **StreamerController.php**: Contiene la clase `StreamerController`, que proporciona un método para obtener información detallada sobre un streamer.
+- 📄 **streamController.php**: Contiene la clase `StreamController`, que proporciona métodos para obtener información sobre los streams.
+- 📄 **streamerController.php**: Contiene la clase `StreamerController`, que proporciona un método para obtener información detallada sobre un streamer.
   
 ## 📌 Guía para Ejecutar la API de Twitch en Local
 
