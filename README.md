@@ -15,7 +15,7 @@ El proyecto contiene los siguientes archivos y carpetas:
 - 🐘 **streamController.php**: Contiene la clase `StreamController`, que proporciona métodos para obtener información sobre los streams.
 - 🐘 **streamerController.php**: Contiene la clase `StreamerController`, que proporciona un método para obtener información detallada sobre un streamer.
   
-## 📌 Guía para Ejecutar la API de Twitch en Local
+# 📌 Guía para ejecutarlo en local
 
 ## 📥 1. Clonar el Repositorio
 
