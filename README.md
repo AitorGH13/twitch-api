@@ -51,7 +51,7 @@ Si usas Apache o Nginx, configura un VirtualHost apuntando al directorio del pro
 
 **Ejemplo de solicitud**:  
 ```bash
-curl -X GET "http://localhost:8000/analytics/user?id=12345"
+curl -X GET "http://localhost:8000/analytics/user?id=12345" -H "Token: n2rnsruj57culzwz2iznqx6y5jbata" -H "Client-Id: iw4dxrhn2yqaethe9b6uwdbanf3xiw"
 ```
 **Ejemplo de respuesta**:  
 ```json
@@ -66,7 +66,7 @@ curl -X GET "http://localhost:8000/analytics/user?id=12345"
 
 **Ejemplo de solicitud**: 
 ```bash
-curl -X GET "http://localhost:8000/analytics/streams"
+curl -X GET "http://localhost:8000/analytics/streams" -H "Token: n2rnsruj57culzwz2iznqx6y5jbata" -H "Client-Id: iw4dxrhn2yqaethe9b6uwdbanf3xiw"
 ```
 **Ejemplo de respuesta**:  
 ```json
@@ -88,7 +88,7 @@ curl -X GET "http://localhost:8000/analytics/streams"
 
 **Ejemplo de solicitud**: 
 ```bash
-curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=5"
+curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=5" -H "Token: n2rnsruj57culzwz2iznqx6y5jbata" -H "Client-Id: iw4dxrhn2yqaethe9b6uwdbanf3xiw"
 ```
 **Ejemplo de respuesta**:  
 ```json
