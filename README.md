@@ -1,49 +1,57 @@
-# Twitch Analytics API
+# 📊 Twitch Analytics API
 
 Este proyecto proporciona una API RESTful que permite acceder a información sobre streams y streamers de Twitch, usando datos almacenados en una base de datos MySQL.
 
-## Estructura del Proyecto
+## 📂 Estructura del Proyecto
 
 El proyecto contiene los siguientes archivos y carpetas:
 
-- **.htaccess**: Configura el servidor para que todas las solicitudes se redirijan a `index.php`, habilitando rutas amigables.
-- **index.php**: El punto de entrada principal de la API. Define las rutas y maneja las solicitudes HTTP.
-### Carpeta `src/`
-- **Database.php**: Contiene la clase `Database`, responsable de la conexión a la base de datos y la validación del token de acceso.
-- **StreamController.php**: Contiene la clase `StreamController`, que proporciona métodos para obtener información sobre los streams.
-- **StreamerController.php**: Contiene la clase `StreamerController`, que proporciona un método para obtener información detallada sobre un streamer.
+- 📄 **.htaccess**: Configura el servidor para que todas las solicitudes se redirijan a `index.php`, habilitando rutas amigables.
+- 📄 **index.php**: El punto de entrada principal de la API. Define las rutas y maneja las solicitudes HTTP.
+### 📁 Carpeta `src/`
+- 📄 **streamController.php**: Contiene la clase `StreamController`, que proporciona métodos para obtener información sobre los streams.
+- 📄 **streamerController.php**: Contiene la clase `StreamerController`, que proporciona un método para obtener información detallada sobre un streamer.
   
-## Instalación y Ejecución
+## 📌 Guía para Ejecutar la API de Twitch en Local
 
-### Ejecución en la Web
+## 📥 1. Clonar el Repositorio
 
-La API está configurada para ejecutarse directamente en la web, sin necesidad de hacer configuraciones adicionales. El proceso es completamente autónomo:
+Primero, debes descargar el código desde GitHub. Abre una terminal y ejecuta:
 
-1. **Base de datos**: Se hace uso de la propia API de twitch para hacer las peticiones y revir los resultados.
-2. **API**: La API está lista para usarse. Simplemente accede a la URL de la aplicación web donde está alojada y la API se ejecutará automáticamente.
-3. **Servidor web**: El servidor web (como Apache) está configurado para redirigir automáticamente todas las solicitudes a `index.php`, por lo que no se requiere ninguna acción extra.
+```bash
+git clone https://github.com/AitorGH13/twitchapi.git
+```
+```bsh
+cd twitchapi
+```
+## 🔧 2. Configurar el Entorno
 
-### URL de la aplicación en vivo
+Necesitas PHP y cURL instalados en tu sistema. Puedes verificarlo ejecutando:
 
-Puedes acceder a la API en la siguiente URL:  
-[Accede a la API](http://twitchanalytics.com.mialias.net/)
+```bash
+php -v
+php -m | grep curl
+```
+Si `curl` no está habilitado, edita `php.ini` y descomenta la línea:
 
-No es necesario hacer ninguna configuración manual en el servidor o en la base de datos. Solo asegúrate de que la URL esté correctamente configurada en tu servidor web y la API funcionará como se espera.
+```php
+extension=curl
+```
 
-## Uso
+## 🚀 3. Levantar un Servidor Local 
+✅ Opción 1: Usar el servidor embebido de PHP
+```bash
+php -S localhost:8000
+```
+✅ Opción 2: Usar Apache o Nginx
+Si usas Apache o Nginx, configura un VirtualHost apuntando al directorio del proyecto.
 
-La API proporciona tres rutas principales:
-
-### 1. **Obtener información de un streamer**  
-**Ruta**: `/analytics/user?id=<id>`  
-**Método**: `GET`  
-**Autenticación**: Se requiere un token de acceso de Twitch en el encabezado `Authorization` (formato `Bearer <token>`).  
-**Respuesta**: Información del streamer en formato JSON. 
+## 🌍 4. Probar la API
+### 🔹 Obtener información de un usuario:
 
 **Ejemplo de solicitud**:  
 ```bash
-GET /analytics/user?id=12345
-Authorization: Bearer <tu_token>
+curl -X GET "http://localhost:8000/analytics/user?id=12345"
 ```
 **Ejemplo de respuesta**:  
 ```json
@@ -54,15 +62,11 @@ Authorization: Bearer <tu_token>
   "bio": "Gamer, streamer, and all-around cool person."
 }
 ```
-### 2. **Obtener información de los streams en vivo**  
-**Ruta**: `/analytics/streams`  
-**Método**: `GET`  
-**Autenticación**: No es necesaria.  
-**Respuesta**: Una lista de streams en vivo en formato JSON.  
+### 🔹 Obtener streams en vivo:  
 
 **Ejemplo de solicitud**: 
 ```bash
-GET /analytics/streams
+curl -X GET "http://localhost:8000/analytics/streams"
 ```
 **Ejemplo de respuesta**:  
 ```json
@@ -77,18 +81,14 @@ GET /analytics/streams
   }
 ]
 ```
-### 3. **Obtener los streams mas populares**  
-**Ruta**: `/analytics/streams/enriched?limit=<limit>`  
-**Método**: `GET`  
-**Autenticación**: No es necesaria.  
+### 🔹 Obtener streams mas populares: 
+ 
 **Párametros:**
 + `limit`(opcional): Define el numero de streams a devolver. El valor predterminado es 3.
-  
-**Respuesta**: Una lista de streams en vivo en formato JSON.
 
 **Ejemplo de solicitud**: 
 ```bash
-GET /analytics/streams/enriched?limit=5
+curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=5"
 ```
 **Ejemplo de respuesta**:  
 ```json
@@ -109,7 +109,11 @@ GET /analytics/streams/enriched?limit=5
   }
 ]
 ```
+### 🔗 URL de la aplicación web
 
+Puedes acceder a la API en la siguiente URL: [Accede a la API](http://twitchanalytics.com.mialias.net/)
+
+💬 No es necesario hacer ninguna configuración manual en el servidor. 
 
 
 
