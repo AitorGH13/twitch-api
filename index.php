@@ -1,8 +1,6 @@
 <?php
 header("Content-Type: application/json");
 
-require_once __DIR__ . '/src/TwitchConfig.php';  // Ahora incluimos el archivo de configuración
-require_once __DIR__ . '/src/Database.php';
 require_once __DIR__ . '/src/StreamerController.php';
 require_once __DIR__ . '/src/StreamController.php';
 
@@ -14,9 +12,6 @@ if ($method !== 'GET') {
     echo json_encode(["error" => "Method Not Allowed"]);
     exit;
 }
-
-// Validación del token de acceso
-Database::validateAccessToken();
 
 if (preg_match('/^\/analytics\/user$/', $uri)) {
     $id = $_GET['id'] ?? null;
