@@ -135,7 +135,7 @@ curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=2" -H "Token
     }
 ]
 ```
-### 🔗 URL de la aplicación web
+## 🔗 URL de la aplicación web
 
 Puedes acceder a la API en la siguiente URL: [Accede a la API](http://twitchanalytics.com.mialias.net/)
 
