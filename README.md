@@ -12,9 +12,6 @@ El proyecto contiene los siguientes archivos y carpetas:
 - **Database.php**: Contiene la clase `Database`, responsable de la conexión a la base de datos y la validación del token de acceso.
 - **StreamController.php**: Contiene la clase `StreamController`, que proporciona métodos para obtener información sobre los streams.
 - **StreamerController.php**: Contiene la clase `StreamerController`, que proporciona un método para obtener información detallada sobre un streamer.
-
-## Recursos utilizados
-- phpMyAdmin para crear [nuestraBaseDeDatos](https://phpmyadmin.mi-alojamiento.com/?d=twitchanalytics.com")
   
 ## Instalación y Ejecución
 
@@ -22,7 +19,7 @@ El proyecto contiene los siguientes archivos y carpetas:
 
 La API está configurada para ejecutarse directamente en la web, sin necesidad de hacer configuraciones adicionales. El proceso es completamente autónomo:
 
-1. **Base de datos**: La base de datos `twitchanalytics` ya está creada y configurada con las credenciales necesarias. No es necesario realizar configuraciones adicionales en la base de datos.
+1. **Base de datos**: Se hace uso de la propia API de twitch para hacer las peticiones y revir los resultados.
 2. **API**: La API está lista para usarse. Simplemente accede a la URL de la aplicación web donde está alojada y la API se ejecutará automáticamente.
 3. **Servidor web**: El servidor web (como Apache) está configurado para redirigir automáticamente todas las solicitudes a `index.php`, por lo que no se requiere ninguna acción extra.
 
