@@ -10,6 +10,7 @@ El proyecto contiene los siguientes archivos y carpetas:
 - 📄 **Entrega 1.pdf**:  Documentación sobre todas las decisiones y problemas encontrados así como, información relativa a cómo probar la implementación y dónde se encuentra alojada.
 - 🐘 **index.php**: El punto de entrada principal de la API. Define las rutas y maneja las solicitudes HTTP.
 - 🔒 **cacert.pem**: Archivo que almacena certificados de autoridades de certificación (CA).
+- ℹ️ **README.md**: Archivo de texto que proporciona información sobre la estructura del proyecto y su ejecución.
 ### 📁 Carpeta `src/`
 - 🐘 **streamController.php**: Contiene la clase `StreamController`, que proporciona métodos para obtener información sobre los streams.
 - 🐘 **streamerController.php**: Contiene la clase `StreamerController`, que proporciona un método para obtener información detallada sobre un streamer.
