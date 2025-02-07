@@ -1,6 +1,6 @@
 <?php
 class Database {
-    // Esta función ahora valida el token directamente desde Twitch utilizando el OAuth Token almacenado.
+    // Esta función valida el token directamente desde Twitch utilizando el OAuth Token almacenado.
     public static function validateAccessToken() {
         $url = "https://id.twitch.tv/oauth2/validate";
         $ch = curl_init();
