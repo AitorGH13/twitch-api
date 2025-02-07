@@ -42,7 +42,7 @@ extension=curl
 ## 🚀 3. Levantar un Servidor Local 
 ✅ Opción 1: Usar el servidor embebido de PHP
 ```bash
-php -S 0.0.0.0:80 
+php -S localhost:8000
 ```
 ✅ Opción 2: Usar Apache o Nginx
 Si usas Apache o Nginx, configura un VirtualHost apuntando al directorio del proyecto.
