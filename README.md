@@ -1,4 +1,4 @@
-# Twitch Analytics API
+# 📊 Twitch Analytics API
 
 Este proyecto proporciona una API RESTful que permite acceder a información sobre streams y streamers de Twitch, usando datos almacenados en una base de datos MySQL.
 
