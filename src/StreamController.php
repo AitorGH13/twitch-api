@@ -1,8 +1,8 @@
 <?php
-$oauthToken = "n2rnsruj57culzwz2iznqx6y5jbata";
-$clientId = "iw4dxrhn2yqaethe9b6uwdbanf3xiw";
 class StreamController {
-    private static function callTwitchApi($url, $oauthToken, $clientId) {
+    private static function callTwitchApi($url) {
+        $oauthToken = "n2rnsruj57culzwz2iznqx6y5jbata";
+        $clientId = "iw4dxrhn2yqaethe9b6uwdbanf3xiw";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -26,30 +26,12 @@ class StreamController {
     }
 
     public static function getLiveStreams() {
-        $headers = getallheaders();
-
-        if (!isset($headers['Token']) || !isset($headers['Client-Id'])) {
-            http_response_code(401);
-            return ["error" => "Unauthorized. Twitch access token is invalid or has expired."];
-        }
-
-        $oauthToken = $headers['Token'];
-        $clientId = $headers['Client-Id'];
         $url = "https://api.twitch.tv/helix/streams";
-        $response = self::callTwitchApi($url, $oauthToken, $clientId);
+        $response = self::callTwitchApi($url);
         return $response['data'];
     }
 
     public static function getTopEnrichedStreams($limit) {
-        $headers = getallheaders();
-
-        if (!isset($headers['Token']) || !isset($headers['Client-Id'])) {
-            http_response_code(401);
-            return ["error" => "Unauthorized. Twitch access token is invalid or has expired."];
-        }
-
-        $oauthToken = $headers['Token'];
-        $clientId = $headers['Client-Id'];
         $url = "https://api.twitch.tv/helix/streams?first=$limit";
         $response = self::callTwitchApi($url, $oauthToken, $clientId);
         
@@ -57,7 +39,7 @@ class StreamController {
         foreach ($response['data'] as $stream) {
             $userId = $stream['user_id'];
             $userUrl = "https://api.twitch.tv/helix/users?id=$userId";
-            $userResponse = self::callTwitchApi($userUrl, $oauthToken, $clientId);
+            $userResponse = self::callTwitchApi($userUrl);
             $user = $userResponse['data'][0];
 
             $enrichedStreams[] = [
