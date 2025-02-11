@@ -58,83 +58,19 @@ Si usas Apache o Nginx, configura un VirtualHost apuntando al directorio del pro
 ```bash
 curl -X GET "http://localhost:8000/analytics/user?id=1"
 ```
-**Ejemplo de respuesta**:  
-```json
-{
-    "data": [
-        {
-            "id": "1",
-            "login": "elsmurfoz",
-            "display_name": "elsmurfoz",
-            "type": "",
-            "broadcaster_type": "",
-            "description": "",
-            "profile_image_url": "https://static-cdn.jtvnw.net/user-default-pictures-uv/215b7342-def9-11e9-9a66-784f43822e80-profile_image-300x300.png",
-            "offline_image_url": "",
-            "view_count": 0,
-            "created_at": "2007-05-22T10:37:47Z"
-        }
-    ]
-}
-```
++ `id`: Define el id del usuario a devolver.
 ### 🔹 Obtener streams en vivo:  
 
 **Ejemplo de solicitud**: 
 ```bash
 curl -X GET "http://localhost:8000/analytics/streams"
 ```
-**Ejemplo de respuesta**:  
-```json
-[
-    {
-        "id": "316115893245",
-        "user_id": "31239503",
-        "user_login": "eslcs",
-        "user_name": "ESLCS",
-        "game_id": "32399",
-        "game_name": "Counter-Strike",
-        "type": "live",
-        "title": "LIVE: The Mongolz vs. Eternal Fire - IEM Katowice 2025",
-        "viewer_count": 77501,
-        "started_at": "2025-02-07T13:15:24Z",
-        "language": "en",
-        "thumbnail_url": "https://static-cdn.jtvnw.net/previews-ttv/live_user_eslcs-{width}x{height}.jpg",
-        "tag_ids": [],
-        "tags": [
-            "English"
-        ],
-        "is_mature": false
-    }
-]
-```
 ### 🔹 Obtener streams mas enriquecidos: 
- 
-**Párametros:**
-+ `limit`(opcional): Define el numero de streams a devolver. El valor predterminado es 3.
-
 **Ejemplo de solicitud**: 
 ```bash
 curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=2"
 ```
-**Ejemplo de respuesta**:  
-```json
-[
-    {
-        "stream_id": "316115893245",
-        "title": "LIVE: The Mongolz vs. Eternal Fire - IEM Katowice 2025",
-        "viewer_count": 77501,
-        "display_name": "ESLCS",
-        "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/c1ecbcd5-b8b6-4e0c-9d5f-e01d610aa97d-profile_image-300x300.png"
-    },
-    {
-        "stream_id": "316120598013",
-        "title": "🔴ETERNAL FIRE vs MONGOLZ | IEM KATOWICE 2025🔴",
-        "viewer_count": 50090,
-        "display_name": "ohnePixel",
-        "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/5742b015-e6ed-4f7c-a1dd-87cd88fe1eb9-profile_image-300x300.png"
-    }
-]
-```
++ `limit`(opcional): Define el numero de streams a devolver. El valor predterminado es 3.
 ## 🔗 URL de la aplicación web
 
 Puedes acceder a la API en la siguiente URL: [Accede a la API](http://twitchanalytics.com.mialias.net/)
@@ -156,5 +92,4 @@ http://twitchanalytics.com.mialias.net/analytics/streams
 ```
 http://twitchanalytics.com.mialias.net/analytics/streams/enriched?limit=2
 ```
-**Párametros:**
 + `limit`(opcional): Define el numero de streams a devolver. El valor predterminado es 3.
