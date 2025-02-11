@@ -1,4 +1,6 @@
 <?php
+$oauthToken = "n2rnsruj57culzwz2iznqx6y5jbata";
+$clientId = "iw4dxrhn2yqaethe9b6uwdbanf3xiw";
 class StreamerController {
     private static function callTwitchApi($url, $oauthToken, $clientId) {
         $ch = curl_init();
