@@ -147,6 +147,7 @@ Puedes acceder a la API en la siguiente URL: [Accede a la API](http://twitchanal
 ```
 http://twitchanalytics.com.mialias.net/analytics/user?id=1
 ```
++ `id`: Define el id del usuario a devolver. 
 ### 🔹 Obtener streams en vivo:  
 ```
 http://twitchanalytics.com.mialias.net/analytics/streams
