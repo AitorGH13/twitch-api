@@ -56,7 +56,7 @@ Si usas Apache o Nginx, configura un VirtualHost apuntando al directorio del pro
 
 **Ejemplo de solicitud**:  
 ```bash
-curl -X GET "http://localhost:8000/analytics/user?id=1" -H "Token: n2rnsruj57culzwz2iznqx6y5jbata" -H "Client-Id: iw4dxrhn2yqaethe9b6uwdbanf3xiw"
+curl -X GET "http://localhost:8000/analytics/user?id=1"
 ```
 **Ejemplo de respuesta**:  
 ```json
@@ -81,7 +81,7 @@ curl -X GET "http://localhost:8000/analytics/user?id=1" -H "Token: n2rnsruj57cul
 
 **Ejemplo de solicitud**: 
 ```bash
-curl -X GET "http://localhost:8000/analytics/streams" -H "Token: n2rnsruj57culzwz2iznqx6y5jbata" -H "Client-Id: iw4dxrhn2yqaethe9b6uwdbanf3xiw"
+curl -X GET "http://localhost:8000/analytics/streams"
 ```
 **Ejemplo de respuesta**:  
 ```json
@@ -114,7 +114,7 @@ curl -X GET "http://localhost:8000/analytics/streams" -H "Token: n2rnsruj57culzw
 
 **Ejemplo de solicitud**: 
 ```bash
-curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=2" -H "Token: n2rnsruj57culzwz2iznqx6y5jbata" -H "Client-Id: iw4dxrhn2yqaethe9b6uwdbanf3xiw"
+curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=2"
 ```
 **Ejemplo de respuesta**:  
 ```json
@@ -139,7 +139,7 @@ curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=2" -H "Token
 
 Puedes acceder a la API en la siguiente URL: [Accede a la API](http://twitchanalytics.com.mialias.net/)
 - Usuario: twitch896
-- Password: r3lqKhjC
+- Contraseña: r3lqKhjC
   
 💬 No es necesario hacer ninguna configuración manual en el servidor. 
 
