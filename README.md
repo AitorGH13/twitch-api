@@ -143,7 +143,17 @@ Puedes acceder a la API en la siguiente URL: [Accede a la API](http://twitchanal
   
 💬 No es necesario hacer ninguna configuración manual en el servidor. 
 
-
-
-
-
+### 🔹 Obtener información de un usuario:
+```
+http://twitchanalytics.com.mialias.net/analytics/user?id=1
+```
+### 🔹 Obtener streams en vivo:  
+```
+http://twitchanalytics.com.mialias.net/analytics/streams
+```
+### 🔹 Obtener streams mas enriquecidos:
+```
+http://twitchanalytics.com.mialias.net/analytics/streams/enriched?limit=2
+```
+**Párametros:**
++ `limit`(opcional): Define el numero de streams a devolver. El valor predterminado es 3.
