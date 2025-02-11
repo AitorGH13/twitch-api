@@ -70,7 +70,7 @@ curl -X GET "http://localhost:8000/analytics/streams"
 ```bash
 curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=2"
 ```
-+ `limit`(opcional): Define el numero de streams a devolver. El valor predterminado es 3.
++ `limit`(opcional): Define el numero de streams a devolver. El valor predeterminado es 3.
 ## 🔗 URL de la aplicación web
 
 Puedes acceder a la API en la siguiente URL: [Accede a la API](http://twitchanalytics.com.mialias.net/)
@@ -92,4 +92,4 @@ http://twitchanalytics.com.mialias.net/analytics/streams
 ```
 http://twitchanalytics.com.mialias.net/analytics/streams/enriched?limit=2
 ```
-+ `limit`(opcional): Define el numero de streams a devolver. El valor predterminado es 3.
++ `limit`(opcional): Define el numero de streams a devolver. El valor predeterminado es 3.
