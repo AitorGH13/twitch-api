@@ -85,6 +85,25 @@ Si usas Apache o Nginx, configura un VirtualHost apuntando al directorio del pro
 
 
 ## 🌍 5. Probar la API
+### 🔹 Registrar usuario:
+
+```bash
+curl -X POST "http://localhost:8000/register" \
+  -d "email=tucorrreo@gmail.com"
+```
+### 🔹 Obtener token:
+
+```bash
+curl -X POST "http://localhost:8000/token" \
+  -d "email=tu_correo@example.com&key=tu_clave"
+```
+### 🔹 Obtener Tops of the tops:
+
+```bash
+curl -X GET http://www.twitchanalytics.com.mialias.net/analytics/topsofthetops \
+  -H "Authorizationt: Bearer TU_TOKEN_AQUI" \
+  -d "email=tu_correo@example.com&key=tu_clave"
+```
 ### 🔹 Obtener información de un usuario:
 
 **Ejemplo de solicitud**:  
