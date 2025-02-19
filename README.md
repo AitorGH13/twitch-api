@@ -12,8 +12,10 @@ El proyecto contiene los siguientes archivos y carpetas:
 - 🔒 **cacert.pem**: Archivo que almacena certificados de autoridades de certificación (CA).
 - ℹ️ **README.md**: Archivo de texto que proporciona información sobre la estructura del proyecto y su ejecución.
 ### 📁 Carpeta `src/`
-- 🐘 **streamController.php**: Contiene la clase `StreamController`, que proporciona métodos para obtener información sobre los streams.
-- 🐘 **streamerController.php**: Contiene la clase `StreamerController`, que proporciona un método para obtener información detallada sobre un streamer.
+- 🐘 **AuthController.php**: Gestiona la creación y validación de claves de API y tokens de acceso para usuarios a través de su correo electrónico.
+- 🐘 **StreamController.php**: Obtener información sobre los streams.
+- 🐘 **StreamerController.php**: Obtener información detallada sobre un streamer.
+- 🐘 **VideoController.php**: Obtener y almacenar información sobre los tres juegos más populares y sus videos más vistos.
   
 # 📌 Guía para ejecutarlo en local
 
