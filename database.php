@@ -6,8 +6,8 @@ class Database {
         if (!self::$conn) {
             $host = "localhost";
             $dbname = "twitchanalytics";
-            $username = "mytwitchan6c";
-            $password = "63H7S7UU";
+            $username = "root";
+            $password = "";
             
             try {
                 self::$conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
