@@ -18,7 +18,11 @@ El proyecto contiene los siguientes archivos y carpetas:
 - 🐘 **VideoController.php**: Obtener y almacenar información sobre los tres juegos más populares y sus videos más vistos.
   
 # 📌 Guía para ejecutarlo en local
-
+## 📋 Requisitos previos
+- **Servidor Web Local:** Necesitas tener instalado un servidor web local como [XAMPP](https://www.apachefriends.org/es/index.html), [MAMP](https://www.mamp.info/en/downloads/), o [WAMP](https://www.wampserver.com/en/). Asegúrate de tener Apache y MySQL funcionando.
+- **PHP:** Asegúrate de tener PHP instalado en tu entorno local. Puedes comprobarlo ejecutando `php -v` en tu terminal.
+- **Base de Datos MySQL:** Este proyecto requiere MySQL. Asegúrate de tener acceso a un servidor MySQL local.
+- **Git:** Es necesario tener Git instalado para clonar el repositorio.
 ## 📥 1. Clonar el Repositorio
 
 Primero, debes descargar el código desde GitHub. Abre una terminal y ejecuta:
@@ -44,8 +48,34 @@ Si `curl` no está habilitado, edita `php.ini` y descomenta la línea:
 ```php
 extension=curl
 ```
+## 🗄️ 3. Levantar la base de datos
+Dentro del repositorio clonado, encontrarás el archivo database.sql, que contiene la estructura de la base de datos. Sigue estos pasos para importarlo en tu servidor MySQL:
+1. Abre [phpMyAdmin](https://www.phpmyadmin.net/).
+2. Crea una nueva base de datos. En el panel izquierdo, haz clic en **"Nueva"** e ingresa el nombre de la base de datos (por ejemplo, `twitchanalytics`).
+3. Selecciona la base de datos recién creada y haz clic en la pestaña **"Importar"**.
+4. En Archivo a importar, selecciona el archivo `database.sql` que se encuentra en el repositorio clonado.
+5. Haz clic en **"Ejecutar"** para cargar la base de datos.
+   
+Una vez que la importación se haya completado, deberías ver las tablas y los datos necesarios en la base de datos.
 
-## 🚀 3. Levantar un Servidor Local 
+## 🔧 Configuración de `database.php`
+Para conectar la API con la base de datos correctamente, debes ajustar las credenciales de conexión en el archivo database.php con los detalles de tu entorno local.
+1. Abre el archivo database.php.
+2. Modifica las siguientes líneas según tu configuración:
+private static $conn;
+```php
+$host = "localhost"; // Dirección del servidor de base de datos
+$dbname = "twitchanalytics"; // Nombre de la base de datos
+$username = "root"; // Nombre de usuario de la base de datos
+$password = ""; // Contraseña de la base de datos
+```
+### Parámetros a modificar:
+- **$host:** Si tu servidor MySQL está en localhost, no necesitarás cambiar este valor.
+- **$dbname:** Debe ser el nombre de la base de datos que importaste desde `database.sql`. Si la base de datos se llama `twitchanalytics`, asegúrate de que coincida.
+- **$username:** Es el nombre de usuario de tu base de datos MySQL. En muchos casos, el nombre de usuario predeterminado en entornos locales es `root`. Si has configurado otro usuario, cámbialo aquí.
+- **$password:** Es la contraseña de tu base de datos MySQL. Si estás usando `root` como usuario, es común que no haya contraseña en entornos locales. Si no tienes contraseña, deja este valor vacío (`""`).
+
+## 🚀 4. Levantar un Servidor Local 
 ✅ Opción 1: Usar el servidor embebido de PHP
 ```bash
 php -S localhost:8000
@@ -53,7 +83,8 @@ php -S localhost:8000
 ✅ Opción 2: Usar Apache o Nginx
 Si usas Apache o Nginx, configura un VirtualHost apuntando al directorio del proyecto.
 
-## 🌍 4. Probar la API
+
+## 🌍 5. Probar la API
 ### 🔹 Obtener información de un usuario:
 
 **Ejemplo de solicitud**:  
