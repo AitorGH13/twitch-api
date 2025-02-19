@@ -89,7 +89,7 @@ Si usas Apache o Nginx, configura un VirtualHost apuntando al directorio del pro
 
 ```bash
 curl -X POST "http://localhost:8000/register" \
-  -d "email=tucorrreo@gmail.com"
+  -d "email=tu_correo@gmail.com"
 ```
 ### 🔹 Obtener token:
 
