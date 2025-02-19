@@ -48,7 +48,7 @@ Si `curl` no está habilitado, edita `php.ini` y descomenta la línea:
 ```php
 extension=curl
 ```
-## 🗄️ 3. Levantar la base de datos
+## 🗄️ 3. Crear la Base de Datos
 Dentro del repositorio clonado, encontrarás el archivo database.sql, que contiene la estructura de la base de datos. Sigue estos pasos para importarlo en tu servidor MySQL:
 1. Abre [phpMyAdmin](https://www.phpmyadmin.net/).
 2. Crea una nueva base de datos. En el panel izquierdo, haz clic en **"Nueva"** e ingresa el nombre de la base de datos (por ejemplo, `twitchanalytics`).
