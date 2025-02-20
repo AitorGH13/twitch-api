@@ -26,6 +26,14 @@ class StreamerController {
     }
 
     public static function getStreamerById($id) {
+        if (!AuthController::validateAccessToken($token)) {
+            http_response_code(401);
+            return ["error" => "Unauthorized. Token is invalid or expired."];
+        } else if (!$id) {
+            http_response_code(400);
+            return ["error" => "Invalid or missing 'id' parameter."];
+        }
+        
         $url = "https://api.twitch.tv/helix/users?id=$id";
         $response = self::callTwitchApi($url);
 
