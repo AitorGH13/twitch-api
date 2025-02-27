@@ -25,7 +25,7 @@ class StreamerController {
         return json_decode($response, true);
     }
 
-    public static function getStreamerById($id) {
+    public static function getStreamerById($id, $token) {
         if (!AuthController::validateAccessToken($token)) {
             http_response_code(401);
             return ["error" => "Unauthorized. Token is invalid or expired."];
@@ -33,16 +33,28 @@ class StreamerController {
             http_response_code(400);
             return ["error" => "Invalid or missing 'id' parameter."];
         }
-        
-        $url = "https://api.twitch.tv/helix/users?id=$id";
-        $response = self::callTwitchApi($url);
 
-        if (empty($response['data'])) {
-            http_response_code(404);
-            return ["error" => "User not found."];
+        $db = database::getConnection();
+        $stmt = $db->prepare("SELECT id, login, display_name, type, broadcaster_type, description, profile_image_url, offline_image_url, view_count, created_at FROM users where id = :id");
+        $stmt->execute([':id' => $id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$result) {
+            $url = "https://api.twitch.tv/helix/users?id=$id";
+            $response = self::callTwitchApi($url);
+
+            if (empty($response['data'])) {
+                http_response_code(404);
+                return ["error" => "User not found."];
+            }
+
+            $user = $response['data'];
+            $stmt = $db->prepare("INSERT INTO users (id, login, display_name, type, broadcaster_type, description, profile_image_url, offline_image_url, view_count, created_at) VALUES (:id, :login, :display_name, :type, :broadcaster_type, :description, :profile_image_url, :offline_image_url, :view_count, :created_at)");
+            $stmt->execute([':id' => $user[0]['id'], ':login' => $user[0]['login'], ':display_name' => $user[0]['login'], ':type' => $user[0]['type'], ':broadcaster_type' => $user[0]['broadcaster_type'], ':description' => $user[0]['description'], ':profile_image_url' => $user[0]['profile_image_url'], ':offline_image_url' => $user[0]['offline_image_url'], ':view_count' => $user[0]['view_count'], ':created_at' => $user[0]['created_at']]);
+            return $user[0];
+        } else {
+            return $result;
         }
-
-        return $response['data'];
     }
 }
 ?>
