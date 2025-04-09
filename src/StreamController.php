@@ -43,7 +43,7 @@ class StreamController {
         }
         
         $url = "https://api.twitch.tv/helix/streams?first=$limit";
-        $response = self::callTwitchApi($url, $oauthToken, $clientId);
+        $response = self::callTwitchApi($url);
         
         $enrichedStreams = [];
         foreach ($response['data'] as $stream) {

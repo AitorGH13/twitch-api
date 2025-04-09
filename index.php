@@ -11,23 +11,38 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if (preg_match('/^\/analytics\/user$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
-    $token = $headers['Authorizationt'] ?? null;
     $id = $_GET['id'] ?? null;
+    $authHeader = $headers['Authorization'] ?? null;
+    $token = null;
+    
+    if ($authHeader && preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+        $token = $matches[1];
+    }
     echo json_encode(StreamerController::getStreamerById($id, $token));
     exit;
 }
 
 if (preg_match('/^\/analytics\/streams$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
-    $token = $headers['Authorizationt'] ?? null;
+    $authHeader = $headers['Authorization'] ?? null;
+    $token = null;
+    
+    if ($authHeader && preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+        $token = $matches[1];
+    }
     echo json_encode(StreamController::getLiveStreams($token));
     exit;
 }
 
 if (preg_match('/^\/analytics\/streams\/enriched$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
-    $token = $headers['Authorizationt'] ?? null;
     $limit = $_GET['limit'] ?? 3;
+    $authHeader = $headers['Authorization'] ?? null;
+    $token = null;
+    
+    if ($authHeader && preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+        $token = $matches[1];
+    }
     echo json_encode(StreamController::getTopEnrichedStreams($limit, $token));
     exit;
 }
@@ -49,7 +64,13 @@ if (preg_match('/^\/token$/', $uri) && ($method == 'POST')) {
 
 if (preg_match('/^\/analytics\/topsofthetops$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
-    $token = $headers['Authorizationt'] ?? null;
+    $authHeader = $headers['Authorization'] ?? null;
+    $token = null;
+    
+    if ($authHeader && preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+        $token = $matches[1];
+    }
+    
     $since = $_GET['since'] ?? null;
     echo json_encode(VideoController::getTopsOfTheTops($token, $since));
     exit;
