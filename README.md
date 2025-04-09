@@ -88,73 +88,40 @@ Si usas Apache o Nginx, configura un VirtualHost apuntando al directorio del pro
 ### 🔹 Registrar usuario:
 
 ```bash
-curl -X POST "http://www.twitchanalytics.com.mialias.net/register" \
-  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
+curl -X POST "http://54.219.250.68/register" \
   -d '{"email": "tu_correo@example.com"}'
 ```
 ### 🔹 Obtener token:
 
 ```bash
-curl -X POST "http://www.twitchanalytics.com.mialias.net/token" \
-  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
+curl -X POST "http://54.219.250.68/token" \
   -d '{"email": "tu_correo@example.com", "api_key": "tu_clave"}'
 ```
 ### 🔹 Obtener Tops of the tops:
 
 ```bash
-curl -X GET "http://www.twitchanalytics.com.mialias.net/analytics/topsofthetops" \
-  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
-  -H "Authorizationt: TU_TOKEN_AQUI" \
-  -d '{"email": "tu_correo@example.com&key=tu_clave"}'
+curl -X GET "http://54.219.250.68/analytics/topsofthetops" \
+  -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
 ### 🔹 Obtener información de un usuario:
 
 **Ejemplo de solicitud**:  
 ```bash
-curl -X GET "http://www.twitchanalytics.com.mialias.net/analytics/user?id=1" \
-  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
-  -H "Authorizationt: TU_TOKEN_AQUI" \
-  -d '{"email": "tu_correo@example.com&key=tu_clave"}'
+curl -X GET "http://54.219.250.68/analytics/user?id=1" \
+  -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
 + `id`: Define el id del usuario a devolver.
 ### 🔹 Obtener streams en vivo:  
 
 **Ejemplo de solicitud**: 
 ```bash
-curl -X GET "http://www.twitchanalytics.com.mialias.net/analytics/streams" \
-  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
-  -H "Authorizationt: TU_TOKEN_AQUI" \
-  -d '{"email": "tu_correo@example.com&key=tu_clave"}'
+curl -X GET "http://54.219.250.68/analytics/streams" \
+  -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
 ### 🔹 Obtener streams mas enriquecidos: 
 **Ejemplo de solicitud**: 
 ```bash
-curl -X GET "http://www.twitchanalytics.com.mialias.net/analytics/streams/enriched?limit=2" \
-  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
-  -H "Authorizationt: TU_TOKEN_AQUI" \
-  -d '{"email": "tu_correo@example.com&key=tu_clave"}'
-```
-+ `limit`(opcional): Define el numero de streams a devolver. El valor predeterminado es 3.
-## 🔗 URL de la aplicación web
-
-Puedes acceder a la API en la siguiente URL: [Accede a la API](http://twitchanalytics.com.mialias.net/)
-- Usuario: twitch896
-- Contraseña: r3lqKhjC
-
-> [!NOTE]
-> No es necesario hacer ninguna configuración manual en el servidor. 
-
-### 🔹 Obtener información de un usuario:
-```
-http://twitchanalytics.com.mialias.net/analytics/user?id=1
-```
-+ `id`: Define el id del usuario a devolver. 
-### 🔹 Obtener streams en vivo:  
-```
-http://twitchanalytics.com.mialias.net/analytics/streams
-```
-### 🔹 Obtener streams mas enriquecidos:
-```
-http://twitchanalytics.com.mialias.net/analytics/streams/enriched?limit=2
+curl -X GET "http://54.219.250.68/analytics/streams/enriched?limit=2" \
+  -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
 + `limit`(opcional): Define el numero de streams a devolver. El valor predeterminado es 3.
