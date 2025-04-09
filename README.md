@@ -84,49 +84,55 @@ php -S localhost:8000
 Si usas Apache o Nginx, configura un VirtualHost apuntando al directorio del proyecto.
 
 
-## 🌍 5. Probar la API
+## 🌍 5. Probar la API mediante Curl
 ### 🔹 Registrar usuario:
 
 ```bash
-curl -X POST "http://localhost:8000/register" \
-  -d "email=tu_correo@gmail.com"
+curl -X POST "http://www.twitchanalytics.com.mialias.net/register" \
+  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
+  -d '{"email": "tu_correo@example.com"}'
 ```
 ### 🔹 Obtener token:
 
 ```bash
-curl -X POST "http://localhost:8000/token" \
-  -d "email=tu_correo@example.com&key=tu_clave"
+curl -X POST "http://www.twitchanalytics.com.mialias.net/token" \
+  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
+  -d '{"email": "tu_correo@example.com", "api_key": "tu_clave"}'
 ```
 ### 🔹 Obtener Tops of the tops:
 
 ```bash
-curl -X GET http://www.twitchanalytics.com.mialias.net/analytics/topsofthetops \
+curl -X GET "http://www.twitchanalytics.com.mialias.net/analytics/topsofthetops" \
+  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
   -H "Authorizationt: TU_TOKEN_AQUI" \
-  -d "email=tu_correo@example.com&key=tu_clave"
+  -d '{"email": "tu_correo@example.com&key=tu_clave"}'
 ```
 ### 🔹 Obtener información de un usuario:
 
 **Ejemplo de solicitud**:  
 ```bash
-curl -X GET "http://localhost:8000/analytics/user?id=1" \
+curl -X GET "http://www.twitchanalytics.com.mialias.net/analytics/user?id=1" \
+  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
   -H "Authorizationt: TU_TOKEN_AQUI" \
-  -d "email=tu_correo@example.com&key=tu_clave"
+  -d '{"email": "tu_correo@example.com&key=tu_clave"}'
 ```
 + `id`: Define el id del usuario a devolver.
 ### 🔹 Obtener streams en vivo:  
 
 **Ejemplo de solicitud**: 
 ```bash
-curl -X GET "http://localhost:8000/analytics/streams" \
+curl -X GET "http://www.twitchanalytics.com.mialias.net/analytics/streams" \
+  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
   -H "Authorizationt: TU_TOKEN_AQUI" \
-  -d "email=tu_correo@example.com&key=tu_clave"
+  -d '{"email": "tu_correo@example.com&key=tu_clave"}'
 ```
 ### 🔹 Obtener streams mas enriquecidos: 
 **Ejemplo de solicitud**: 
 ```bash
-curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=2" \
+curl -X GET "http://www.twitchanalytics.com.mialias.net/analytics/streams/enriched?limit=2" \
+  -H "Authorization: Basic dHdpdGNoODk2OnIzbHFLaGpD" \
   -H "Authorizationt: TU_TOKEN_AQUI" \
-  -d "email=tu_correo@example.com&key=tu_clave"
+  -d '{"email": "tu_correo@example.com&key=tu_clave"}'
 ```
 + `limit`(opcional): Define el numero de streams a devolver. El valor predeterminado es 3.
 ## 🔗 URL de la aplicación web
