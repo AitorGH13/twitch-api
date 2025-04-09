@@ -101,7 +101,7 @@ curl -X POST "http://localhost:8000/token" \
 
 ```bash
 curl -X GET http://www.twitchanalytics.com.mialias.net/analytics/topsofthetops \
-  -H "Authorizationt: Bearer TU_TOKEN_AQUI" \
+  -H "Authorizationt: TU_TOKEN_AQUI" \
   -d "email=tu_correo@example.com&key=tu_clave"
 ```
 ### 🔹 Obtener información de un usuario:
@@ -109,7 +109,7 @@ curl -X GET http://www.twitchanalytics.com.mialias.net/analytics/topsofthetops \
 **Ejemplo de solicitud**:  
 ```bash
 curl -X GET "http://localhost:8000/analytics/user?id=1" \
-  -H "Authorizationt: Bearer TU_TOKEN_AQUI" \
+  -H "Authorizationt: TU_TOKEN_AQUI" \
   -d "email=tu_correo@example.com&key=tu_clave"
 ```
 + `id`: Define el id del usuario a devolver.
@@ -118,14 +118,14 @@ curl -X GET "http://localhost:8000/analytics/user?id=1" \
 **Ejemplo de solicitud**: 
 ```bash
 curl -X GET "http://localhost:8000/analytics/streams" \
-  -H "Authorizationt: Bearer TU_TOKEN_AQUI" \
+  -H "Authorizationt: TU_TOKEN_AQUI" \
   -d "email=tu_correo@example.com&key=tu_clave"
 ```
 ### 🔹 Obtener streams mas enriquecidos: 
 **Ejemplo de solicitud**: 
 ```bash
 curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=2" \
-  -H "Authorizationt: Bearer TU_TOKEN_AQUI" \
+  -H "Authorizationt: TU_TOKEN_AQUI" \
   -d "email=tu_correo@example.com&key=tu_clave"
 ```
 + `limit`(opcional): Define el numero de streams a devolver. El valor predeterminado es 3.
