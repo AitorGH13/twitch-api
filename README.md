@@ -124,4 +124,4 @@ curl -X GET "http://54.219.250.68/analytics/streams" \
 curl -X GET "http://54.219.250.68/analytics/streams/enriched?limit=2" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
-+ `limit`(opcional): Define el numero de streams a devolver. El valor predeterminado es 3.
++ `limit`(opcional): Define el numero de streams a devolver. El valor predeterminado es 20.
