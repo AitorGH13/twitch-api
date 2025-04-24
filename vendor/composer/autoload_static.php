@@ -132,6 +132,7 @@ class ComposerStaticInit67c8741b2d9d6de7ae33b3ab98fc9007
         ),
         'A' => 
         array (
+            'App\\TwitchApi\\' => 14,
             'Amp\\Sync\\' => 9,
             'Amp\\Socket\\' => 11,
             'Amp\\Serialization\\' => 18,
@@ -143,7 +144,6 @@ class ComposerStaticInit67c8741b2d9d6de7ae33b3ab98fc9007
             'Amp\\Cache\\' => 10,
             'Amp\\ByteStream\\' => 15,
             'Amp\\' => 4,
-            'Aitor\\Twitchapi\\' => 16,
         ),
     );
 
@@ -378,6 +378,10 @@ class ComposerStaticInit67c8741b2d9d6de7ae33b3ab98fc9007
         array (
             0 => __DIR__ . '/..' . '/clue/ndjson-react/src',
         ),
+        'App\\TwitchApi\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
         'Amp\\Sync\\' => 
         array (
             0 => __DIR__ . '/..' . '/amphp/sync/src',
@@ -421,10 +425,6 @@ class ComposerStaticInit67c8741b2d9d6de7ae33b3ab98fc9007
         'Amp\\' => 
         array (
             0 => __DIR__ . '/..' . '/amphp/amp/src',
-        ),
-        'Aitor\\Twitchapi\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 

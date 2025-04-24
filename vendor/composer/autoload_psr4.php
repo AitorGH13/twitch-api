@@ -63,6 +63,7 @@ return array(
     'Composer\\Semver\\' => array($vendorDir . '/composer/semver/src'),
     'Composer\\Pcre\\' => array($vendorDir . '/composer/pcre/src'),
     'Clue\\React\\NDJson\\' => array($vendorDir . '/clue/ndjson-react/src'),
+    'App\\TwitchApi\\' => array($baseDir . '/src'),
     'Amp\\Sync\\' => array($vendorDir . '/amphp/sync/src'),
     'Amp\\Socket\\' => array($vendorDir . '/amphp/socket/src'),
     'Amp\\Serialization\\' => array($vendorDir . '/amphp/serialization/src'),
@@ -74,5 +75,4 @@ return array(
     'Amp\\Cache\\' => array($vendorDir . '/amphp/cache/src'),
     'Amp\\ByteStream\\' => array($vendorDir . '/amphp/byte-stream/src'),
     'Amp\\' => array($vendorDir . '/amphp/amp/src'),
-    'Aitor\\Twitchapi\\' => array($baseDir . '/src'),
 );

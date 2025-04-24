@@ -1,14 +1,23 @@
 <?php
-class Database {
+
+declare(strict_types=1);
+
+namespace App\TwitchApi;
+
+use PDO;
+
+class Database
+{
     private static $conn;
 
-    public static function getConnection() {
+    public function getConnection()
+    {
         if (!self::$conn) {
             $host = "localhost";
             $dbname = "twitchanalytics";
             $username = "root";
             $password = "dxl2025*";
-            
+
             try {
                 self::$conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
                 self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -19,4 +28,3 @@ class Database {
         return self::$conn;
     }
 }
-?>

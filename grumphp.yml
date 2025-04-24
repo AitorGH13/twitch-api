@@ -7,8 +7,20 @@ grumphp:
   tasks:
     # 1) Validación del mensaje de commit
     git_commit_message:
+      # ----------------------------------------
+      # Desactivamos las validaciones por defecto
+      enforce_capitalized_subject: false
+      enforce_no_subject_punctuations: false
+      enforce_no_subject_trailing_period: true
+      enforce_single_lined_subject: true
+
+      # Queremos que respete mayúsculas/minúsculas
+      case_insensitive: false
+
+      # ----------------------------------------
+      # Aquí definimos el patrón EXACTO para el subject
       matchers:
-        - '/^\[\d+\]\s-\s.+$/'    # exige: [1234] - Descripción :contentReference[oaicite:0]{index=0}
+        subject: '/^\[#\d+\] - [A-Z][^\n]{1,95}$/'
 
     # 2) PHP_CodeSniffer con PSR-12
     phpcs:
