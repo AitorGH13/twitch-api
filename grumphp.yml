@@ -1,35 +1,24 @@
-# grumphp.yml
 grumphp:
-  # (opcional) Directorio donde GrumPHP instala los hooks. Por defecto usa .git/hooks.
   hooks_dir: .git/hooks
 
-  # Aquí van las tareas que quieres activar y sus opciones
   tasks:
-    # 1) Validación del mensaje de commit
     git_commit_message:
-      # ----------------------------------------
-      # Desactivamos las validaciones por defecto
       enforce_capitalized_subject: false
       enforce_no_subject_punctuations: false
       enforce_no_subject_trailing_period: true
       enforce_single_lined_subject: true
 
-      # Queremos que respete mayúsculas/minúsculas
       case_insensitive: false
 
-      # ----------------------------------------
-      # Aquí definimos el patrón EXACTO para el subject
       matchers:
         subject: '/^\[#\d+\] - [A-Z][^\n]{1,95}$/'
 
-    # 2) PHP_CodeSniffer con PSR-12
     phpcs:
       standard: PSR12
       triggered_by: ['php']
       ignore_patterns:
         - 'vendor/*' 
 
-    # 3) PHP Mess Detector con reglas cleancode, codesize y naming
     phpmd:
       ruleset: 
         - cleancode
@@ -39,7 +28,6 @@ grumphp:
       whitelist_patterns:
         - '/^src\/.*/'
 
-    # 4) PHP-CS-Fixer (auto-formateo) — nombre de task “phpcsfixer”
     phpcsfixer:
       config: .php-cs-fixer.php
       #allow_risky: true
