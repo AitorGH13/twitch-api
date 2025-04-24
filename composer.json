@@ -1,0 +1,10 @@
+{
+    "config": {
+        "allow-plugins": {
+            "phpro/grumphp": true
+        }
+    },
+    "require-dev": {
+        "phpro/grumphp": "^2.12"
+    }
+}
