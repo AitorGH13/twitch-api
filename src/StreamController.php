@@ -1,7 +1,10 @@
 <?php
+
 require_once 'AuthController.php';
-class StreamController {
-    private static function callTwitchApi($url) {
+class StreamController
+{
+    private static function callTwitchApi($url)
+    {
         $oauthToken = "n2rnsruj57culzwz2iznqx6y5jbata";
         $clientId = "iw4dxrhn2yqaethe9b6uwdbanf3xiw";
         $ch = curl_init();
@@ -26,7 +29,8 @@ class StreamController {
         return json_decode($response, true);
     }
 
-    public static function getLiveStreams($token) {
+    public static function getLiveStreams($token)
+    {
         if (!AuthController::validateAccessToken($token)) {
             http_response_code(401);
             return ["error" => "Unauthorized. Token is invalid or expired."];
@@ -36,15 +40,16 @@ class StreamController {
         return $response['data'];
     }
 
-    public static function getTopEnrichedStreams($limit, $token) {
+    public static function getTopEnrichedStreams($limit, $token)
+    {
         if (!AuthController::validateAccessToken($token)) {
             http_response_code(401);
             return ["error" => "Unauthorized. Token is invalid or expired."];
         }
-        
+
         $url = "https://api.twitch.tv/helix/streams?first=$limit";
         $response = self::callTwitchApi($url);
-        
+
         $enrichedStreams = [];
         foreach ($response['data'] as $stream) {
             $userId = $stream['user_id'];
@@ -64,4 +69,3 @@ class StreamController {
         return $enrichedStreams;
     }
 }
-?>

@@ -1,6 +1,9 @@
 <?php
-class StreamerController {
-    private static function callTwitchApi($url) {
+
+class StreamerController
+{
+    private static function callTwitchApi($url)
+    {
         $oauthToken = "n2rnsruj57culzwz2iznqx6y5jbata";
         $clientId = "iw4dxrhn2yqaethe9b6uwdbanf3xiw";
         $ch = curl_init();
@@ -25,11 +28,12 @@ class StreamerController {
         return json_decode($response, true);
     }
 
-    public static function getStreamerById($id, $token) {
+    public static function getStreamerById($id, $token)
+    {
         if (!AuthController::validateAccessToken($token)) {
             http_response_code(401);
             return ["error" => "Unauthorized. Token is invalid or expired."];
-        } else if (!$id) {
+        } elseif (!$id) {
             http_response_code(400);
             return ["error" => "Invalid or missing 'id' parameter."];
         }
@@ -57,4 +61,3 @@ class StreamerController {
         }
     }
 }
-?>

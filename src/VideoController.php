@@ -1,7 +1,10 @@
 <?php
+
 require_once 'AuthController.php';
-class VideoController {
-    private static function callTwitchApi($url) {
+class VideoController
+{
+    private static function callTwitchApi($url)
+    {
         $oauthToken = "n2rnsruj57culzwz2iznqx6y5jbata";
         $clientId = "iw4dxrhn2yqaethe9b6uwdbanf3xiw";
         $ch = curl_init();
@@ -26,7 +29,8 @@ class VideoController {
         return json_decode($response, true);
     }
 
-    private static function getTopThreeGames() {
+    private static function getTopThreeGames()
+    {
         $url = "https://api.twitch.tv/helix/games/top?first=3";
         $response = self::callTwitchApi($url);
 
@@ -38,8 +42,9 @@ class VideoController {
         return $response['data'];
     }
 
-    private static function getTopVideos($gameId) {
-        $url = "https://api.twitch.tv/helix/videos?game_id=" . $gameId ."&sort=views&first=40";
+    private static function getTopVideos($gameId)
+    {
+        $url = "https://api.twitch.tv/helix/videos?game_id=" . $gameId . "&sort=views&first=40";
         $response = self::callTwitchApi($url);
 
         if (empty($response['data'])) {
@@ -50,7 +55,8 @@ class VideoController {
         return $response['data'];
     }
 
-    public static function getTopsOfTheTops($token, $since) {
+    public static function getTopsOfTheTops($token, $since)
+    {
         if (!AuthController::validateAccessToken($token)) {
             http_response_code(401);
             return ["error" => "Unauthorized. Token is invalid or expired."];
@@ -63,7 +69,9 @@ class VideoController {
 
         if (!$result || (strtotime($result['expires_at']) < time()) || $since != null) {
             $db->exec("DELETE FROM topsofthetops");
-            if ($since == null) $since = 600;
+            if ($since == null) {
+                $since = 600;
+            }
             $expiresAt = date('Y-m-d H:i:s', strtotime('+' . $since . 'seconds'));
             $games = self::getTopThreeGames();
             $response = [];
@@ -102,4 +110,3 @@ class VideoController {
         }
     }
 }
-?>
