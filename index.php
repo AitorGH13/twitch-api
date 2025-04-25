@@ -10,13 +10,6 @@ require_once __DIR__ . '/src/VideoController.php';
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
-
-
-
-
-
-
-
 if (preg_match('/^\/analytics\/user$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
     $id = $_GET['id'] ?? null;
