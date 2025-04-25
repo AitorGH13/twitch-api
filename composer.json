@@ -1,16 +1,9 @@
 {
-    "name": "aitor/twitchapi",
     "autoload": {
       "psr-4": {
         "App\\TwitchApi\\": "src/"
       }
     },
-    "authors": [
-      {
-        "name": "AitorGH13",
-        "email": "arrarasaitor@gmail.com"
-      }
-    ],
     "require-dev": {
       "squizlabs/php_codesniffer": "^3.12",
       "phpmd/phpmd": "^2.15",
@@ -21,6 +14,17 @@
       "allow-plugins": {
         "phpro/grumphp": true
       }
+    },
+    "scripts": {
+      "post-install-cmd": [
+        "@composer dump-autoload",
+        "vendor/bin/grumphp git:init"
+      ],
+      "post-update-cmd": [
+        "@composer dump-autoload",
+        "vendor/bin/grumphp git:init"
+      ]
     }
   }
+  
   
