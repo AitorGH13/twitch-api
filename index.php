@@ -1,4 +1,5 @@
 <?php
+
 header("Content-Type: application/json");
 
 require_once __DIR__ . '/src/StreamerController.php';
@@ -9,12 +10,19 @@ require_once __DIR__ . '/src/VideoController.php';
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
+
+
+
+
+
+
+
 if (preg_match('/^\/analytics\/user$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
     $id = $_GET['id'] ?? null;
     $authHeader = $headers['Authorization'] ?? null;
     $token = null;
-    
+
     if ($authHeader && preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
         $token = $matches[1];
     }
@@ -26,7 +34,7 @@ if (preg_match('/^\/analytics\/streams$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
     $authHeader = $headers['Authorization'] ?? null;
     $token = null;
-    
+
     if ($authHeader && preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
         $token = $matches[1];
     }
@@ -39,7 +47,7 @@ if (preg_match('/^\/analytics\/streams\/enriched$/', $uri) && ($method == 'GET')
     $limit = $_GET['limit'] ?? 3;
     $authHeader = $headers['Authorization'] ?? null;
     $token = null;
-    
+
     if ($authHeader && preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
         $token = $matches[1];
     }
@@ -66,11 +74,11 @@ if (preg_match('/^\/analytics\/topsofthetops$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
     $authHeader = $headers['Authorization'] ?? null;
     $token = null;
-    
+
     if ($authHeader && preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
         $token = $matches[1];
     }
-    
+
     $since = $_GET['since'] ?? null;
     echo json_encode(VideoController::getTopsOfTheTops($token, $since));
     exit;
@@ -78,4 +86,3 @@ if (preg_match('/^\/analytics\/topsofthetops$/', $uri) && ($method == 'GET')) {
 
 http_response_code(500);
 echo json_encode(["error" => "Internal server error."]);
-?>

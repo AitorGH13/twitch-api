@@ -27,6 +27,7 @@ grumphp:
       triggered_by: ['php']
       whitelist_patterns:
         - '/^src\/.*/'
+        - '^index\.php$'
 
     phpcsfixer:
       config: .php-cs-fixer.php
