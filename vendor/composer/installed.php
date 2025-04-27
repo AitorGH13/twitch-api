@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'aitor/twitchapi',
+        'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '84cb312e125fc9af8d98dd908dc95f9be6138f40',
+        'reference' => 'd093f59ddeca2ec601cda38f98b61fa299c80eed',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'aitor/twitchapi' => array(
+        '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '84cb312e125fc9af8d98dd908dc95f9be6138f40',
+            'reference' => 'd093f59ddeca2ec601cda38f98b61fa299c80eed',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
