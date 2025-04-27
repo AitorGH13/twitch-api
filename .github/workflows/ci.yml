@@ -20,7 +20,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'        # o la versión que uses
+          php-version: '8.2'        # o la versión que uses
           extensions: mbstring, curl, pdo, pdo_mysql
 
       # 3) Cachea composer para acelerar builds
