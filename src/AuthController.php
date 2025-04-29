@@ -24,7 +24,7 @@ class AuthController
             exit;
         }
 
-        $dbService = new App\TwitchApi\Database();
+        $dbService = new Database();
         $dbConnection = $dbService->getConnection();
         $apiKey      = bin2hex(random_bytes(8));
         $sqlInsert   = <<<'SQL'
@@ -63,7 +63,7 @@ SQL;
             exit;
         }
 
-        $dbService = new App\TwitchApi\Database();
+        $dbService = new Database();
         $dbConnection = $dbService->getConnection();
         $stmtCheck    = $dbConnection->prepare(
             'SELECT expires_at FROM tokens WHERE email = :email AND api_key = :apiKey LIMIT 1'
@@ -106,7 +106,7 @@ SQL;
             return false;
         }
 
-        $dbService = new App\TwitchApi\Database();
+        $dbService = new Database();
         $dbConnection = $dbService->getConnection();
         $stmtQuery    = $dbConnection->prepare(
             'SELECT expires_at FROM tokens WHERE token = :token LIMIT 1'
