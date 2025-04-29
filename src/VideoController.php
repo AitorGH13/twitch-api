@@ -72,7 +72,7 @@ class VideoController
             return ['error' => 'Unauthorized. Token is invalid or expired.'];
         }
 
-        $dbService = new \App\TwitchApi\Database();
+        $dbService = new App\TwitchApi\Database();
         $dbConnection = $dbService->getConnection();
         $stmtCheck    = $dbConnection->prepare('SELECT expires_at FROM topsofthetops LIMIT 1');
         $stmtCheck->execute();
