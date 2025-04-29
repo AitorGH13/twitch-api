@@ -6,35 +6,11 @@ namespace App\TwitchApi;
 
 use App\TwitchApi\AuthController;
 use App\TwitchApi\Database;
+use App\TwitchApi\TwitchAuth;
 use PDO;
 
 class StreamerController
 {
-    private static function callTwitchApi(string $url): array
-    {
-        $oauthToken = 'at4xi9qrfxqbvlp5d0mqt6g7z5tzzv';
-        $clientId   = 'pl90uakzou662frdn51bgohgalbxj5';
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($curl, CURLOPT_CAINFO, __DIR__ . '/../cacert.pem');
-        curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            "Authorization: Bearer $oauthToken",
-            "Client-Id: $clientId",
-        ]);
-
-        $response = curl_exec($curl);
-        if ($response === false) {
-            http_response_code(500);
-            return ['error' => 'Internal server error.'];
-        }
-
-        curl_close($curl);
-        return json_decode($response, true);
-    }
-
     public static function getStreamerById(string $idStreamer, string $token): array
     {
         $auth = new AuthController();
@@ -65,7 +41,7 @@ SQL;
         }
 
         $url         = "https://api.twitch.tv/helix/users?id=$idStreamer";
-        $apiResponse = self::callTwitchApi($url);
+        $apiResponse = callTwitchApi($url);
         $data        = $apiResponse['data'] ?? [];
 
         if (empty($data)) {

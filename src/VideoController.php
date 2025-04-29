@@ -6,42 +6,16 @@ namespace App\TwitchApi;
 
 use App\TwitchApi\AuthController;
 use App\TwitchApi\Database;
+use App\TwitchApi\TwitchAuth;
 use PDO;
 use DateTime;
 
 class VideoController
 {
-    private static function callTwitchApi(string $url): array
-    {
-        $oauthToken = 'at4xi9qrfxqbvlp5d0mqt6g7z5tzzv';
-        $clientId   = 'pl90uakzou662frdn51bgohgalbxj5';
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($curl, CURLOPT_CAINFO, __DIR__ . '/../cacert.pem');
-        curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            "Authorization: Bearer $oauthToken",
-            "Client-Id: $clientId",
-        ]);
-
-        $response = curl_exec($curl);
-
-        if ($response === false) {
-            http_response_code(500);
-            return ['error' => 'Internal server error.'];
-        }
-
-        curl_close($curl);
-
-        return json_decode($response, true);
-    }
-
     private static function getTopThreeGames(): array
     {
         $url = 'https://api.twitch.tv/helix/games/top?first=3';
-        $response = self::callTwitchApi($url);
+        $response = callTwitchApi($url);
 
         if (empty($response['data'])) {
             http_response_code(404);
@@ -54,7 +28,7 @@ class VideoController
     private static function getTopVideos(string $gameId): array
     {
         $url = "https://api.twitch.tv/helix/videos?game_id=$gameId&sort=views&first=40";
-        $response = self::callTwitchApi($url);
+        $response = callTwitchApi($url);
 
         if (empty($response['data'])) {
             http_response_code(404);
