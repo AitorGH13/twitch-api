@@ -1,0 +1,36 @@
+grumphp:
+  hooks_dir: .git/hooks
+
+  tasks:
+    git_commit_message:
+      enforce_capitalized_subject: false
+      enforce_no_subject_punctuations: false
+      enforce_no_subject_trailing_period: true
+      enforce_single_lined_subject: true
+
+      case_insensitive: false
+
+      matchers:
+        subject: '/^\[#\d+\] - [A-Z][^\n]{1,95}$/'
+
+    phpcs:
+      standard: PSR12
+      triggered_by: ['php']
+      ignore_patterns:
+        - 'vendor/*' 
+
+    phpmd:
+      ruleset: 
+        - cleancode
+        - codesize
+        - naming
+      triggered_by: ['php']
+      whitelist_patterns:
+        - '/^src\/.*/'
+        - '^index\.php$'
+
+    phpcsfixer:
+      config: .php-cs-fixer.php
+      #allow_risky: true
+      triggered_by: ['php']
+

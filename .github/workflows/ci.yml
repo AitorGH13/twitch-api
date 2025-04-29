@@ -1,0 +1,45 @@
+name: CI
+
+# Se dispara en pushes a cualquier rama y en PRs
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      # 1) Saca el código
+      - uses: actions/checkout@v4
+
+      # 2) Instala PHP y extensiones comunes
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'        # no es la mas reciente (8.4)
+          extensions: mbstring, curl, pdo, pdo_mysql
+
+      # 3) Cachea composer para acelerar builds
+      - name: Cache Composer
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      # 4) Instala dependencias
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      # 5) Ejecuta GrumPHP (lanza PHPCS, PHPMD y PHP-CS-Fixer)
+      - name: Run code quality checks
+        run: vendor/bin/grumphp run --verbose
+
+      # 6) (Opcional) Lanza PHPUnit si tienes tests
+      # - name: Run unit tests
+      #   run: vendor/bin/phpunit --configuration phpunit.xml

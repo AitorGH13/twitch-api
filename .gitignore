@@ -1,0 +1,12 @@
+# 1) Dependencias de Composer
+/vendor/
+
+# 2) Cache de PHP-CS-Fixer
+.php-cs-fixer.cache
+
+# 3) Archivos de log, caché o compilados
+/logs/
+/cache/
+/temp/
+/build/
+
