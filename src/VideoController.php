@@ -13,8 +13,8 @@ class VideoController
 {
     private static function callTwitchApi(string $url): array
     {
-        $oauthToken = 'n2rnsruj57culzwz2iznqx6y5jbata';
-        $clientId   = 'iw4dxrhn2yqaethe9b6uwdbanf3xiw';
+        $oauthToken = 'at4xi9qrfxqbvlp5d0mqt6g7z5tzzv';
+        $clientId   = 'pl90uakzou662frdn51bgohgalbxj5';
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -72,7 +72,7 @@ class VideoController
             return ['error' => 'Unauthorized. Token is invalid or expired.'];
         }
 
-        $dbService = new Database();
+        $dbService = new \App\TwitchApi\Database();
         $dbConnection = $dbService->getConnection();
         $stmtCheck    = $dbConnection->prepare('SELECT expires_at FROM topsofthetops LIMIT 1');
         $stmtCheck->execute();
