@@ -20,7 +20,7 @@ class StreamController
         $url      = 'https://api.twitch.tv/helix/streams';
         $response = callTwitchApi($url);
 
-        return array_map(function($stream) {
+        return array_map(function ($stream) {
             return [
                 'title'     => $stream['title'],
                 'user_name' => $stream['user_name']
