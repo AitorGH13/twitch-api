@@ -10,3 +10,5 @@
 /temp/
 /build/
 
+# 4) Carpeta que guarda la configuración del proyecto
+.idea/
