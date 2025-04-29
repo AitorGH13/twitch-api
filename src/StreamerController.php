@@ -16,7 +16,7 @@ class StreamerController
         $auth = new AuthController();
         if (! $auth->validateAccessToken($token)) {
             http_response_code(401);
-            return ['error' => 'Unauthorized. Token is invalid or expired.'];
+            return ['error' => 'Unauthorized. Twitch access token is invalid or has expired.'];
         }
 
         if ($idStreamer === '') {
