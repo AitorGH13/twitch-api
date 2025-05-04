@@ -7,9 +7,7 @@ grumphp:
       enforce_no_subject_punctuations: false
       enforce_no_subject_trailing_period: true
       enforce_single_lined_subject: true
-
       case_insensitive: false
-
       matchers:
         subject: '/^\[#\d+\] - [A-Z][^\n]{1,95}$/'
 
@@ -17,7 +15,8 @@ grumphp:
       standard: PSR12
       triggered_by: ['php']
       ignore_patterns:
-        - 'vendor/*' 
+        - 'vendor/*'
+        - 'lumen-api/*'
 
     phpmd:
       ruleset: 
@@ -25,12 +24,9 @@ grumphp:
         - codesize
         - naming
       triggered_by: ['php']
-      whitelist_patterns:
-        - '/^src\/.*/'
-        - '^index\.php$'
+      exclude:
+        - 'lumen-api/*'
 
     phpcsfixer:
       config: .php-cs-fixer.php
-      #allow_risky: true
       triggered_by: ['php']
-

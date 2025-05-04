@@ -1,0 +1,37 @@
+services:
+  app:
+    build:
+      context: .           # el propio lumen-api/
+      dockerfile: Dockerfile
+    container_name: lumen-app
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: db
+      DB_DATABASE: twitchanalytics
+      DB_USERNAME: root
+      DB_PASSWORD: dxl2025*
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    container_name: lumen-db
+    environment:
+      MYSQL_ROOT_PASSWORD: dxl2025*
+      MYSQL_DATABASE: twitchanalytics
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+
+volumes:
+  db_data:
