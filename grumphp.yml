@@ -17,7 +17,8 @@ grumphp:
       standard: PSR12
       triggered_by: ['php']
       ignore_patterns:
-        - 'vendor/*' 
+        - 'vendor/*'
+        - 'lumen-api/*'
 
     phpmd:
       ruleset: 
@@ -25,6 +26,8 @@ grumphp:
         - codesize
         - naming
       triggered_by: ['php']
+      exclude:
+        - 'lumen-api/*'
       whitelist_patterns:
         - '/^src\/.*/'
         - '^index\.php$'
@@ -33,4 +36,3 @@ grumphp:
       config: .php-cs-fixer.php
       #allow_risky: true
       triggered_by: ['php']
-

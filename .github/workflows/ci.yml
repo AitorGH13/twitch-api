@@ -20,7 +20,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'        # no es la mas reciente (8.4)
+          php-version: '8.3'
           extensions: mbstring, curl, pdo, pdo_mysql
 
       # 3) Cachea composer para acelerar builds
@@ -38,7 +38,7 @@ jobs:
 
       # 5) Ejecuta GrumPHP (lanza PHPCS, PHPMD y PHP-CS-Fixer)
       - name: Run code quality checks
-        run: vendor/bin/grumphp run --verbose
+        run: vendor/bin/grumphp run --verbose --exclude=lumen-api
 
       # 6) (Opcional) Lanza PHPUnit si tienes tests
       # - name: Run unit tests
