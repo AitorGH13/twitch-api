@@ -14,7 +14,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if (preg_match('/^\/analytics\/user$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
-    $id = $_GET['id'] ?? null;
+    $id = $_GET['id'] ?? '';
     $authHeader = $headers['Authorization'] ?? null;
     $token = '';
 
@@ -39,7 +39,7 @@ if (preg_match('/^\/analytics\/streams$/', $uri) && ($method == 'GET')) {
 
 if (preg_match('/^\/analytics\/streams\/enriched$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
-    $limit = $_GET['limit'] ?? 3;
+    $limit = is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 3;
     $authHeader = $headers['Authorization'] ?? null;
     $token = '';
 
