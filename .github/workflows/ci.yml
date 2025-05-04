@@ -38,7 +38,7 @@ jobs:
 
       # 5) Ejecuta GrumPHP (lanza PHPCS, PHPMD y PHP-CS-Fixer)
       - name: Run code quality checks
-        run: vendor/bin/grumphp run --verbose --exclude=lumen-api
+        run: vendor/bin/grumphp run --verbose
 
       # 6) (Opcional) Lanza PHPUnit si tienes tests
       # - name: Run unit tests
