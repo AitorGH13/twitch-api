@@ -176,4 +176,4 @@ curl -X GET "http://localhost:8000/analytics/streams"
 ```bash
 curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=3"
 ```
-+ `limit`(opcional): Define el número de streams a devolver. El valor predeterminado es 3.
++ `limit`: Define el número de streams a devolver. El valor predeterminado es 3.
