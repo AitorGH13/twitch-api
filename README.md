@@ -124,4 +124,56 @@ curl -X GET "http://54.219.250.68/analytics/streams" \
 curl -X GET "http://54.219.250.68/analytics/streams/enriched?limit=2" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
-+ `limit`(opcional): Define el numero de streams a devolver. El valor predeterminado es 3.
++ `limit`: Define el número de streams a devolver. El valor predeterminado es 3.
+
+## 🐳 6. Probar la API con Lumen+Docker
+Descargamos el repo y acedemos al directorio lumen:
+```bash
+git clone https://github.com/AitorGH13/twitchapi.git ; cd twitchapi ; cd lumen-api
+```
+Instalamos dependencias mediante composer:
+```bash
+composer install
+```
+Levantamos el contenedor con docker:
+```
+docker-compose up --build
+```
+
+### 🔹 Registrar usuario:
+```bash
+curl -X POST http://localhost:8000/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com"}'
+```
+### 🔹 Obtener token:
+
+```bash
+curl -X POST http://localhost:8000/token \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com"}'
+```
+### 🔹 Obtener Tops of the tops:
+
+```bash
+curl -X GET "http://localhost:8000/analytics/topsofthetops"
+```
+### 🔹 Obtener información de un usuario:
+
+**Ejemplo de solicitud**:
+```bash
+curl -X GET "http://localhost:8000/analytics/user?id=1"
+```
++ `id`: Define el id del usuario a devolver.
+### 🔹 Obtener streams en vivo:
+
+**Ejemplo de solicitud**:
+```bash
+curl -X GET "http://localhost:8000/analytics/streams"
+```
+### 🔹 Obtener streams mas enriquecidos:
+**Ejemplo de solicitud**:
+```bash
+curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=3"
+```
++ `limit`(opcional): Define el número de streams a devolver. El valor predeterminado es 3.
