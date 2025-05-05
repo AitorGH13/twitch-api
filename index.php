@@ -39,7 +39,7 @@ if (preg_match('/^\/analytics\/streams$/', $uri) && ($method == 'GET')) {
 
 if (preg_match('/^\/analytics\/streams\/enriched$/', $uri) && ($method == 'GET')) {
     $headers = getallheaders();
-    $limit = is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 3;
+    $limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 0;
     $authHeader = $headers['Authorization'] ?? null;
     $token = '';
 
