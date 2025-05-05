@@ -129,7 +129,7 @@ curl -X GET "http://54.219.250.68/analytics/streams/enriched?limit=2" \
 ## 🐳 6. Probar la API con Lumen+Docker
 Descargamos el repo y acedemos al directorio lumen:
 ```bash
-git clone https://github.com/AitorGH13/twitchapi.git ; cd twitchapi; cd lumen-api
+git clone https://github.com/AitorGH13/twitchapi.git ; cd twitchapi ; cd lumen-api
 ```
 Instalamos dependencias mediante composer:
 ```bash
