@@ -17,13 +17,15 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('/register', function (\Illuminate\Http\Request $request) {
+/*$router->post('/register', function (\Illuminate\Http\Request $request) {
     return response()->json(['message' => 'User registered successfully', 'email' => $request->input('email')]);
-});
+});*/
+$router->post('/register', 'RegisterController');  // invoca __invoke
 
-$router->post('/token', function (\Illuminate\Http\Request $request) {
+/*$router->post('/token', function (\Illuminate\Http\Request $request) {
     return response()->json(['token' => 'generated_token', 'email' => $request->input('email')]);
-});
+});*/
+$router->post('/token',    'TokenController');     // invoca __invoke
 
 $router->get('/analytics/user', function (\Illuminate\Http\Request $request) {
     $userId = $request->input('id');

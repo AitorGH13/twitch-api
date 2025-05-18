@@ -1,10 +1,22 @@
 <?php
+// bootstrap/app.php
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-(new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
-    dirname(__DIR__)
-))->bootstrap();
+use Dotenv\Dotenv;
+
+// Detectamos el entorno
+$appEnv   = $_ENV['APP_ENV']   ?? $_SERVER['APP_ENV']   ?? 'production';
+$basePath = dirname(__DIR__);
+
+// Elegimos el fichero según el entorno
+$envFile = $appEnv === 'testing' && file_exists($basePath.'/.env.testing')
+    ? '.env.testing'
+    : '.env';
+
+// Cargamos las variables y permitimos que sobreescriban las de Docker
+Dotenv::createMutable($basePath, $envFile)
+    ->load();
 
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
@@ -112,4 +124,35 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
+$app->withFacades();
+
+if (! class_exists('DB')) {
+    class_alias(\Illuminate\Support\Facades\DB::class, 'DB');
+}
+
+// repository
+$app->singleton(
+    App\Repository\DatabaseRepository::class,
+    App\Repository\DatabaseRepository::class
+);
+
+// services
+$app->singleton(
+    App\Services\RegisterService::class,
+    App\Services\RegisterService::class
+);
+$app->singleton(
+    App\Services\TokenService::class,
+    App\Services\TokenService::class
+);
+
+// justo después de los bindings de RegisterService y TokenService:
+$app->singleton(
+    App\Services\AuthService::class,
+    App\Services\AuthService::class
+);
+
 return $app;
+
+
+
