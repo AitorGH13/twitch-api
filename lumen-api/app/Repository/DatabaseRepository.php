@@ -61,4 +61,11 @@ class DatabaseRepository
                 'expires_at' => date('Y-m-d H:i:s', $expiresAt),
             ]);
     }
+
+    public function getSessionByToken(string $token): ?stdClass
+    {
+        return DB::table('sessions')
+            ->where('token', $token)
+            ->first();
+    }
 }

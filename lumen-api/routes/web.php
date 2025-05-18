@@ -36,9 +36,10 @@ $router->get('/analytics/streams', function () {
     return response()->json(['streams' => ['stream1', 'stream2']]);
 });
 
-$router->get('/analytics/topsofthetops', function () {
+/*$router->get('/analytics/topsofthetops', function () {
     return response()->json(['top_games' => ['game1', 'game2', 'game3']]);
-});
+});*/
+$router->get('/analytics/topsofthetops', 'TopOfTheTopsController');
 
 $router->get('/analytics/streams/enriched', function (\Illuminate\Http\Request $request) {
     $limit = $request->input('limit', 3);

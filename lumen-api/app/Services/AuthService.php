@@ -43,4 +43,12 @@ class AuthService
         $data     = $response->getData(true);
         return $data['token'];
     }
+
+    /**
+     * Proxy a TokenService::validateAccessToken()
+     */
+    public function validateAccessToken(string $token): bool
+    {
+        return $this->tokenService->validateAccessToken($token);
+    }
 }
