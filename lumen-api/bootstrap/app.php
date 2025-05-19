@@ -175,7 +175,5 @@ $app->singleton(
     App\Validators\TokenRequestValidator::class,
     App\Validators\TokenRequestValidator::class
 );
+
 return $app;
-
-
-
