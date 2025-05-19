@@ -55,28 +55,25 @@ class TwitchApiClient
      */
     public function getUserById(string $id): array
     {
-        if (getenv('APP_ENV') === 'testing') {
-            // sólo devolvemos datos para el id “42”, simulando que los tests
-            // validan estructura para ese caso. Para cualquier otro id testing,
-            // devolvemos [] y así provocamos el 404.
-            if ($id === '42') {
-                return [[
-                    'id'               => $id,
-                    'login'            => "login{$id}",
-                    'display_name'     => "Display {$id}",
-                    'type'             => '',
-                    'broadcaster_type' => 'partner',
-                    'description'      => 'Test description.',
-                    'profile_image_url'=> 'https://example.com/profile.png',
-                    'offline_image_url'=> 'https://example.com/offline.png',
-                    'view_count'       => 1234,
-                    // Este formato MySQL‐compatible evita errores de timestamp
-                    'created_at'       => '2020-01-01 00:00:00',
-                ]];
+        if ($this->isTesting()) {
+            // En testing, devolvemos stub para todos los ids excepto '9999'
+            if ($id === '9999') {
+                return [];
             }
-            return [];  // para id != 42, simulamos “no encontrado”
+            $lastDigit = substr($id, -1);
+            return [[
+                'id'               => $id,
+                'login'            => "login{$id}",
+                'display_name'     => "Display {$lastDigit}",
+                'type'             => '',
+                'broadcaster_type' => 'partner',
+                'description'      => 'Test description.',
+                'profile_image_url'=> 'https://example.com/profile.png',
+                'offline_image_url'=> 'https://example.com/offline.png',
+                'view_count'       => 1234,
+                'created_at'       => '2020-01-01 00:00:00',
+            ]];
         }
-
         $url      = "https://api.twitch.tv/helix/users?id={$id}";
         $response = callTwitchApi($url);
         return $response['data'] ?? [];
@@ -98,6 +95,30 @@ class TwitchApiClient
             ];
         }
         $url      = 'https://api.twitch.tv/helix/streams';
+        $response = callTwitchApi($url);
+        return $response['data'] ?? [];
+    }
+
+    /**
+     * Obtiene N streams vivos (helix/streams?first=…).
+     */
+    public function getStreams(int $limit): array
+    {
+        if ($this->isTesting()) {
+            $out = [];
+            for ($i = 1; $i <= $limit; $i++) {
+                $out[] = [
+                    'id'           => (string)(1000 + $i),
+                    'user_id'      => (string)(2000 + $i),
+                    'user_name'    => "TopStreamer{$i}",
+                    'viewer_count' => 1000 * $i,
+                    'title'        => "Epic Gaming Session {$i}",
+                ];
+            }
+            return $out;
+        }
+
+        $url      = "https://api.twitch.tv/helix/streams?first={$limit}";
         $response = callTwitchApi($url);
         return $response['data'] ?? [];
     }
