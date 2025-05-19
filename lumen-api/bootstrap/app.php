@@ -168,6 +168,10 @@ $app->singleton(
 $app->singleton(
     App\Services\RegisterService::class,
     App\Services\UserService::class
+);
+$app->singleton(
+    App\Services\StreamsService::class,
+    App\Services\StreamsService::class
 );*/
 
 // Validators
@@ -186,6 +190,10 @@ $app->singleton(
 $app->singleton(
     App\Validators\UserRequestValidator::class,
     App\Validators\UserRequestValidator::class
+);
+$app->singleton(
+    App\Validators\StreamsRequestValidator::class,
+    App\Validators\StreamsRequestValidator::class
 );*/
 
 return $app;

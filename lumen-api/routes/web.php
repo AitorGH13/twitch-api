@@ -33,9 +33,10 @@ $router->post('/token',    'TokenController');     // invoca __invoke
 });*/
 $router->get('/analytics/user', 'UserController');
 
-$router->get('/analytics/streams', function () {
+/*$router->get('/analytics/streams', function () {
     return response()->json(['streams' => ['stream1', 'stream2']]);
-});
+});*/
+$router->get('/analytics/streams', 'StreamsController');
 
 /*$router->get('/analytics/topsofthetops', function () {
     return response()->json(['top_games' => ['game1', 'game2', 'game3']]);
