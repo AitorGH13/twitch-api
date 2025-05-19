@@ -81,4 +81,24 @@ class TwitchApiClient
         $response = callTwitchApi($url);
         return $response['data'] ?? [];
     }
+
+    /**
+     * Obtiene streams en directo. Stub en testing.
+     *
+     * @return array<int,array{title:string,user_name:string}>
+     */
+    public function getLiveStreams(): array
+    {
+        if ($this->isTesting()) {
+            // stub para 3 streams
+            return [
+                ['title'=>'Title of Stream 1','user_name'=>'User1'],
+                ['title'=>'Title of Stream 2','user_name'=>'User2'],
+                ['title'=>'Title of Stream 3','user_name'=>'User3'],
+            ];
+        }
+        $url      = 'https://api.twitch.tv/helix/streams';
+        $response = callTwitchApi($url);
+        return $response['data'] ?? [];
+    }
 }
