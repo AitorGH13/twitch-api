@@ -43,7 +43,8 @@ $router->get('/analytics/streams', 'StreamsController');
 });*/
 $router->get('/analytics/topsofthetops', 'TopOfTheTopsController');
 
-$router->get('/analytics/streams/enriched', function (\Illuminate\Http\Request $request) {
+/*$router->get('/analytics/streams/enriched', function (\Illuminate\Http\Request $request) {
     $limit = $request->input('limit', 3);
     return response()->json(['enriched_streams' => array_fill(0, $limit, 'enriched_stream')]);
-});
+});*/
+$router->get('/analytics/streams/enriched', 'EnrichedStreamsController');

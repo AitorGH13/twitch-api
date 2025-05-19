@@ -172,6 +172,10 @@ $app->singleton(
 $app->singleton(
     App\Services\StreamsService::class,
     App\Services\StreamsService::class
+);
+$app->singleton(
+    App\Services\EnrichedStreamsService::class,
+    App\Services\EnrichedStreamsService::class
 );*/
 
 // Validators
@@ -194,6 +198,10 @@ $app->singleton(
 $app->singleton(
     App\Validators\StreamsRequestValidator::class,
     App\Validators\StreamsRequestValidator::class
+);
+$app->singleton(
+    App\Validators\EnrichedStreamsRequestValidator::class,
+    App\Validators\EnrichedStreamsRequestValidator::class
 );*/
 
 return $app;
