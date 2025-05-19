@@ -36,9 +36,7 @@ class EnrichedStreamsController extends BaseController
                 JSON_UNESCAPED_UNICODE
             );
         } catch (UnauthorizedException $e) {
-            return response()->json([
-                'error' => 'Unauthorized. Twitch access token is invalid or has expired.'
-            ], 401);
+            return response()->json(['error' => $e->getMessage()], 401);
         } catch (InvalidLimitException $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
