@@ -53,7 +53,9 @@ class TopOfTheTopsService
                 $first   = $videos[0];
                 $user    = $first['user_name'];
                 $userSet = array_filter($videos, fn($v) => $v['user_name'] === $user);
-
+                $isoCreatedAt = $first['created_at'];  // p.e. "2024-11-28T02:06:07Z"
+                $mysqlCreatedAt = (new \DateTime($isoCreatedAt))
+                    ->format('Y-m-d H:i:s');
                 $row = [
                     'game_id'                => $game['id'],
                     'game_name'              => $game['name'],
@@ -63,7 +65,7 @@ class TopOfTheTopsService
                     'most_viewed_title'      => $first['title'],
                     'most_viewed_views'      => $first['view_count'],
                     'most_viewed_duration'   => $first['duration'],
-                    'most_viewed_created_at' => $first['created_at'],
+                    'most_viewed_created_at' => $mysqlCreatedAt,
                 ];
                 $this->repo->insert($row, $expiresAt);
                 $response[] = $row;

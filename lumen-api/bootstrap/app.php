@@ -176,6 +176,10 @@ $app->singleton(
 $app->singleton(
     App\Services\EnrichedStreamsService::class,
     App\Services\EnrichedStreamsService::class
+);
+$app->singleton(
+    App\Services\TwitchAuthService::class,
+    App\Services\TwitchAuthService::class
 );*/
 
 // Validators

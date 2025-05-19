@@ -1,9 +1,33 @@
 <?php
 // app/Services/TwitchApiClient.php
 namespace App\Services;
-
+use Illuminate\Support\Facades\Http;
 class TwitchApiClient
 {
+    private $auth;
+
+    public function __construct(TwitchAuthService $auth)
+    {
+        $this->auth = $auth;
+    }
+
+    private function request(string $url, array $query = []): array
+    {
+        $token = $this->auth->getAppAccessToken();
+
+        $response = Http::withHeaders([
+            'Client-ID'     => env('TWITCH_CLIENT_ID'),
+            'Authorization' => 'Bearer ' . $token,
+        ])
+            ->get($url, $query);
+
+        if (! $response->ok()) {
+            throw new \RuntimeException('Twitch API error: ' . $response->status());
+        }
+
+        return $response->json();
+    }
+
     private function isTesting(): bool
     {
         // getenv sí recogerá el APP_ENV=testing que viene de phpunit.xml
@@ -23,9 +47,7 @@ class TwitchApiClient
             return $games;
         }
 
-        $url      = "https://api.twitch.tv/helix/games/top?first={$n}";
-        $response = callTwitchApi($url);
-        return $response['data'] ?? [];
+        return $this->request('https://api.twitch.tv/helix/games/top', ['first' => $n])['data'] ?? [];
     }
 
     /**
@@ -45,9 +67,11 @@ class TwitchApiClient
             ];
         }
 
-        $url      = "https://api.twitch.tv/helix/videos?game_id={$gameId}&sort=views&first={$limit}";
-        $response = callTwitchApi($url);
-        return $response['data'] ?? [];
+        return $this->request('https://api.twitch.tv/helix/videos', [
+            'game_id' => $gameId,
+            'sort'    => 'views',
+            'first'   => $limit,
+        ])['data'] ?? [];
     }
 
     /**
@@ -74,9 +98,8 @@ class TwitchApiClient
                 'created_at'       => '2020-01-01 00:00:00',
             ]];
         }
-        $url      = "https://api.twitch.tv/helix/users?id={$id}";
-        $response = callTwitchApi($url);
-        return $response['data'] ?? [];
+
+        return $this->request('https://api.twitch.tv/helix/users', ['id' => $id])['data'] ?? [];
     }
 
     /**
@@ -94,9 +117,8 @@ class TwitchApiClient
                 ['title'=>'Title of Stream 3','user_name'=>'User3'],
             ];
         }
-        $url      = 'https://api.twitch.tv/helix/streams';
-        $response = callTwitchApi($url);
-        return $response['data'] ?? [];
+
+        return $this->request('https://api.twitch.tv/helix/streams')['data'] ?? [];
     }
 
     /**
@@ -118,9 +140,7 @@ class TwitchApiClient
             return $out;
         }
 
-        $url      = "https://api.twitch.tv/helix/streams?first={$limit}";
-        $response = callTwitchApi($url);
-        return $response['data'] ?? [];
+        return $this->request('https://api.twitch.tv/helix/streams', ['first' => $limit])['data'] ?? [];
     }
 }
 

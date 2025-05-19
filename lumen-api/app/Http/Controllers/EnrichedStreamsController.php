@@ -28,7 +28,13 @@ class EnrichedStreamsController extends BaseController
             }
 
             $data = $this->service->getTopEnrichedStreams($limit, $token);
-            return response()->json($data, 200);
+            //return response()->json($data, 200);
+            return response()->json(
+                $data,
+                200,
+                [],
+                JSON_UNESCAPED_UNICODE
+            );
         } catch (UnauthorizedException $e) {
             return response()->json([
                 'error' => 'Unauthorized. Twitch access token is invalid or has expired.'

@@ -2,20 +2,28 @@
 namespace App\Validators;
 
 use App\Exceptions\EmptyIdException;
+use App\Exceptions\UnauthorizedException;
 use Illuminate\Http\Request;
 
 class UserRequestValidator
 {
+    /**
+     * @return array{string,string}  [$id, $token]
+     * @throws UnauthorizedException
+     * @throws EmptyIdException
+     */
     public function validate(Request $request): array
     {
-        $token = $request->query('token') ?? '';
-        if (empty($token)) {
-            // reusa UnauthorizedException en el controller
-            return ['', ''];
+        // 1) Token
+        $header = $request->header('Authorization', '');
+        if (! str_starts_with($header, 'Bearer ')) {
+            throw new UnauthorizedException();
         }
+        $token = substr($header, 7);
 
-        $id = $request->query('id') ?? '';
-        if (empty($id)) {
+        // 2) ID
+        $id = $request->query('id', '');
+        if ($id === '') {
             throw new EmptyIdException();
         }
 
