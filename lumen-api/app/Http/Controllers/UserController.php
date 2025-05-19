@@ -28,7 +28,9 @@ class UserController extends BaseController
                 ], 401);
             }
             $user = $this->service->get([$id, $token]);
-            return response()->json($user, 200);
+            //return response()->json($user, 200);
+            return response()->json($user, 200, [], JSON_UNESCAPED_UNICODE);
+          
         } catch (UnauthorizedException $e) {
             return response()->json(['error' => $e->getMessage()], 401);
         } catch (EmptyIdException $e) {

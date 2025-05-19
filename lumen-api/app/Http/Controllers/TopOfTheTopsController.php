@@ -23,7 +23,8 @@ class TopOfTheTopsController extends BaseController
         try {
             $input    = $this->validator->validate($request);
             $response = $this->service->get($input);
-            return response()->json($response, 200);
+            //return response()->json($response, 200);
+            return response()->json($response, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (UnauthorizedException $e) {
             return response()->json(['error' => $e->getMessage()], 401);
         } catch (NoGamesFoundException | NoVideosFoundException $e) {

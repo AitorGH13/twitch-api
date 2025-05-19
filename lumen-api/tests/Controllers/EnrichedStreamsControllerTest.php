@@ -36,7 +36,10 @@ class EnrichedStreamsControllerTest extends TestCase
         $token  = app(AuthService::class)
             ->createAccessToken('u@e.com', $apiKey);
 
-        $this->get("/analytics/streams/enriched?token={$token}&limit=0");
+        $this->get(
+            '/analytics/streams/enriched?limit=0',
+            ['Authorization' => "Bearer {$token}"]
+        );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error'=>"Invalid 'limit' parameter."]);
     }
@@ -50,7 +53,11 @@ class EnrichedStreamsControllerTest extends TestCase
         $token  = app(AuthService::class)
             ->createAccessToken('u@e2.com', $apiKey);
 
-        $this->get("/analytics/streams/enriched?token={$token}&limit=3");
+        $this->get(
+            '/analytics/streams/enriched?limit=3',
+            ['Authorization' => "Bearer {$token}"]
+        );
+      
         $this->seeStatusCode(200)
             ->seeJsonEquals([
                 [

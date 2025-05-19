@@ -2,12 +2,13 @@
 namespace App\Services;
 
 use App\Exceptions\UnauthorizedException;
+use App\Manager\TwitchManager;
 
 class StreamsService
 {
     public function __construct(
-        private AuthService        $authService,
-        private TwitchApiClient    $twitchClient
+        private AuthService   $authService,
+        private TwitchManager $twitchClient
     ) {}
 
     /**

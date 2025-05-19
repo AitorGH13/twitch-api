@@ -146,8 +146,8 @@ $app->singleton(
 
 // Servicios
 /*$app->singleton(
-    App\Services\TwitchApiClient::class,
-    App\Services\TwitchApiClient::class
+    App\Services\TwitchManager::class,
+    App\Services\TwitchManager::class
 );
 $app->singleton(
     App\Services\TopOfTheTopsService::class,
@@ -176,6 +176,10 @@ $app->singleton(
 $app->singleton(
     App\Services\EnrichedStreamsService::class,
     App\Services\EnrichedStreamsService::class
+);
+$app->singleton(
+    App\Services\TwitchAuthService::class,
+    App\Services\TwitchAuthService::class
 );*/
 
 // Validators

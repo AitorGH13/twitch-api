@@ -21,12 +21,15 @@ class StreamsController extends BaseController
         try {
             $token    = $this->validator->validate($request);
             $streams  = $this->service->getLiveStreams($token);
-            return response()->json($streams, 200);
-        } catch (UnauthorizedException $e) {
+            //return response()->json($streams, 200);
             return response()->json(
-                ['error' => 'Unauthorized. Twitch access token is invalid or has expired.'],
-                401
+                $streams,
+                200,
+                [],
+                JSON_UNESCAPED_UNICODE
             );
+        } catch (UnauthorizedException $e) {
+            return response()->json(['error' => $e->getMessage()], 401);
         }
     }
 }

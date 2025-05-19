@@ -24,7 +24,7 @@ class TopOfTheTopsControllerTest extends TestCase
     {
         $this->get('/analytics/topsofthetops');
         $this->seeStatusCode(401)
-            ->seeJsonEquals(['error'=>'Unauthorized. Token is invalid or expired.']);
+            ->seeJsonEquals(['error'=>'Unauthorized. Twitch access token is invalid or has expired.']);
     }
 
     /** @test */
@@ -34,7 +34,10 @@ class TopOfTheTopsControllerTest extends TestCase
         $apiKey = app(RegisterService::class)->registerUser('u@v.com')->getData(true)['api_key'];
         $token  = app(TokenService::class)->createToken('u@v.com', $apiKey)->getData(true)['token'];
 
-        $this->get("/analytics/topsofthetops?token={$token}&since=abc");
+        $this->get(
+            '/analytics/topsofthetops?since=abc',
+            ['Authorization' => "Bearer {$token}"]
+        );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error'=>'Parameter since must be an integer.']);
     }
@@ -42,14 +45,18 @@ class TopOfTheTopsControllerTest extends TestCase
     /** @test */
     public function valid_request_returns_structure()
     {
-        // aquí podrías mockear TwitchApiClient con respuestas fijas,
+        // aquí podrías mockear TwitchManager con respuestas fijas,
         // pero para este ejemplo asumimos que llama realmente a la API,
         // o bien inyectas un stub en el service container.
 
         $apiKey = app(RegisterService::class)->registerUser('u@w.com')->getData(true)['api_key'];
         $token  = app(TokenService::class)->createToken('u@w.com', $apiKey)->getData(true)['token'];
 
-        $this->get("/analytics/topsofthetops?token={$token}");
+        $this->get(
+            '/analytics/topsofthetops',
+            ['Authorization' => "Bearer {$token}"]
+        );
+
         $this->seeStatusCode(200)
             ->seeJsonStructure([
                 ['game_id','game_name','user_name','total_videos','total_views',
