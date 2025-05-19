@@ -131,7 +131,7 @@ if (! class_exists('DB')) {
 }
 
 // Repositorios
-$app->singleton(
+/*$app->singleton(
     App\Repository\DatabaseRepository::class,
     App\Repository\DatabaseRepository::class
 );
@@ -139,9 +139,13 @@ $app->singleton(
     App\Repository\TopOfTheTopsRepository::class,
     App\Repository\TopOfTheTopsRepository::class
 );
+$app->singleton(
+    App\Repository\UserRepository::class,
+    App\Repository\UserRepository::class
+);*/
 
 // Servicios
-$app->singleton(
+/*$app->singleton(
     App\Services\TwitchApiClient::class,
     App\Services\TwitchApiClient::class
 );
@@ -161,9 +165,13 @@ $app->singleton(
     App\Services\AuthService::class,
     App\Services\AuthService::class
 );
+$app->singleton(
+    App\Services\RegisterService::class,
+    App\Services\UserService::class
+);*/
 
 // Validators
-$app->singleton(
+/*$app->singleton(
     App\Validators\TopOfTheTopsRequestValidator::class,
     App\Validators\TopOfTheTopsRequestValidator::class
 );
@@ -175,5 +183,9 @@ $app->singleton(
     App\Validators\TokenRequestValidator::class,
     App\Validators\TokenRequestValidator::class
 );
+$app->singleton(
+    App\Validators\UserRequestValidator::class,
+    App\Validators\UserRequestValidator::class
+);*/
 
 return $app;
