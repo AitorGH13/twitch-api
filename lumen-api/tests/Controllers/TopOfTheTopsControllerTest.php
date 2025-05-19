@@ -45,7 +45,7 @@ class TopOfTheTopsControllerTest extends TestCase
     /** @test */
     public function valid_request_returns_structure()
     {
-        // aquí podrías mockear TwitchApiClient con respuestas fijas,
+        // aquí podrías mockear TwitchManager con respuestas fijas,
         // pero para este ejemplo asumimos que llama realmente a la API,
         // o bien inyectas un stub en el service container.
 

@@ -1,17 +1,17 @@
 <?php // app/Services/UserService.php
 namespace App\Services;
 
-use App\Repository\UserRepository;
-use App\Exceptions\UserNotFoundException;
 use App\Exceptions\UnauthorizedException;
-use DateTime;
+use App\Exceptions\UserNotFoundException;
+use App\Manager\TwitchManager;
+use App\Repository\UserRepository;
 
 class UserService
 {
     public function __construct(
         private UserRepository  $repo,
         private AuthService     $authService,
-        private TwitchApiClient $twitchClient
+        private TwitchManager $twitchClient
     ) {}
 
     public function get(array $input): array

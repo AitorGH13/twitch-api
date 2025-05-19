@@ -1,10 +1,11 @@
 <?php // app/Services/TopOfTheTopsService.php
 namespace App\Services;
 
-use App\Repository\TopOfTheTopsRepository;
 use App\Exceptions\NoGamesFoundException;
 use App\Exceptions\NoVideosFoundException;
 use App\Exceptions\UnauthorizedException;
+use App\Manager\TwitchManager;
+use App\Repository\TopOfTheTopsRepository;
 use DateTime;
 
 class TopOfTheTopsService
@@ -12,7 +13,7 @@ class TopOfTheTopsService
     public function __construct(
         private TopOfTheTopsRepository $repo,
         private AuthService            $authService,
-        private TwitchApiClient        $twitchClient
+        private TwitchManager $twitchClient
     ) {}
 
     public function get(array $input): array

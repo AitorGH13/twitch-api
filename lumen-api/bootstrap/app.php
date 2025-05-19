@@ -146,8 +146,8 @@ $app->singleton(
 
 // Servicios
 /*$app->singleton(
-    App\Services\TwitchApiClient::class,
-    App\Services\TwitchApiClient::class
+    App\Services\TwitchManager::class,
+    App\Services\TwitchManager::class
 );
 $app->singleton(
     App\Services\TopOfTheTopsService::class,

@@ -1,8 +1,10 @@
 <?php
-// app/Services/TwitchApiClient.php
-namespace App\Services;
+// app/Services/TwitchManager.php
+namespace App\Manager;
+use App\Services\TwitchAuthService;
 use Illuminate\Support\Facades\Http;
-class TwitchApiClient
+
+class TwitchManager
 {
     private $auth;
 
