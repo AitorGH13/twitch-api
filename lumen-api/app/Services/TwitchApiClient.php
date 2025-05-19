@@ -102,4 +102,3 @@ class TwitchApiClient
         return $response['data'] ?? [];
     }
 }
-
