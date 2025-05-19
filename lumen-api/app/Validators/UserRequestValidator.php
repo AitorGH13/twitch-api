@@ -23,7 +23,7 @@ class UserRequestValidator
 
         // 2) Validate ID parameter: must be positive integer string
         $id = $request->query('id', '');
-        if ($id === '' || !ctype_digit($id) || (int)$id <= 0) {
+        if ($id === '' || !ctype_digit($id)) {
             throw new EmptyIdException();
         }
 
