@@ -144,36 +144,40 @@ docker-compose up --build
 ```bash
 curl -X POST http://localhost:8000/register \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com"}'
+  -d '{"email": "tu_correo@example.com"}'
 ```
 ### 🔹 Obtener token:
 
 ```bash
 curl -X POST http://localhost:8000/token \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com"}'
+  -d '{"email": "tu_correo@example.com", "api_key": "tu_clave"}'
 ```
 ### 🔹 Obtener Tops of the tops:
 
 ```bash
-curl -X GET "http://localhost:8000/analytics/topsofthetops"
+curl -X GET "http://localhost:8000/analytics/topsofthetops" \
+  -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
 ### 🔹 Obtener información de un usuario:
 
 **Ejemplo de solicitud**:
 ```bash
-curl -X GET "http://localhost:8000/analytics/user?id=1"
+curl -X GET "http://localhost:8000/analytics/user?id=1" \
+  -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
 + `id`: Define el id del usuario a devolver.
 ### 🔹 Obtener streams en vivo:
 
 **Ejemplo de solicitud**:
 ```bash
-curl -X GET "http://localhost:8000/analytics/streams"
+curl -X GET "http://localhost:8000/analytics/streams" \
+  -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
 ### 🔹 Obtener streams mas enriquecidos:
 **Ejemplo de solicitud**:
 ```bash
-curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=3"
+curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=3" \
+  -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
 + `limit`: Define el número de streams a devolver. El valor predeterminado es 3.
