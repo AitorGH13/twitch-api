@@ -17,7 +17,6 @@ class TopOfTheTopsRequestValidator
             throw new UnauthorizedException();
         }
         $token = substr($header, 7);
-
         $sinceParam = $request->query('since');
         $since = null;
         if ($sinceParam !== null) {

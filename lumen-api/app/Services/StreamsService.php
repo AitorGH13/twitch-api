@@ -7,7 +7,7 @@ use App\Manager\TwitchManager;
 class StreamsService
 {
     public function __construct(
-        private AuthService        $authService,
+        private AuthService   $authService,
         private TwitchManager $twitchClient
     ) {}
 

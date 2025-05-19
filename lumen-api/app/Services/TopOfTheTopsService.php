@@ -13,7 +13,7 @@ class TopOfTheTopsService
     public function __construct(
         private TopOfTheTopsRepository $repo,
         private AuthService            $authService,
-        private TwitchManager $twitchClient
+        private TwitchManager          $twitchClient
     ) {}
 
     public function get(array $input): array

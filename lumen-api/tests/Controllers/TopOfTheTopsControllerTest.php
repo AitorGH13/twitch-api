@@ -56,6 +56,7 @@ class TopOfTheTopsControllerTest extends TestCase
             '/analytics/topsofthetops',
             ['Authorization' => "Bearer {$token}"]
         );
+
         $this->seeStatusCode(200)
             ->seeJsonStructure([
                 ['game_id','game_name','user_name','total_videos','total_views',

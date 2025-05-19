@@ -57,6 +57,7 @@ class EnrichedStreamsControllerTest extends TestCase
             '/analytics/streams/enriched?limit=3',
             ['Authorization' => "Bearer {$token}"]
         );
+      
         $this->seeStatusCode(200)
             ->seeJsonEquals([
                 [

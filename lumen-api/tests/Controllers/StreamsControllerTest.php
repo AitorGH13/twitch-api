@@ -40,6 +40,7 @@ class StreamsControllerTest extends TestCase
             '/analytics/streams',
             ['Authorization' => "Bearer {$token}"]
         );
+
         $this->seeStatusCode(200)
             ->seeJsonEquals([
                 ['title'=>'Title of Stream 1','user_name'=>'User1'],

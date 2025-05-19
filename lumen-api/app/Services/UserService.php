@@ -38,6 +38,7 @@ class UserService
         // Convertimos created_at de ISO8601 a Y-m-d H:i:s
         $user['created_at'] = (new \DateTime($user['created_at']))
             ->format('Y-m-d H:i:s');
+      
         // 3) Inserta en cache
         $this->repo->insert($user);
 

@@ -23,6 +23,7 @@ class UserControllerTest extends TestCase
             '/analytics/user?id=1234',
             []
         );
+
         $this->seeStatusCode(401)
             ->seeJsonEquals(['error'=>'Unauthorized. Twitch access token is invalid or has expired.']);
     }
@@ -38,6 +39,7 @@ class UserControllerTest extends TestCase
             '/analytics/user',
             ['Authorization' => "Bearer {$token}"]
         );
+      
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error'=>"Invalid or missing 'id' parameter."]);
     }
@@ -52,6 +54,7 @@ class UserControllerTest extends TestCase
             '/analytics/user?id=9999',
             ['Authorization' => "Bearer {$token}"]
         );
+      
         $this->seeStatusCode(404)
             ->seeJsonEquals(['error'=>'User not found.']);
     }
@@ -66,6 +69,7 @@ class UserControllerTest extends TestCase
             '/analytics/user?id=42',
             ['Authorization' => "Bearer {$token}"]
         );
+
         $this->seeStatusCode(200)
             ->seeJsonStructure([
                 'id','login','display_name','type','broadcaster_type',
