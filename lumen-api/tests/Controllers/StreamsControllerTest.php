@@ -36,7 +36,10 @@ class StreamsControllerTest extends TestCase
         $token  = app(AuthService::class)
             ->createAccessToken('u@s.com', $apiKey);
 
-        $this->get("/analytics/streams?token={$token}");
+        $this->get(
+            '/analytics/streams',
+            ['Authorization' => "Bearer {$token}"]
+        );
         $this->seeStatusCode(200)
             ->seeJsonEquals([
                 ['title'=>'Title of Stream 1','user_name'=>'User1'],

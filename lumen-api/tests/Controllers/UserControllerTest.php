@@ -19,7 +19,10 @@ class UserControllerTest extends TestCase
     /** @test */
     public function no_token_returns_401()
     {
-        $this->get('/analytics/user?id=1234');
+        $this->get(
+            '/analytics/user?id=1234',
+            []
+        );
         $this->seeStatusCode(401)
             ->seeJsonEquals(['error'=>'Unauthorized. Twitch access token is invalid or has expired.']);
     }
@@ -31,7 +34,10 @@ class UserControllerTest extends TestCase
         $apiKey = app(RegisterService::class)->registerUser('u@t.com')->getData(true)['api_key'];
         $token  = app(AuthService::class)->createAccessToken('u@t.com', $apiKey);
 
-        $this->get("/analytics/user?token={$token}");
+        $this->get(
+            '/analytics/user',
+            ['Authorization' => "Bearer {$token}"]
+        );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error'=>"Invalid or missing 'id' parameter."]);
     }
@@ -42,7 +48,10 @@ class UserControllerTest extends TestCase
         $apiKey = app(RegisterService::class)->registerUser('u@x.com')->getData(true)['api_key'];
         $token  = app(AuthService::class)->createAccessToken('u@x.com', $apiKey);
 
-        $this->get("/analytics/user?id=9999&token={$token}");
+        $this->get(
+            '/analytics/user?id=9999',
+            ['Authorization' => "Bearer {$token}"]
+        );
         $this->seeStatusCode(404)
             ->seeJsonEquals(['error'=>'User not found.']);
     }
@@ -53,7 +62,10 @@ class UserControllerTest extends TestCase
         $apiKey = app(RegisterService::class)->registerUser('u@y.com')->getData(true)['api_key'];
         $token  = app(AuthService::class)->createAccessToken('u@y.com', $apiKey);
 
-        $this->get("/analytics/user?id=42&token={$token}");
+        $this->get(
+            '/analytics/user?id=42',
+            ['Authorization' => "Bearer {$token}"]
+        );
         $this->seeStatusCode(200)
             ->seeJsonStructure([
                 'id','login','display_name','type','broadcaster_type',
