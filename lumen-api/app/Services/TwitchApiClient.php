@@ -74,6 +74,7 @@ class TwitchApiClient
                 'created_at'       => '2020-01-01 00:00:00',
             ]];
         }
+
         $url      = "https://api.twitch.tv/helix/users?id={$id}";
         $response = callTwitchApi($url);
         return $response['data'] ?? [];
@@ -123,4 +124,3 @@ class TwitchApiClient
         return $response['data'] ?? [];
     }
 }
-
