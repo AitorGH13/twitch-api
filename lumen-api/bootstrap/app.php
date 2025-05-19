@@ -189,6 +189,3 @@ $app->singleton(
 );*/
 
 return $app;
-
-
-
