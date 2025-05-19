@@ -21,9 +21,9 @@ class UserRequestValidator
         }
         $token = substr($header, 7);
 
-        // 2) ID
+        // 2) Validate ID parameter: must be positive integer string
         $id = $request->query('id', '');
-        if ($id === '') {
+        if ($id === '' || !ctype_digit($id) || (int)$id <= 0) {
             throw new EmptyIdException();
         }
 
