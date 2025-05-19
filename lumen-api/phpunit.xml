@@ -10,8 +10,17 @@
         </testsuite>
     </testsuites>
     <php>
-        <env name="APP_ENV" value="testing"/>
+        <env name="APP_ENV"      value="testing"/>
+        <env name="APP_DEBUG"    value="true"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
+
+        <!-- Base de datos de tests en Docker -->
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_HOST"       value="db"/>
+        <env name="DB_PORT"       value="3306"/>
+        <env name="DB_DATABASE"   value="twitchanalytics"/>
+        <env name="DB_USERNAME"   value="root"/>
+        <env name="DB_PASSWORD"   value="dxl2025*"/>
     </php>
 </phpunit>

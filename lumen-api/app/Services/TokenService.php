@@ -1,0 +1,43 @@
+<?php
+// app/Services/TokenService.php
+
+namespace App\Services;
+
+use App\Repository\DatabaseRepository;
+use Illuminate\Http\JsonResponse;
+use App\Exceptions\InvalidApiKeyException;
+
+class TokenService
+{
+    private $repo;
+
+    public function __construct(DatabaseRepository $repo)
+    {
+        $this->repo = $repo;
+    }
+
+    public function createToken(string $email, string $apiKey): JsonResponse
+    {
+        $userId = $this->repo->getUserIdByCredentials($email, $apiKey);
+        if (! $userId) {
+            throw new InvalidApiKeyException();
+        }
+
+        $now       = time();
+        $expiresAt = $now + 3 * 24 * 3600;
+        $session   = $this->repo->getSession($userId);
+
+        if (! $session || strtotime($session->expires_at) < $now) {
+            $token = bin2hex(random_bytes(16));
+            if ($session) {
+                $this->repo->updateSession($userId, $token, $expiresAt);
+            } else {
+                $this->repo->registerSession($userId, $token, $expiresAt);
+            }
+        } else {
+            $token = $session->token;
+        }
+
+        return new JsonResponse(['token' => $token], 200);
+    }
+}
