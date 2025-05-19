@@ -130,13 +130,25 @@ if (! class_exists('DB')) {
     class_alias(\Illuminate\Support\Facades\DB::class, 'DB');
 }
 
-// repository
+// Repositorios
 $app->singleton(
     App\Repository\DatabaseRepository::class,
     App\Repository\DatabaseRepository::class
 );
+$app->singleton(
+    App\Repository\TopOfTheTopsRepository::class,
+    App\Repository\TopOfTheTopsRepository::class
+);
 
-// services
+// Servicios
+$app->singleton(
+    App\Services\TwitchApiClient::class,
+    App\Services\TwitchApiClient::class
+);
+$app->singleton(
+    App\Services\TopOfTheTopsService::class,
+    App\Services\TopOfTheTopsService::class
+);
 $app->singleton(
     App\Services\RegisterService::class,
     App\Services\RegisterService::class
@@ -145,14 +157,23 @@ $app->singleton(
     App\Services\TokenService::class,
     App\Services\TokenService::class
 );
-
-// justo después de los bindings de RegisterService y TokenService:
 $app->singleton(
     App\Services\AuthService::class,
     App\Services\AuthService::class
 );
 
+// Validators
+$app->singleton(
+    App\Validators\TopOfTheTopsRequestValidator::class,
+    App\Validators\TopOfTheTopsRequestValidator::class
+);
+$app->singleton(
+    App\Validators\RegisterRequestValidator::class,
+    App\Validators\RegisterRequestValidator::class
+);
+$app->singleton(
+    App\Validators\TokenRequestValidator::class,
+    App\Validators\TokenRequestValidator::class
+);
+
 return $app;
-
-
-

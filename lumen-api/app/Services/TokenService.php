@@ -40,4 +40,16 @@ class TokenService
 
         return new JsonResponse(['token' => $token], 200);
     }
+
+    /**
+     * Valida un access token.
+     */
+    public function validateAccessToken(string $token): bool
+    {
+        $session = $this->repo->getSessionByToken($token);
+        if (! $session) {
+            return false;
+        }
+        return strtotime($session->expires_at) >= time();
+    }
 }
