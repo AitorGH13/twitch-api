@@ -27,10 +27,11 @@ $router->post('/register', 'RegisterController');  // invoca __invoke
 });*/
 $router->post('/token',    'TokenController');     // invoca __invoke
 
-$router->get('/analytics/user', function (\Illuminate\Http\Request $request) {
+/*$router->get('/analytics/user', function (\Illuminate\Http\Request $request) {
     $userId = $request->input('id');
     return response()->json(['id' => $userId, 'name' => 'Sample User']);
-});
+});*/
+$router->get('/analytics/user', 'UserController');
 
 $router->get('/analytics/streams', function () {
     return response()->json(['streams' => ['stream1', 'stream2']]);
