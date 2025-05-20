@@ -39,7 +39,37 @@ class UserControllerTest extends TestCase
             '/analytics/user',
             ['Authorization' => "Bearer {$token}"]
         );
-      
+
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error'=>"Invalid or missing 'id' parameter."]);
+    }
+
+    /** @test */
+    public function invalid_id_parameter_returns_400()
+    {
+        $apiKey = app(RegisterService::class)->registerUser('u@x.com')->getData(true)['api_key'];
+        $token  = app(AuthService::class)->createAccessToken('u@x.com', $apiKey);
+
+        $this->get(
+            '/analytics/user?id=abc',
+            ['Authorization' => "Bearer {$token}"]
+        );
+
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error'=>"Invalid or missing 'id' parameter."]);
+    }
+
+    /** @test */
+    public function invalid_id_returns_400()
+    {
+        $apiKey = app(RegisterService::class)->registerUser('u@x.com')->getData(true)['api_key'];
+        $token  = app(AuthService::class)->createAccessToken('u@x.com', $apiKey);
+
+        $this->get(
+            '/analytics/user?i=1',
+            ['Authorization' => "Bearer {$token}"]
+        );
+
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error'=>"Invalid or missing 'id' parameter."]);
     }
@@ -54,7 +84,7 @@ class UserControllerTest extends TestCase
             '/analytics/user?id=9999',
             ['Authorization' => "Bearer {$token}"]
         );
-      
+
         $this->seeStatusCode(404)
             ->seeJsonEquals(['error'=>'User not found.']);
     }
