@@ -29,7 +29,6 @@ class StreamsControllerTest extends TestCase
     /** @test */
     public function valid_request_returns_streams_list()
     {
-        // generar usuario y token válidos
         $apiKey = app(RegisterService::class)
             ->registerUser('u@s.com')
             ->getData(true)['api_key'];
