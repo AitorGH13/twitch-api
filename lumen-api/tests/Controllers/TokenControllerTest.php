@@ -45,13 +45,9 @@ class TokenControllerTest extends TestCase
     /** @test */
     public function token_with_invalid_api_key_returns_401()
     {
-        // primero registro un email para generar un api_key válido
-        $validApiKey = app(AuthService::class)->registerEmail('user@example.com');
-
-        // ahora pruebo con otro api_key
         $this->post('/token', [
             'email'   => 'user@example.com',
-            'api_key' => 'deadbeef'
+            'api_key' => 'abcd1234'
         ]);
         $this->seeStatusCode(401)
             ->seeJsonEquals(['error' => 'Unauthorized. API access token is invalid.']);

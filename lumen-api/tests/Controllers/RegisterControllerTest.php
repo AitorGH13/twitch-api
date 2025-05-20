@@ -28,7 +28,7 @@ class RegisterControllerTest extends TestCase
     /** @test */
     public function register_with_invalid_email_returns_400()
     {
-        $this->post('/register', ['email' => 'foo@']);
+        $this->post('/register', ['email' => 'foo@.com']);
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => 'The email must be a valid email address']);
     }
@@ -40,7 +40,6 @@ class RegisterControllerTest extends TestCase
         $this->seeStatusCode(200)
             ->seeJsonStructure(['api_key']);
 
-        // además comprobamos longitud (16 bytes → 32 hex chars)
         $body = json_decode($this->response->getContent(), true);
         $this->assertEquals(32, strlen($body['api_key']));
     }

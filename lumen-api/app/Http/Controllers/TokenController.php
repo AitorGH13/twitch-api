@@ -1,12 +1,9 @@
-<?php
-// app/Http/Controllers/TokenController.php
-
+<?php // app/Http/Controllers/TokenController.php
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-
 use App\Validators\TokenRequestValidator;
 use App\Services\TokenService;
 use App\Exceptions\EmptyEmailException;
@@ -16,15 +13,10 @@ use App\Exceptions\InvalidApiKeyException;
 
 class TokenController extends BaseController
 {
-    private $validator;
-    private $service;
-
     public function __construct(
-        TokenRequestValidator $validator,
-        TokenService          $service
+        private TokenRequestValidator $validator,
+        private TokenService          $service
     ) {
-        $this->validator = $validator;
-        $this->service   = $service;
     }
 
     public function __invoke(Request $request): JsonResponse

@@ -1,11 +1,10 @@
 <?php // app/Validators/TokenRequestValidator.php
-
 namespace App\Validators;
 
+use Illuminate\Http\Request;
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
 use App\Exceptions\EmptyApiKeyException;
-use Illuminate\Http\Request;
 
 class TokenRequestValidator
 {
@@ -15,8 +14,9 @@ class TokenRequestValidator
         $apiKey = $request->input('api_key');
 
         if (empty($email)) {
-            throw new EmptyEmailException();
+            throw new EmptyEmailException('Email cannot be empty');
         }
+
         $sanitizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL);
         if (! filter_var($sanitizedEmail, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidEmailAddressException();
@@ -25,7 +25,6 @@ class TokenRequestValidator
         if (empty($apiKey)) {
             throw new EmptyApiKeyException();
         }
-        // si tuvieras formato fijo de API Key, lo validarías aquí
 
         return [
             'email'   => $sanitizedEmail,

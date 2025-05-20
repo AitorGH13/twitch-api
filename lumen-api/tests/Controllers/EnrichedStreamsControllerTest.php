@@ -27,9 +27,8 @@ class EnrichedStreamsControllerTest extends TestCase
     }
 
     /** @test */
-    public function invalid_limit_returns_400()
+    public function invalid_limit_parameter_returns_400()
     {
-        // creamos usuario y token válidos
         $apiKey = app(RegisterService::class)
             ->registerUser('u@e.com')
             ->getData(true)['api_key'];
@@ -38,6 +37,23 @@ class EnrichedStreamsControllerTest extends TestCase
 
         $this->get(
             '/analytics/streams/enriched?limit=0',
+            ['Authorization' => "Bearer {$token}"]
+        );
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error'=>"Invalid 'limit' parameter."]);
+    }
+
+    /** @test */
+    public function invalid_limit_returns_400()
+    {
+        $apiKey = app(RegisterService::class)
+            ->registerUser('u@e.com')
+            ->getData(true)['api_key'];
+        $token  = app(AuthService::class)
+            ->createAccessToken('u@e.com', $apiKey);
+
+        $this->get(
+            '/analytics/streams/enriched?lim=0',
             ['Authorization' => "Bearer {$token}"]
         );
         $this->seeStatusCode(400)
@@ -57,7 +73,7 @@ class EnrichedStreamsControllerTest extends TestCase
             '/analytics/streams/enriched?limit=3',
             ['Authorization' => "Bearer {$token}"]
         );
-      
+
         $this->seeStatusCode(200)
             ->seeJsonEquals([
                 [
