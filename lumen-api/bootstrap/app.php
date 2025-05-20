@@ -92,6 +92,10 @@ $app->configure('app');
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
+$app->routeMiddleware([
+    // ... otros middlewares ...
+    'auth.token' => App\Http\Middleware\AuthMiddleware::class,
+]);
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers

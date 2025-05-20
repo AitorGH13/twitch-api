@@ -16,7 +16,7 @@ class TopOfTheTopsService
         private TwitchManager          $twitchClient
     ) {}
 
-    public function get(array $input): array
+    public function getTopOfTheTops(array $input): array
     {
         [$token, $since] = $input;
 

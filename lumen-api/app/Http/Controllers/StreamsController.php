@@ -4,32 +4,28 @@ namespace App\Http\Controllers;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-
+use App\Http\Middleware\AuthMiddleware;
 use App\Validators\StreamsRequestValidator;
 use App\Services\StreamsService;
-use App\Exceptions\UnauthorizedException;
 
 class StreamsController extends BaseController
 {
     public function __construct(
         private StreamsRequestValidator $validator,
-        private StreamsService          $service
-    ) {}
+        private StreamsService $service
+    ) {
+        $this->middleware(AuthMiddleware::class);
+    }
 
-    public function __invoke(Request $request): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        try {
-            $token    = $this->validator->validate($request);
-            $streams  = $this->service->getLiveStreams($token);
-            //return response()->json($streams, 200);
-            return response()->json(
-                $streams,
-                200,
-                [],
-                JSON_UNESCAPED_UNICODE
-            );
-        } catch (UnauthorizedException $e) {
-            return response()->json(['error' => $e->getMessage()], 401);
-        }
+        $token   = $this->validator->validate($request);
+        $streams = $this->service->getLiveStreams($token);
+        return response()->json(
+            $streams,
+            200,
+            [],
+            JSON_UNESCAPED_UNICODE
+        );
     }
 }

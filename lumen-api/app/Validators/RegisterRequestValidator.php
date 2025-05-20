@@ -1,10 +1,9 @@
 <?php // app/Validators/RegisterRequestValidator.php
-
 namespace App\Validators;
 
+use Illuminate\Http\Request;
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
-use Illuminate\Http\Request;
 
 class RegisterRequestValidator
 {
