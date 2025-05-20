@@ -31,7 +31,6 @@ class UserControllerTest extends TestCase
     /** @test */
     public function missing_id_returns_400()
     {
-        // genera un token válido
         $apiKey = app(RegisterService::class)->registerUser('u@t.com')->getData(true)['api_key'];
         $token  = app(AuthService::class)->createAccessToken('u@t.com', $apiKey);
 
