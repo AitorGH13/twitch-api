@@ -39,7 +39,7 @@ class TopOfTheTopsControllerTest extends TestCase
             ['Authorization' => "Bearer {$token}"]
         );
         $this->seeStatusCode(400)
-            ->seeJsonEquals(['error'=>'Parameter since must be an integer.']);
+            ->seeJsonEquals(['error'=>"Invalid 'since' parameter."]);
     }
 
     /** @test */
