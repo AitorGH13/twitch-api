@@ -12,6 +12,9 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./lumen-api
     steps:
       # 1) Saca el código
       - uses: actions/checkout@v4
