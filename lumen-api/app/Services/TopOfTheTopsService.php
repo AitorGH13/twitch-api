@@ -8,6 +8,7 @@ use App\Exceptions\UnauthorizedException;
 use App\Manager\TwitchManager;
 use App\Repository\TopOfTheTopsRepository;
 use DateTime;
+use Exception;
 
 class TopOfTheTopsService
 {
@@ -25,6 +26,9 @@ class TopOfTheTopsService
         $this->twitchClient = $twitchClient;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getTopOfTheTops(array $input): array
     {
         [$token, $since] = $input;
@@ -47,7 +51,7 @@ class TopOfTheTopsService
         $this->repo->clearCache();
 
         $ttl = $since ?? 600;
-        $expiresAt = (new DateTime())->modify("+{$ttl} seconds")->format('Y-m-d H:i:s');
+        $expiresAt = (new DateTime())->modify("+$ttl seconds")->format('Y-m-d H:i:s');
 
         $games = $this->twitchClient->getTopGames(3);
         if (empty($games)) {
