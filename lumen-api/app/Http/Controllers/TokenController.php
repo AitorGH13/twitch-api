@@ -11,15 +11,19 @@ use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
 use App\Exceptions\EmptyApiKeyException;
 use App\Exceptions\InvalidApiKeyException;
+use Random\RandomException;
 
 class TokenController extends BaseController
 {
     public function __construct(
-        private TokenRequestValidator $validator,
-        private TokenService $service
+        private readonly TokenRequestValidator $validator,
+        private readonly TokenService $service
     ) {
     }
 
+    /**
+     * @throws RandomException
+     */
     public function __invoke(Request $request): JsonResponse
     {
         try {
