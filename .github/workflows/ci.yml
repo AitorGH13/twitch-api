@@ -59,7 +59,6 @@ jobs:
         working-directory: ./lumen-api
         run: |
           cp .env.testing .env
-          php artisan key:generate
           vendor/bin/phpunit --testdox --configuration phpunit.xml
         env:
           APP_ENV: testing
