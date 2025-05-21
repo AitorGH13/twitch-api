@@ -1,6 +1,5 @@
 name: CI
 
-# Se dispara en pushes a cualquier rama y en PRs
 on:
   push:
     branches:
@@ -12,18 +11,30 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: dxl2025*
+          MYSQL_DATABASE: twitchanalytics
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
-      # 1) Saca el código
       - uses: actions/checkout@v4
 
-      # 2) Instala PHP y extensiones comunes
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           extensions: mbstring, curl, pdo, pdo_mysql
 
-      # 3) Cachea composer para acelerar builds (raíz)
       - name: Cache Root Composer
         uses: actions/cache@v3
         with:
@@ -32,15 +43,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-root-
 
-      # 4) Instala dependencias en la raíz
       - name: Install root dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      # 5) Ejecuta GrumPHP (lanza PHPCS, PHPMD y PHP-CS-Fixer)
       - name: Run code quality checks
         run: vendor/bin/grumphp run --verbose
 
-      # 6) Cachea composer para lumen-api
       - name: Cache Lumen API Composer
         uses: actions/cache@v3
         with:
@@ -49,16 +57,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-lumen-
 
-      # 7) Instala dependencias de Lumen
       - name: Install Lumen dependencies
         working-directory: ./lumen-api
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      # 8) Ejecuta los tests de PHPUnit con el entorno de testing
       - name: Run Tests
         working-directory: ./lumen-api
         run: |
           cp .env.testing .env
+          php artisan migrate:fresh --force
           vendor/bin/phpunit --testdox --configuration phpunit.xml
         env:
           APP_ENV: testing
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: twitchanalytics
+          DB_USERNAME: root
+          DB_PASSWORD: dxl2025*
