@@ -6,7 +6,7 @@ use App\Exceptions\InvalidLimitException;
 use App\Exceptions\UnauthorizedException;
 use App\Manager\TwitchManager;
 
-class EnrichedStreamsService
+readonly class EnrichedStreamsService
 {
     public function __construct(
         private AuthService $authService,
