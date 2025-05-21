@@ -37,7 +37,7 @@ class EnrichedStreamsControllerTest extends TestCase
 
         $this->get(
             '/analytics/streams/enriched?limit=0',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => "Invalid 'limit' parameter."]);
@@ -54,7 +54,7 @@ class EnrichedStreamsControllerTest extends TestCase
 
         $this->get(
             '/analytics/streams/enriched?lim=0',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => "Invalid 'limit' parameter."]);
@@ -71,7 +71,7 @@ class EnrichedStreamsControllerTest extends TestCase
 
         $this->get(
             '/analytics/streams/enriched?limit=3',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
 
         $this->seeStatusCode(200)
