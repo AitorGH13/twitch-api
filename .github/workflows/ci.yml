@@ -40,6 +40,12 @@ jobs:
       - name: Run code quality checks
         run: vendor/bin/grumphp run --verbose
 
-      # 6) (Opcional) Lanza PHPUnit si tienes tests
-      # - name: Run unit tests
-      #   run: vendor/bin/phpunit --configuration phpunit.xml
+      # 6) Ejecuta los tests de PHPUnit con el entorno de testing
+      - name: Run Tests
+        run: |
+          cp .env.testing .env
+          php artisan key:generate
+          vendor/bin/phpunit --testdox --configuration phpunit.xml
+        env:
+          APP_ENV: testing
+
