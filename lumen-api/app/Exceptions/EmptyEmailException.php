@@ -1,7 +1,10 @@
-<?php // app/Exceptions/EmptyEmailException.php
+<?php
+
 namespace App\Exceptions;
 
-class EmptyEmailException extends \RuntimeException
+use RuntimeException;
+
+class EmptyEmailException extends RuntimeException
 {
     public function __construct()
     {

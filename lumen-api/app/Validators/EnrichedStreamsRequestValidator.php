@@ -1,4 +1,5 @@
-<?php // app/Validators/EnrichedStreamsRequestValidator.php
+<?php
+
 namespace App\Validators;
 
 use Illuminate\Http\Request;

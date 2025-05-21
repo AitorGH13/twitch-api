@@ -1,7 +1,10 @@
-<?php // app/Exceptions/InvalidLimitException.php
+<?php
+
 namespace App\Exceptions;
 
-class InvalidLimitException extends \RuntimeException
+use RuntimeException;
+
+class InvalidLimitException extends RuntimeException
 {
     public function __construct()
     {

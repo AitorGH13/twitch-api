@@ -1,7 +1,8 @@
 <?php
+
 // bootstrap/app.php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
@@ -10,7 +11,7 @@ $appEnv   = $_ENV['APP_ENV']   ?? $_SERVER['APP_ENV']   ?? 'production';
 $basePath = dirname(__DIR__);
 
 // Elegimos el fichero según el entorno
-$envFile = $appEnv === 'testing' && file_exists($basePath.'/.env.testing')
+$envFile = $appEnv === 'testing' && file_exists($basePath . '/.env.testing')
     ? '.env.testing'
     : '.env';
 
@@ -125,7 +126,7 @@ $app->routeMiddleware([
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
 
 $app->withFacades();
@@ -171,7 +172,7 @@ $app->singleton(
 );
 $app->singleton(
     App\Services\RegisterService::class,
-    App\Services\UserService::class
+    App\Services\StreamerService::class
 );
 $app->singleton(
     App\Services\StreamsService::class,
@@ -200,8 +201,8 @@ $app->singleton(
     App\Validators\TokenRequestValidator::class
 );
 $app->singleton(
-    App\Validators\UserRequestValidator::class,
-    App\Validators\UserRequestValidator::class
+    App\Validators\StreamerRequestValidator::class,
+    App\Validators\StreamerRequestValidator::class
 );
 $app->singleton(
     App\Validators\StreamsRequestValidator::class,
@@ -213,6 +214,3 @@ $app->singleton(
 );*/
 
 return $app;
-
-
-

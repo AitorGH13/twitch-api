@@ -1,4 +1,5 @@
-<?php // app/Http/Controllers/RegisterController.php
+<?php
+
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -8,15 +9,19 @@ use App\Validators\RegisterRequestValidator;
 use App\Services\RegisterService;
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
+use Random\RandomException;
 
 class RegisterController extends BaseController
 {
     public function __construct(
-        private RegisterRequestValidator $validator,
-        private RegisterService $service
+        private readonly RegisterRequestValidator $validator,
+        private readonly RegisterService $service
     ) {
     }
 
+    /**
+     * @throws RandomException
+     */
     public function __invoke(Request $request): JsonResponse
     {
         try {

@@ -5,8 +5,7 @@ use PhpCsFixer\Finder;
 
 $finder = Finder::create()
     ->in(__DIR__)
-    ->exclude('vendor')
-    ->exclude('lumen-api');
+    ->exclude('vendor');
 
 return (new Config())
     ->setRules([

@@ -1,4 +1,4 @@
-<?php // tests/Controllers/TokenControllerTest.php
+<?php
 
 namespace Tests\Controllers;
 
@@ -15,11 +15,11 @@ class TokenControllerTest extends TestCase
      */
     public function createApplication()
     {
-        return require __DIR__.'/../../bootstrap/app.php';
+        return require __DIR__ . '/../../bootstrap/app.php';
     }
 
     /** @test */
-    public function token_without_email_returns_400()
+    public function testTokenWithoutEmailReturns400()
     {
         $this->post('/token', ['api_key' => 'any']);
         $this->seeStatusCode(400)
@@ -27,7 +27,7 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function token_without_api_key_returns_400()
+    public function testTokenWithoutApiKeyReturns400()
     {
         $this->post('/token', ['email' => 'user@example.com']);
         $this->seeStatusCode(400)
@@ -35,7 +35,7 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function token_with_invalid_email_returns_400()
+    public function testTokenWithInvalidEmailReturns400()
     {
         $this->post('/token', ['email' => 'not-an-email', 'api_key' => 'abc']);
         $this->seeStatusCode(400)
@@ -43,21 +43,21 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function token_with_invalid_api_key_returns_401()
+    public function testTokenWithInvalidApiKeyReturns401()
     {
         $this->post('/token', [
             'email'   => 'user@example.com',
-            'api_key' => 'abcd1234'
+            'api_key' => 'abed1234'
         ]);
         $this->seeStatusCode(401)
             ->seeJsonEquals(['error' => 'Unauthorized. API access token is invalid.']);
     }
 
     /** @test */
-    public function token_with_valid_credentials_returns_token()
+    public function testTokenWithValidCredentialsReturnsToken()
     {
-        $email      = 'user@example.com';
-        $validKey   = app(AuthService::class)->registerEmail($email);
+        $email    = 'user@example.com';
+        $validKey = app(AuthService::class)->registerEmail($email);
 
         $this->post('/token', [
             'email'   => $email,

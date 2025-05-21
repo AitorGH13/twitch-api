@@ -1,20 +1,17 @@
 <?php
-// app/Services/AuthService.php
 
 namespace App\Services;
-use Illuminate\Http\JsonResponse;
-use App\Services\RegisterService;
-use App\Services\TokenService;
-use App\Exceptions\InvalidApiKeyException;
+
+use Random\RandomException;
 
 class AuthService
 {
-    private $registerService;
-    private $tokenService;
+    private RegisterService $registerService;
+    private TokenService $tokenService;
 
     public function __construct(
         RegisterService $registerService,
-        TokenService   $tokenService
+        TokenService $tokenService
     ) {
         $this->registerService = $registerService;
         $this->tokenService    = $tokenService;
@@ -23,11 +20,12 @@ class AuthService
     /**
      * Devuelve el api_key como string (no JsonResponse),
      * para satisfacer a los tests que llaman a app(AuthService::class)->registerEmail()
+     * @used-by /lumen-api/tests*
+     * @throws RandomException
      */
     public function registerEmail(string $email): string
     {
         $response = $this->registerService->registerUser($email);
-        // getData(true) devuelve el body como array
         $data = $response->getData(true);
         return $data['api_key'];
     }
@@ -36,6 +34,8 @@ class AuthService
      * Devuelve el token como string,
      * para que app(AuthService::class)->createAccessToken() funcione.
      * Lanza InvalidApiKeyException si no coincide.
+     * @used-by /lumen-api/tests*
+     * @throws RandomException
      */
     public function createAccessToken(string $email, string $apiKey): string
     {

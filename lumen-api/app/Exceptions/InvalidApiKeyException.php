@@ -1,7 +1,10 @@
-<?php // app/Exceptions/InvalidApiKeyException.php
+<?php
+
 namespace App\Exceptions;
 
-class InvalidApiKeyException extends \RuntimeException
+use RuntimeException;
+
+class InvalidApiKeyException extends RuntimeException
 {
     public function __construct()
     {

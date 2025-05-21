@@ -1,6 +1,5 @@
 name: CI
 
-# Se dispara en pushes a cualquier rama y en PRs
 on:
   push:
     branches:
@@ -12,34 +11,71 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: twitch_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
-      # 1) Saca el código
       - uses: actions/checkout@v4
 
-      # 2) Instala PHP y extensiones comunes
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           extensions: mbstring, curl, pdo, pdo_mysql
 
-      # 3) Cachea composer para acelerar builds
-      - name: Cache Composer
+      - name: Cache Root Composer
         uses: actions/cache@v3
         with:
           path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-root-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-composer-
+            ${{ runner.os }}-composer-root-
 
-      # 4) Instala dependencias
-      - name: Install dependencies
+      - name: Install root dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      # 5) Ejecuta GrumPHP (lanza PHPCS, PHPMD y PHP-CS-Fixer)
       - name: Run code quality checks
         run: vendor/bin/grumphp run --verbose
 
-      # 6) (Opcional) Lanza PHPUnit si tienes tests
-      # - name: Run unit tests
-      #   run: vendor/bin/phpunit --configuration phpunit.xml
+      - name: Cache Lumen API Composer
+        uses: actions/cache@v3
+        with:
+          path: lumen-api/vendor
+          key: ${{ runner.os }}-composer-lumen-${{ hashFiles('lumen-api/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-lumen-
+
+      - name: Install Lumen dependencies
+        working-directory: ./lumen-api
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Prepare Environment
+        working-directory: ./lumen-api
+        run: |
+          sed -i 's/DB_HOST=db/DB_HOST=127.0.0.1/g' .env.testing
+          cp .env.testing .env
+
+      - name: Run Tests
+        working-directory: ./lumen-api
+        run: |
+          php artisan migrate:fresh --force
+          vendor/bin/phpunit --testdox --configuration phpunit.xml
+        env:
+          APP_ENV: testing
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: twitch_db
+          DB_USERNAME: root
+          DB_PASSWORD: root

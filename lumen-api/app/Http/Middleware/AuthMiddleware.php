@@ -1,5 +1,5 @@
 <?php
-// app/Http/Middleware/AuthMiddleware.php
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -18,11 +18,11 @@ class AuthMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @param  Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         $header = $request->header('Authorization', '');
         if (! str_starts_with($header, 'Bearer ')) {
@@ -38,7 +38,6 @@ class AuthMiddleware
             ], 401);
         }
 
-        // Optionally attach token/user info to request
         $request->attributes->set('token', $token);
 
         return $next($request);

@@ -1,29 +1,34 @@
-<?php // app/Http/Controllers/UserController.php
+<?php
+
 namespace App\Http\Controllers;
 
+use Exception;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Middleware\AuthMiddleware;
-use App\Validators\UserRequestValidator;
-use App\Services\UserService;
+use App\Validators\StreamerRequestValidator;
+use App\Services\StreamerService;
 use App\Exceptions\EmptyIdException;
 use App\Exceptions\UserNotFoundException;
 
-class UserController extends BaseController
+class StreamerController extends BaseController
 {
     public function __construct(
-        private UserRequestValidator $validator,
-        private UserService          $service
+        private readonly StreamerRequestValidator $validator,
+        private readonly StreamerService $service
     ) {
         $this->middleware(AuthMiddleware::class);
     }
 
+    /**
+     * @throws Exception
+     */
     public function profile(Request $request): JsonResponse
     {
         try {
-            [$id, $token] = $this->validator->validate($request);
-            $user = $this->service->getUserProfile([$id, $token]);
+            [$userId, $token] = $this->validator->validate($request);
+            $user = $this->service->getUserProfile([$userId, $token]);
             return response()->json(
                 $user,
                 200,

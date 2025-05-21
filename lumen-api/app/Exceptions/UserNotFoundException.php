@@ -1,7 +1,10 @@
-<?php // app/Exceptions/UserNotFoundException.php
+<?php
+
 namespace App\Exceptions;
 
-class UserNotFoundException extends \RuntimeException
+use RuntimeException;
+
+class UserNotFoundException extends RuntimeException
 {
     public function __construct()
     {

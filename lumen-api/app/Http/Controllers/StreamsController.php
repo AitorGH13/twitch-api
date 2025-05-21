@@ -1,4 +1,5 @@
-<?php // app/Http/Controllers/StreamsController.php
+<?php
+
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -11,8 +12,8 @@ use App\Services\StreamsService;
 class StreamsController extends BaseController
 {
     public function __construct(
-        private StreamsRequestValidator $validator,
-        private StreamsService $service
+        private readonly StreamsRequestValidator $validator,
+        private readonly StreamsService $service
     ) {
         $this->middleware(AuthMiddleware::class);
     }

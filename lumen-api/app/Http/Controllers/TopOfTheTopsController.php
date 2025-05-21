@@ -1,6 +1,8 @@
-<?php // app/Http/Controllers/TopOfTheTopsController.php
+<?php
+
 namespace App\Http\Controllers;
 
+use Exception;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -14,12 +16,15 @@ use App\Exceptions\NoVideosFoundException;
 class TopOfTheTopsController extends BaseController
 {
     public function __construct(
-        private TopOfTheTopsRequestValidator $validator,
-        private TopOfTheTopsService          $service
+        private readonly TopOfTheTopsRequestValidator $validator,
+        private readonly TopOfTheTopsService $service
     ) {
         $this->middleware(AuthMiddleware::class);
     }
 
+    /**
+     * @throws Exception
+     */
     public function list(Request $request): JsonResponse
     {
         try {
@@ -38,4 +43,3 @@ class TopOfTheTopsController extends BaseController
         }
     }
 }
-

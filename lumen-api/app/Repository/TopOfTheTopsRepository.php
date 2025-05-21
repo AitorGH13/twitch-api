@@ -1,4 +1,5 @@
-<?php // app/Repository/TopOfTheTopsRepository.php
+<?php
+
 namespace App\Repository;
 
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,7 @@ class TopOfTheTopsRepository
             'mv_title'     => $row['most_viewed_title'],
             'mv_views'     => $row['most_viewed_views'],
             'mv_duration'  => $row['most_viewed_duration'],
-            'mv_created_at'=> $row['most_viewed_created_at'],
+            'mv_created_at' => $row['most_viewed_created_at'],
             'expires_at'   => $expiresAt,
         ]);
     }
@@ -43,7 +44,7 @@ class TopOfTheTopsRepository
                 'mv_title as most_viewed_title','mv_views as most_viewed_views',
                 'mv_duration as most_viewed_duration','mv_created_at as most_viewed_created_at'
             ])->get()
-            ->map(fn($r) => (array)$r)
+            ->map(fn ($r) => (array)$r)
             ->all();
     }
 }

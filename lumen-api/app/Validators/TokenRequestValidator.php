@@ -1,4 +1,5 @@
-<?php // app/Validators/TokenRequestValidator.php
+<?php
+
 namespace App\Validators;
 
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class TokenRequestValidator
         $apiKey = $request->input('api_key');
 
         if (empty($email)) {
-            throw new EmptyEmailException('Email cannot be empty');
+            throw new EmptyEmailException();
         }
 
         $sanitizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL);

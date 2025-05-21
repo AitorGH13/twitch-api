@@ -1,7 +1,10 @@
-<?php // app/Exceptions/EmptyTokenException.php
+<?php
+
 namespace App\Exceptions;
 
-class EmptyTokenException extends \RuntimeException
+use RuntimeException;
+
+class EmptyTokenException extends RuntimeException
 {
     public function __construct()
     {
