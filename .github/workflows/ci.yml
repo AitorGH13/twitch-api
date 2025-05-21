@@ -61,10 +61,15 @@ jobs:
         working-directory: ./lumen-api
         run: composer install --prefer-dist --no-progress --no-suggest
 
+      - name: Prepare Environment
+        working-directory: ./lumen-api
+        run: |
+          sed -i 's/DB_HOST=db/DB_HOST=127.0.0.1/g' .env.testing
+          cp .env.testing .env
+
       - name: Run Tests
         working-directory: ./lumen-api
         run: |
-          cp .env.testing .env
           php artisan migrate:fresh --force
           vendor/bin/phpunit --testdox --configuration phpunit.xml
         env:
