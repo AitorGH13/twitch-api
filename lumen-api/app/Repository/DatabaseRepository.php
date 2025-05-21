@@ -1,4 +1,5 @@
 <?php
+
 // app/Repository/DatabaseRepository.php
 
 namespace App\Repository;

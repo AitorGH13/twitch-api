@@ -1,4 +1,7 @@
-<?php // app/Repository/UserRepository.php
+<?php
+
+// app/Repository/UserRepository.php
+
 namespace App\Repository;
 
 use Illuminate\Support\Facades\DB;
@@ -6,10 +9,10 @@ use stdClass;
 
 class UserRepository
 {
-    public function findById(string $id): ?array
+    public function findById(string $userId): ?array
     {
         $row = DB::table('streamers')
-            ->where('id', $id)
+            ->where('id', $userId)
             ->first();
 
         return $row ? (array)$row : null;
@@ -24,8 +27,8 @@ class UserRepository
             'type'             => $user['type'],
             'broadcaster_type' => $user['broadcaster_type'],
             'description'      => $user['description'],
-            'profile_image_url'=> $user['profile_image_url'],
-            'offline_image_url'=> $user['offline_image_url'],
+            'profile_image_url' => $user['profile_image_url'],
+            'offline_image_url' => $user['offline_image_url'],
             'view_count'       => $user['view_count'],
             'created_at'       => $user['created_at'],
         ]);

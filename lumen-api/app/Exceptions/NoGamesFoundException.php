@@ -1,4 +1,7 @@
-<?php // app/Exceptions/NoGamesFoundException.php
+<?php
+
+// app/Exceptions/NoGamesFoundException.php
+
 namespace App\Exceptions;
 
 class NoGamesFoundException extends \RuntimeException

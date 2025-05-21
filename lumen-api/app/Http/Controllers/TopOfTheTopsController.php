@@ -1,4 +1,7 @@
-<?php // app/Http/Controllers/TopOfTheTopsController.php
+<?php
+
+// app/Http/Controllers/TopOfTheTopsController.php
+
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -15,7 +18,7 @@ class TopOfTheTopsController extends BaseController
 {
     public function __construct(
         private TopOfTheTopsRequestValidator $validator,
-        private TopOfTheTopsService          $service
+        private TopOfTheTopsService $service
     ) {
         $this->middleware(AuthMiddleware::class);
     }
@@ -38,4 +41,3 @@ class TopOfTheTopsController extends BaseController
         }
     }
 }
-

@@ -1,4 +1,7 @@
-<?php // app/Validators/TopOfTheTopsRequestValidator.php
+<?php
+
+// app/Validators/TopOfTheTopsRequestValidator.php
+
 namespace App\Validators;
 
 use Illuminate\Http\Request;

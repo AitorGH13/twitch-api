@@ -1,4 +1,7 @@
-<?php // app/Exceptions/NoVideosFoundException.php
+<?php
+
+// app/Exceptions/NoVideosFoundException.php
+
 namespace App\Exceptions;
 
 class NoVideosFoundException extends \RuntimeException

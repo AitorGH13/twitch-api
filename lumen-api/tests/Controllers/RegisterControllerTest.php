@@ -1,4 +1,4 @@
-<?php // tests/Controllers/RegisterControllerTest.php
+<?php
 
 namespace Tests\Controllers;
 
@@ -14,11 +14,11 @@ class RegisterControllerTest extends TestCase
      */
     public function createApplication()
     {
-        return require __DIR__.'/../../bootstrap/app.php';
+        return require __DIR__ . '/../../bootstrap/app.php';
     }
 
     /** @test */
-    public function register_without_email_returns_400()
+    public function testRegisterWithoutEmailReturns400()
     {
         $this->post('/register', []);
         $this->seeStatusCode(400)
@@ -26,7 +26,7 @@ class RegisterControllerTest extends TestCase
     }
 
     /** @test */
-    public function register_with_invalid_email_returns_400()
+    public function testRegisterWithInvalidEmailReturns400()
     {
         $this->post('/register', ['email' => 'foo@.com']);
         $this->seeStatusCode(400)
@@ -34,7 +34,7 @@ class RegisterControllerTest extends TestCase
     }
 
     /** @test */
-    public function register_with_valid_email_returns_api_key()
+    public function testRegisterWithValidEmailReturnsApiKey()
     {
         $response = $this->post('/register', ['email' => 'user@example.com']);
         $this->seeStatusCode(200)

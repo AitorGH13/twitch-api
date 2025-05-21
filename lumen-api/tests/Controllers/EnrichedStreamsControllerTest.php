@@ -1,4 +1,4 @@
-<?php // tests/Controllers/EnrichedStreamsControllerTest.php
+<?php
 
 namespace Tests\Controllers;
 
@@ -13,11 +13,11 @@ class EnrichedStreamsControllerTest extends TestCase
 
     public function createApplication()
     {
-        return require __DIR__.'/../../bootstrap/app.php';
+        return require __DIR__ . '/../../bootstrap/app.php';
     }
 
     /** @test */
-    public function no_token_returns_401()
+    public function testNoTokenReturns401()
     {
         $this->get('/analytics/streams/enriched?limit=3');
         $this->seeStatusCode(401)
@@ -27,7 +27,7 @@ class EnrichedStreamsControllerTest extends TestCase
     }
 
     /** @test */
-    public function invalid_limit_parameter_returns_400()
+    public function testInvalidLimitParameterReturns400()
     {
         $apiKey = app(RegisterService::class)
             ->registerUser('u@e.com')
@@ -40,11 +40,11 @@ class EnrichedStreamsControllerTest extends TestCase
             ['Authorization' => "Bearer {$token}"]
         );
         $this->seeStatusCode(400)
-            ->seeJsonEquals(['error'=>"Invalid 'limit' parameter."]);
+            ->seeJsonEquals(['error' => "Invalid 'limit' parameter."]);
     }
 
     /** @test */
-    public function invalid_limit_returns_400()
+    public function testInvalidLimitReturns400()
     {
         $apiKey = app(RegisterService::class)
             ->registerUser('u@e.com')
@@ -57,11 +57,11 @@ class EnrichedStreamsControllerTest extends TestCase
             ['Authorization' => "Bearer {$token}"]
         );
         $this->seeStatusCode(400)
-            ->seeJsonEquals(['error'=>"Invalid 'limit' parameter."]);
+            ->seeJsonEquals(['error' => "Invalid 'limit' parameter."]);
     }
 
     /** @test */
-    public function valid_request_returns_enriched_streams()
+    public function testValidRequestReturnsEnrichedStreams()
     {
         $apiKey = app(RegisterService::class)
             ->registerUser('u@e2.com')

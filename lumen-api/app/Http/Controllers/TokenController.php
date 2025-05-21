@@ -1,4 +1,7 @@
-<?php // app/Http/Controllers/TokenController.php
+<?php
+
+// app/Http/Controllers/TokenController.php
+
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -15,7 +18,7 @@ class TokenController extends BaseController
 {
     public function __construct(
         private TokenRequestValidator $validator,
-        private TokenService          $service
+        private TokenService $service
     ) {
     }
 
@@ -25,9 +28,9 @@ class TokenController extends BaseController
             ['email' => $email, 'api_key' => $apiKey] = $this->validator->validate($request);
             return $this->service->createToken($email, $apiKey);
         } catch (
-        EmptyEmailException |
-        InvalidEmailAddressException |
-        EmptyApiKeyException $e
+            EmptyEmailException |
+            InvalidEmailAddressException |
+            EmptyApiKeyException $e
         ) {
             return response()->json(['error' => $e->getMessage()], 400);
         } catch (InvalidApiKeyException $e) {

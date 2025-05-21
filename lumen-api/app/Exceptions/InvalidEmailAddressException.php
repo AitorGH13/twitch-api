@@ -1,4 +1,7 @@
-<?php // app/Exceptions/InvalidEmailAddressException.php
+<?php
+
+// app/Exceptions/InvalidEmailAddressException.php
+
 namespace App\Exceptions;
 
 class InvalidEmailAddressException extends \RuntimeException

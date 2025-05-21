@@ -1,47 +1,66 @@
-<?php // app/Services/UserService.php
+<?php
+
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Exceptions\UnauthorizedException;
 use App\Exceptions\UserNotFoundException;
 use App\Manager\TwitchManager;
 use App\Repository\UserRepository;
+use App\Services\AuthService;
+use DateTime;
 
 class UserService
 {
-    public function __construct(
-        private UserRepository  $repo,
-        private AuthService     $authService,
-        private TwitchManager $twitchClient
-    ) {}
+    private UserRepository $repo;
+    private AuthService $authService;
+    private TwitchManager $twitchClient;
 
+    public function __construct(
+        UserRepository $repo,
+        AuthService $authService,
+        TwitchManager $twitchClient
+    ) {
+        $this->repo = $repo;
+        $this->authService = $authService;
+        $this->twitchClient = $twitchClient;
+    }
+
+    /**
+     * Obtiene el perfil de usuario, validando token y cacheando resultados.
+     *
+     * @param array $input [0 => int userId, 1 => string accessToken]
+     *
+     * @throws UnauthorizedException
+     * @throws UserNotFoundException
+     *
+     * @return array
+     */
     public function getUserProfile(array $input): array
     {
-        [$id, $token] = $input;
+        [$userId, $accessToken] = $input;
 
-        if (! $this->authService->validateAccessToken($token)) {
+        if (! $this->authService->validateAccessToken($accessToken)) {
             throw new UnauthorizedException();
         }
 
-        // 1) Busca en tabla cache
-        $cached = $this->repo->findById($id);
-        if ($cached) {
-            return $cached;
+        $cachedProfile = $this->repo->findById($userId);
+        if ($cachedProfile) {
+            return $cachedProfile;
         }
 
-        // 2) Llama a Twitch API
-        $data = $this->twitchClient->getUserById($id);
-        if (empty($data)) {
+        $apiResponse = $this->twitchClient->getUserById($userId);
+        if (empty($apiResponse)) {
             throw new UserNotFoundException();
         }
 
-        $user = $data[0];
-        // Convertimos created_at de ISO8601 a Y-m-d H:i:s
-        $user['created_at'] = (new \DateTime($user['created_at']))
+        $profile = $apiResponse[0];
+        $profile['created_at'] = (new DateTime($profile['created_at']))
             ->format('Y-m-d H:i:s');
 
-        // 3) Inserta en cache
-        $this->repo->insert($user);
+        $this->repo->insert($profile);
 
-        return $user;
+        return $profile;
     }
 }

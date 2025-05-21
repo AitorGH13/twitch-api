@@ -1,7 +1,9 @@
 <?php
+
 // app/Services/AuthService.php
 
 namespace App\Services;
+
 use Illuminate\Http\JsonResponse;
 use App\Services\RegisterService;
 use App\Services\TokenService;
@@ -14,7 +16,7 @@ class AuthService
 
     public function __construct(
         RegisterService $registerService,
-        TokenService   $tokenService
+        TokenService $tokenService
     ) {
         $this->registerService = $registerService;
         $this->tokenService    = $tokenService;

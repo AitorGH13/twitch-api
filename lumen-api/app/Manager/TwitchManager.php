@@ -1,6 +1,10 @@
 <?php
+
 // app/Services/TwitchManager.php
+
 namespace App\Manager;
+
+use App\Exceptions\TwitchApiNotResponding;
 use App\Services\TwitchAuthService;
 use Illuminate\Support\Facades\Http;
 
@@ -24,7 +28,7 @@ class TwitchManager
             ->get($url, $query);
 
         if (! $response->ok()) {
-            throw new \RuntimeException('Twitch API error: ' . $response->status());
+            throw new TwitchApiNotResponding();
         }
 
         return $response->json();
@@ -39,17 +43,17 @@ class TwitchManager
     /**
      * Devuelve top N juegos. Stub en testing, real en entorno productivo.
      */
-    public function getTopGames(int $n): array
+    public function getTopGames(int $numberOfGames): array
     {
         if ($this->isTesting()) {
             $games = [];
-            for ($i = 1; $i <= $n; $i++) {
+            for ($i = 1; $i <= $numberOfGames; $i++) {
                 $games[] = ['id' => (string)$i, 'name' => "Game{$i}"];
             }
             return $games;
         }
 
-        return $this->request('https://api.twitch.tv/helix/games/top', ['first' => $n])['data'] ?? [];
+        return $this->request('https://api.twitch.tv/helix/games/top', ['first' => $numberOfGames])['data'] ?? [];
     }
 
     /**
@@ -79,29 +83,29 @@ class TwitchManager
     /**
      * Devuelve user por id. Stub en testing.
      */
-    public function getUserById(string $id): array
+    public function getUserById(string $userId): array
     {
         if ($this->isTesting()) {
             // En testing, devolvemos stub para todos los ids excepto '9999'
-            if ($id === '9999') {
+            if ($userId === '9999') {
                 return [];
             }
-            $lastDigit = substr($id, -1);
+            $lastDigit = substr($userId, -1);
             return [[
-                'id'               => $id,
-                'login'            => "login{$id}",
+                'id'               => $userId,
+                'login'            => "login{$userId}",
                 'display_name'     => "Display {$lastDigit}",
                 'type'             => '',
                 'broadcaster_type' => 'partner',
                 'description'      => 'Test description.',
-                'profile_image_url'=> 'https://example.com/profile.png',
-                'offline_image_url'=> 'https://example.com/offline.png',
+                'profile_image_url' => 'https://example.com/profile.png',
+                'offline_image_url' => 'https://example.com/offline.png',
                 'view_count'       => 1234,
                 'created_at'       => '2020-01-01 00:00:00',
             ]];
         }
 
-        return $this->request('https://api.twitch.tv/helix/users', ['id' => $id])['data'] ?? [];
+        return $this->request('https://api.twitch.tv/helix/users', ['id' => $userId])['data'] ?? [];
     }
 
     /**
@@ -114,9 +118,9 @@ class TwitchManager
         if ($this->isTesting()) {
             // stub para 3 streams
             return [
-                ['title'=>'Title of Stream 1','user_name'=>'User1'],
-                ['title'=>'Title of Stream 2','user_name'=>'User2'],
-                ['title'=>'Title of Stream 3','user_name'=>'User3'],
+                ['title' => 'Title of Stream 1','user_name' => 'User1'],
+                ['title' => 'Title of Stream 2','user_name' => 'User2'],
+                ['title' => 'Title of Stream 3','user_name' => 'User3'],
             ];
         }
 
@@ -145,4 +149,3 @@ class TwitchManager
         return $this->request('https://api.twitch.tv/helix/streams', ['first' => $limit])['data'] ?? [];
     }
 }
-

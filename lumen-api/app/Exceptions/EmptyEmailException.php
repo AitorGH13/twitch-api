@@ -1,4 +1,7 @@
-<?php // app/Exceptions/EmptyEmailException.php
+<?php
+
+// app/Exceptions/EmptyEmailException.php
+
 namespace App\Exceptions;
 
 class EmptyEmailException extends \RuntimeException

@@ -1,4 +1,7 @@
-<?php // app/Http/Controllers/StreamsController.php
+<?php
+
+// app/Http/Controllers/StreamsController.php
+
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;

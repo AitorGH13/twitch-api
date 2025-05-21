@@ -1,4 +1,7 @@
-<?php // app/Http/Controllers/EnrichedStreamsController.php
+<?php
+
+// app/Http/Controllers/EnrichedStreamsController.php
+
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -14,7 +17,7 @@ class EnrichedStreamsController extends BaseController
 {
     public function __construct(
         private EnrichedStreamsRequestValidator $validator,
-        private EnrichedStreamsService          $service
+        private EnrichedStreamsService $service
     ) {
         $this->middleware(AuthMiddleware::class);
     }

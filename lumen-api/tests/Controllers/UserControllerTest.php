@@ -1,4 +1,4 @@
-<?php // tests/Controllers/UserControllerTest.php
+<?php
 
 namespace Tests\Controllers;
 
@@ -13,11 +13,11 @@ class UserControllerTest extends TestCase
 
     public function createApplication()
     {
-        return require __DIR__.'/../../bootstrap/app.php';
+        return require __DIR__ . '/../../bootstrap/app.php';
     }
 
     /** @test */
-    public function no_token_returns_401()
+    public function testNoTokenReturns401()
     {
         $this->get(
             '/analytics/user?id=1234',
@@ -25,11 +25,11 @@ class UserControllerTest extends TestCase
         );
 
         $this->seeStatusCode(401)
-            ->seeJsonEquals(['error'=>'Unauthorized. Twitch access token is invalid or has expired.']);
+            ->seeJsonEquals(['error' => 'Unauthorized. Twitch access token is invalid or has expired.']);
     }
 
     /** @test */
-    public function missing_id_returns_400()
+    public function testMissingIdReturns400()
     {
         $apiKey = app(RegisterService::class)->registerUser('u@t.com')->getData(true)['api_key'];
         $token  = app(AuthService::class)->createAccessToken('u@t.com', $apiKey);
@@ -40,11 +40,11 @@ class UserControllerTest extends TestCase
         );
 
         $this->seeStatusCode(400)
-            ->seeJsonEquals(['error'=>"Invalid or missing 'id' parameter."]);
+            ->seeJsonEquals(['error' => "Invalid or missing 'id' parameter."]);
     }
 
     /** @test */
-    public function invalid_id_parameter_returns_400()
+    public function testInvalidIdParameterReturns400()
     {
         $apiKey = app(RegisterService::class)->registerUser('u@x.com')->getData(true)['api_key'];
         $token  = app(AuthService::class)->createAccessToken('u@x.com', $apiKey);
@@ -55,11 +55,11 @@ class UserControllerTest extends TestCase
         );
 
         $this->seeStatusCode(400)
-            ->seeJsonEquals(['error'=>"Invalid or missing 'id' parameter."]);
+            ->seeJsonEquals(['error' => "Invalid or missing 'id' parameter."]);
     }
 
     /** @test */
-    public function invalid_id_returns_400()
+    public function testInvalidIdReturns400()
     {
         $apiKey = app(RegisterService::class)->registerUser('u@x.com')->getData(true)['api_key'];
         $token  = app(AuthService::class)->createAccessToken('u@x.com', $apiKey);
@@ -70,11 +70,11 @@ class UserControllerTest extends TestCase
         );
 
         $this->seeStatusCode(400)
-            ->seeJsonEquals(['error'=>"Invalid or missing 'id' parameter."]);
+            ->seeJsonEquals(['error' => "Invalid or missing 'id' parameter."]);
     }
 
     /** @test */
-    public function not_found_returns_404()
+    public function testNotFoundReturns404()
     {
         $apiKey = app(RegisterService::class)->registerUser('u@x.com')->getData(true)['api_key'];
         $token  = app(AuthService::class)->createAccessToken('u@x.com', $apiKey);
@@ -85,11 +85,11 @@ class UserControllerTest extends TestCase
         );
 
         $this->seeStatusCode(404)
-            ->seeJsonEquals(['error'=>'User not found.']);
+            ->seeJsonEquals(['error' => 'User not found.']);
     }
 
     /** @test */
-    public function valid_request_returns_user_structure()
+    public function testValidRequestReturnsUserStructure()
     {
         $apiKey = app(RegisterService::class)->registerUser('u@y.com')->getData(true)['api_key'];
         $token  = app(AuthService::class)->createAccessToken('u@y.com', $apiKey);
@@ -101,9 +101,16 @@ class UserControllerTest extends TestCase
 
         $this->seeStatusCode(200)
             ->seeJsonStructure([
-                'id','login','display_name','type','broadcaster_type',
-                'description','profile_image_url','offline_image_url',
-                'view_count','created_at'
+                'id',
+                'login',
+                'display_name',
+                'type',
+                'broadcaster_type',
+                'description',
+                'profile_image_url',
+                'offline_image_url',
+                'view_count',
+                'created_at'
             ]);
     }
 }

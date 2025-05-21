@@ -1,4 +1,7 @@
-<?php // app/Exceptions/InvalidApiKeyException.php
+<?php
+
+// app/Exceptions/InvalidApiKeyException.php
+
 namespace App\Exceptions;
 
 class InvalidApiKeyException extends \RuntimeException

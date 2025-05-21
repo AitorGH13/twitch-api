@@ -1,5 +1,4 @@
 <?php
-// app/Services/RegisterService.php
 
 namespace App\Services;
 
@@ -22,9 +21,9 @@ class RegisterService
 
         if ($user) {
             $this->repo->updateApiKey($email, $apiKey);
-        } else {
-            $this->repo->registerEmailAndApiKey($email, $apiKey);
         }
+
+        $this->repo->registerEmailAndApiKey($email, $apiKey);
 
         return new JsonResponse(['api_key' => $apiKey], 200);
     }

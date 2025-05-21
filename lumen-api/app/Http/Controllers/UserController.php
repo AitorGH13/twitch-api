@@ -1,4 +1,7 @@
-<?php // app/Http/Controllers/UserController.php
+<?php
+
+// app/Http/Controllers/UserController.php
+
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -14,7 +17,7 @@ class UserController extends BaseController
 {
     public function __construct(
         private UserRequestValidator $validator,
-        private UserService          $service
+        private UserService $service
     ) {
         $this->middleware(AuthMiddleware::class);
     }
@@ -22,8 +25,8 @@ class UserController extends BaseController
     public function profile(Request $request): JsonResponse
     {
         try {
-            [$id, $token] = $this->validator->validate($request);
-            $user = $this->service->getUserProfile([$id, $token]);
+            [$userId, $token] = $this->validator->validate($request);
+            $user = $this->service->getUserProfile([$userId, $token]);
             return response()->json(
                 $user,
                 200,

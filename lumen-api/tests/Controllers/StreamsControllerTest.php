@@ -1,4 +1,4 @@
-<?php // tests/Controllers/StreamsControllerTest.php
+<?php
 
 namespace Tests\Controllers;
 
@@ -13,11 +13,11 @@ class StreamsControllerTest extends TestCase
 
     public function createApplication()
     {
-        return require __DIR__.'/../../bootstrap/app.php';
+        return require __DIR__ . '/../../bootstrap/app.php';
     }
 
     /** @test */
-    public function no_token_returns_401()
+    public function testNoTokenReturns401()
     {
         $this->get('/analytics/streams');
         $this->seeStatusCode(401)
@@ -27,7 +27,7 @@ class StreamsControllerTest extends TestCase
     }
 
     /** @test */
-    public function valid_request_returns_streams_list()
+    public function testValidRequestReturnsStreamsList()
     {
         $apiKey = app(RegisterService::class)
             ->registerUser('u@s.com')
@@ -42,9 +42,9 @@ class StreamsControllerTest extends TestCase
 
         $this->seeStatusCode(200)
             ->seeJsonEquals([
-                ['title'=>'Title of Stream 1','user_name'=>'User1'],
-                ['title'=>'Title of Stream 2','user_name'=>'User2'],
-                ['title'=>'Title of Stream 3','user_name'=>'User3'],
+                ['title' => 'Title of Stream 1', 'user_name' => 'User1'],
+                ['title' => 'Title of Stream 2', 'user_name' => 'User2'],
+                ['title' => 'Title of Stream 3', 'user_name' => 'User3'],
             ]);
     }
 }

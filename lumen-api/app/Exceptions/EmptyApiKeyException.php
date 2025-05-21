@@ -1,4 +1,7 @@
-<?php // app/Exceptions/EmptyApiKeyException.php
+<?php
+
+// app/Exceptions/EmptyApiKeyException.php
+
 namespace App\Exceptions;
 
 class EmptyApiKeyException extends \RuntimeException

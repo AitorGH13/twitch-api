@@ -1,4 +1,5 @@
-<?php // app/Services/StreamsService.php
+<?php
+
 namespace App\Services;
 
 use App\Exceptions\UnauthorizedException;
@@ -7,9 +8,10 @@ use App\Manager\TwitchManager;
 class StreamsService
 {
     public function __construct(
-        private AuthService   $authService,
+        private AuthService $authService,
         private TwitchManager $twitchClient
-    ) {}
+    ) {
+    }
 
     /**
      * Valida token y devuelve lista de streams formateados.
@@ -25,9 +27,9 @@ class StreamsService
         }
 
         $data = $this->twitchClient->getLiveStreams();
-        return array_map(fn($s) => [
-            'title'     => $s['title'],
-            'user_name' => $s['user_name'],
+        return array_map(fn ($stream) => [
+            'title'     => $stream['title'],
+            'user_name' => $stream['user_name'],
         ], $data);
     }
 }

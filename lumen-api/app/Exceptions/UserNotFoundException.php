@@ -1,4 +1,7 @@
-<?php // app/Exceptions/UserNotFoundException.php
+<?php
+
+// app/Exceptions/UserNotFoundException.php
+
 namespace App\Exceptions;
 
 class UserNotFoundException extends \RuntimeException

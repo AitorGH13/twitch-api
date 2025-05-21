@@ -1,4 +1,7 @@
-<?php // app/Http/Controllers/RegisterController.php
+<?php
+
+// app/Http/Controllers/RegisterController.php
+
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;

@@ -1,4 +1,5 @@
-<?php // app/Validators/UserRequestValidator.php
+<?php
+
 namespace App\Validators;
 
 use Illuminate\Http\Request;
@@ -8,7 +9,7 @@ use App\Exceptions\UnauthorizedException;
 class UserRequestValidator
 {
     /**
-     * @return array{string,string}  [$id, $token]
+     * @return array{string,string}  [$userId, $token]
      * @throws EmptyIdException
      */
     public function validate(Request $request): array
@@ -18,11 +19,11 @@ class UserRequestValidator
             throw new UnauthorizedException();
         }
 
-        $id = $request->query('id', '');
-        if ($id === '' || ! ctype_digit($id)) {
+        $userId = $request->query('id', '');
+        if ($userId === '' || ! ctype_digit($userId)) {
             throw new EmptyIdException();
         }
 
-        return [$id, $token];
+        return [$userId, $token];
     }
 }
