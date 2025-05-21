@@ -1,5 +1,5 @@
 <?php
-// app/Http/Middleware/AuthMiddleware.php
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -38,7 +38,6 @@ class AuthMiddleware
             ], 401);
         }
 
-        // Optionally attach token/user info to request
         $request->attributes->set('token', $token);
 
         return $next($request);

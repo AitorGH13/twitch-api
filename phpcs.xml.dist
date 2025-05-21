@@ -4,7 +4,7 @@
   <rule ref="PSR12"/>
 
   <!-- Analiza sólo el código de src/ -->
-  <file>src</file>
+  <file>lumen-api</file>
 
   <!-- Si tuvieras tests, podrías excluirlos así:
   <exclude-pattern>tests</exclude-pattern>
