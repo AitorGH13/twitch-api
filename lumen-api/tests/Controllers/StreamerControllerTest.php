@@ -20,8 +20,7 @@ class StreamerControllerTest extends TestCase
     public function testNoTokenReturns401()
     {
         $this->get(
-            '/analytics/user?id=1234',
-            []
+            '/analytics/user?id=1234'
         );
 
         $this->seeStatusCode(401)
@@ -36,7 +35,7 @@ class StreamerControllerTest extends TestCase
 
         $this->get(
             '/analytics/user',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
 
         $this->seeStatusCode(400)
@@ -51,7 +50,7 @@ class StreamerControllerTest extends TestCase
 
         $this->get(
             '/analytics/user?id=abc',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
 
         $this->seeStatusCode(400)
@@ -66,7 +65,7 @@ class StreamerControllerTest extends TestCase
 
         $this->get(
             '/analytics/user?i=1',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
 
         $this->seeStatusCode(400)
@@ -81,7 +80,7 @@ class StreamerControllerTest extends TestCase
 
         $this->get(
             '/analytics/user?id=9999',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
 
         $this->seeStatusCode(404)
@@ -96,7 +95,7 @@ class StreamerControllerTest extends TestCase
 
         $this->get(
             '/analytics/user?id=42',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
 
         $this->seeStatusCode(200)
