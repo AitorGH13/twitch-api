@@ -12,9 +12,6 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./lumen-api
     steps:
       # 1) Saca el código
       - uses: actions/checkout@v4
@@ -26,29 +23,43 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, curl, pdo, pdo_mysql
 
-      # 3) Cachea composer para acelerar builds
-      - name: Cache Composer
+      # 3) Cachea composer para acelerar builds (raíz)
+      - name: Cache Root Composer
         uses: actions/cache@v3
         with:
           path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-root-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-composer-
+            ${{ runner.os }}-composer-root-
 
-      # 4) Instala dependencias
-      - name: Install dependencies
+      # 4) Instala dependencias en la raíz
+      - name: Install root dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
       # 5) Ejecuta GrumPHP (lanza PHPCS, PHPMD y PHP-CS-Fixer)
       - name: Run code quality checks
         run: vendor/bin/grumphp run --verbose
 
-      # 6) Ejecuta los tests de PHPUnit con el entorno de testing
+      # 6) Cachea composer para lumen-api
+      - name: Cache Lumen API Composer
+        uses: actions/cache@v3
+        with:
+          path: lumen-api/vendor
+          key: ${{ runner.os }}-composer-lumen-${{ hashFiles('lumen-api/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-lumen-
+
+      # 7) Instala dependencias de Lumen
+      - name: Install Lumen dependencies
+        working-directory: ./lumen-api
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      # 8) Ejecuta los tests de PHPUnit con el entorno de testing
       - name: Run Tests
+        working-directory: ./lumen-api
         run: |
           cp .env.testing .env
           php artisan key:generate
           vendor/bin/phpunit --testdox --configuration phpunit.xml
         env:
           APP_ENV: testing
-
