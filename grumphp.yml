@@ -16,7 +16,6 @@ grumphp:
       triggered_by: ['php']
       ignore_patterns:
         - 'vendor/*'
-        - 'lumen-api/*'
 
     phpmd:
       ruleset: 
@@ -24,8 +23,6 @@ grumphp:
         - codesize
         - naming
       triggered_by: ['php']
-      exclude:
-        - 'lumen-api/*'
 
     phpcsfixer:
       config: .php-cs-fixer.php
