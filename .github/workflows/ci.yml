@@ -19,15 +19,16 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: dxl2025*
           MYSQL_DATABASE: twitchanalytics
-          MYSQL_ROOT_HOST: '%'
-          MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+          MYSQL_USER: root
+          MYSQL_PASSWORD: dxl2025*
+          MYSQL_ALLOW_EMPTY_PASSWORD: "0"
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping"
+          --health-cmd="mysqladmin ping --host 127.0.0.1 --password=dxl2025*"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=3
+          --health-retries=5
 
     steps:
       - uses: actions/checkout@v4
