@@ -49,7 +49,7 @@ class TopOfTheTopsService
         $ttl = $since ?? 600;
         $expiresAt = (new DateTime())->modify("+{$ttl} seconds")->format('Y-m-d H:i:s');
 
-        $games = $this->twitchClient->getTopGames(1);
+        $games = $this->twitchClient->getTopGames(3);
         if (empty($games)) {
             throw new NoGamesFoundException();
         }
