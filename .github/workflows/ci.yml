@@ -16,12 +16,12 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: dxl2025*
-          MYSQL_DATABASE: twitchanalytics
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: twitch_db
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost -u root -pdxl2025*"
+          --health-cmd="mysqladmin ping -h localhost -u root -p root"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -76,6 +76,6 @@ jobs:
           APP_ENV: testing
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
-          DB_DATABASE: twitchanalytics
+          DB_DATABASE: twitch_db
           DB_USERNAME: root
-          DB_PASSWORD: dxl2025*
+          DB_PASSWORD: root
