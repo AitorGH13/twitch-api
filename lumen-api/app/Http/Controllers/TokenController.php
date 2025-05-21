@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Controllers/TokenController.php
-
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
