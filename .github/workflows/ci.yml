@@ -20,6 +20,7 @@ jobs:
           MYSQL_DATABASE: twitchanalytics
           MYSQL_ROOT_HOST: '%'
           TZ: UTC
+          MYSQL_ALLOW_EMPTY_PASSWORD: "no"
         ports:
           - 3306:3306
         options: >-
