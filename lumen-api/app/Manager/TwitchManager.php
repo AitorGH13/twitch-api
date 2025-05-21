@@ -26,7 +26,7 @@ class TwitchManager
             ->get($url, $query);
 
         if (! $response->ok()) {
-            throw new TwitchApiNotResponding();
+            throw new RuntimeException('Twitch API error: ' . $response->status());
         }
 
         return $response->json();
