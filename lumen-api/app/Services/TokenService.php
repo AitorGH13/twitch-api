@@ -5,16 +5,20 @@ namespace App\Services;
 use App\Repository\DatabaseRepository;
 use Illuminate\Http\JsonResponse;
 use App\Exceptions\InvalidApiKeyException;
+use Random\RandomException;
 
 class TokenService
 {
-    private $repo;
+    private DatabaseRepository $repo;
 
     public function __construct(DatabaseRepository $repo)
     {
         $this->repo = $repo;
     }
 
+    /**
+     * @throws RandomException
+     */
     public function createToken(string $email, string $apiKey): JsonResponse
     {
         $userId = $this->repo->getUserIdByCredentials($email, $apiKey);
