@@ -1,7 +1,5 @@
 <?php
 
-// app/Exceptions/TwitchApiNotResponding.php
-
 namespace App\Exceptions;
 
 class TwitchApiNotResponding extends \RuntimeException

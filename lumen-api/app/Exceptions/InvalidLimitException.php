@@ -1,7 +1,5 @@
 <?php
 
-// app/Exceptions/InvalidLimitException.php
-
 namespace App\Exceptions;
 
 class InvalidLimitException extends \RuntimeException

@@ -1,7 +1,5 @@
 <?php
 
-// app/Exceptions/InvalidSinceException.php
-
 namespace App\Exceptions;
 
 class InvalidSinceException extends \RuntimeException

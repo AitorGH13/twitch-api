@@ -1,7 +1,5 @@
 <?php
 
-// app/Exceptions/UnauthorizedException.php
-
 namespace App\Exceptions;
 
 class UnauthorizedException extends \RuntimeException

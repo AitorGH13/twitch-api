@@ -1,7 +1,5 @@
 <?php
 
-// app/Exceptions/EmptyTokenException.php
-
 namespace App\Exceptions;
 
 class EmptyTokenException extends \RuntimeException

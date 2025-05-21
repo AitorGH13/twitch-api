@@ -1,7 +1,5 @@
 <?php
 
-// app/Exceptions/EmptyIdException.php
-
 namespace App\Exceptions;
 
 class EmptyIdException extends \RuntimeException
