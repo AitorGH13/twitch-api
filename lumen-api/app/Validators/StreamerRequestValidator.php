@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\EmptyIdException;
 use App\Exceptions\UnauthorizedException;
 
-class UserRequestValidator
+class StreamerRequestValidator
 {
     /**
      * @return array{string,string}  [$userId, $token]

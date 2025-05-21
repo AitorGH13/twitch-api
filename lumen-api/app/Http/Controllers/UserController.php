@@ -6,7 +6,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Middleware\AuthMiddleware;
-use App\Validators\UserRequestValidator;
+use App\Validators\StreamerRequestValidator;
 use App\Services\UserService;
 use App\Exceptions\EmptyIdException;
 use App\Exceptions\UserNotFoundException;
@@ -14,7 +14,7 @@ use App\Exceptions\UserNotFoundException;
 class UserController extends BaseController
 {
     public function __construct(
-        private UserRequestValidator $validator,
+        private StreamerRequestValidator $validator,
         private UserService $service
     ) {
         $this->middleware(AuthMiddleware::class);

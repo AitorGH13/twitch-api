@@ -201,8 +201,8 @@ $app->singleton(
     App\Validators\TokenRequestValidator::class
 );
 $app->singleton(
-    App\Validators\UserRequestValidator::class,
-    App\Validators\UserRequestValidator::class
+    App\Validators\StreamerRequestValidator::class,
+    App\Validators\StreamerRequestValidator::class
 );
 $app->singleton(
     App\Validators\StreamsRequestValidator::class,
