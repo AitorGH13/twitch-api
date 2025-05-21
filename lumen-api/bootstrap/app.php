@@ -172,7 +172,7 @@ $app->singleton(
 );
 $app->singleton(
     App\Services\RegisterService::class,
-    App\Services\UserService::class
+    App\Services\StreamerService::class
 );
 $app->singleton(
     App\Services\StreamsService::class,

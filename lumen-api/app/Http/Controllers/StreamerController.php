@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Middleware\AuthMiddleware;
 use App\Validators\StreamerRequestValidator;
-use App\Services\UserService;
+use App\Services\StreamerService;
 use App\Exceptions\EmptyIdException;
 use App\Exceptions\UserNotFoundException;
 
@@ -15,7 +15,7 @@ class StreamerController extends BaseController
 {
     public function __construct(
         private StreamerRequestValidator $validator,
-        private UserService $service
+        private StreamerService $service
     ) {
         $this->middleware(AuthMiddleware::class);
     }

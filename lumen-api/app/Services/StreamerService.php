@@ -9,7 +9,7 @@ use App\Repository\UserRepository;
 use DateTime;
 use Exception;
 
-class UserService
+class StreamerService
 {
     private UserRepository $repo;
     private AuthService $authService;
