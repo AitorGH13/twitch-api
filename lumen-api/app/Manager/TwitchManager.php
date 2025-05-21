@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 
 class TwitchManager
 {
-    private $auth;
+    private TwitchAuthService $auth;
 
     public function __construct(TwitchAuthService $auth)
     {
@@ -45,7 +45,7 @@ class TwitchManager
         if ($this->isTesting()) {
             $games = [];
             for ($i = 1; $i <= $numberOfGames; $i++) {
-                $games[] = ['id' => (string)$i, 'name' => "Game{$i}"];
+                $games[] = ['id' => (string)$i, 'name' => "Game$i"];
             }
             return $games;
         }
@@ -61,9 +61,9 @@ class TwitchManager
         if ($this->isTesting()) {
             return [
                 [
-                    'user_name'          => "User{$gameId}",
+                    'user_name'          => "User$gameId",
                     'view_count'         => 1000,
-                    'title'              => "Top video {$gameId}",
+                    'title'              => "Top video $gameId",
                     'duration'           => '1h',
                     'created_at'         => '2020-01-01 00:00:00',
                 ],
@@ -90,8 +90,8 @@ class TwitchManager
             $lastDigit = substr($userId, -1);
             return [[
                 'id'               => $userId,
-                'login'            => "login{$userId}",
-                'display_name'     => "Display {$lastDigit}",
+                'login'            => "login$userId",
+                'display_name'     => "Display $lastDigit",
                 'type'             => '',
                 'broadcaster_type' => 'partner',
                 'description'      => 'Test description.',
@@ -134,9 +134,9 @@ class TwitchManager
                 $out[] = [
                     'id'           => (string)(1000 + $i),
                     'user_id'      => (string)(2000 + $i),
-                    'user_name'    => "TopStreamer{$i}",
+                    'user_name'    => "TopStreamer$i",
                     'viewer_count' => 1000 * $i,
-                    'title'        => "Epic Gaming Session {$i}",
+                    'title'        => "Epic Gaming Session $i",
                 ];
             }
             return $out;
