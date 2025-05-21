@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use Random\RandomException;
+
 class AuthService
 {
-    private $registerService;
-    private $tokenService;
+    private RegisterService $registerService;
+    private TokenService $tokenService;
 
     public function __construct(
         RegisterService $registerService,
@@ -18,7 +20,8 @@ class AuthService
     /**
      * Devuelve el api_key como string (no JsonResponse),
      * para satisfacer a los tests que llaman a app(AuthService::class)->registerEmail()
-     * @used-by \Tests\*
+     * @used-by /lumen-api/tests*
+     * @throws RandomException
      */
     public function registerEmail(string $email): string
     {
@@ -31,7 +34,8 @@ class AuthService
      * Devuelve el token como string,
      * para que app(AuthService::class)->createAccessToken() funcione.
      * Lanza InvalidApiKeyException si no coincide.
-     * @used-by \Tests\*
+     * @used-by /lumen-api/tests*
+     * @throws RandomException
      */
     public function createAccessToken(string $email, string $apiKey): string
     {
