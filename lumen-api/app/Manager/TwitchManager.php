@@ -45,7 +45,7 @@ class TwitchManager
         if ($this->isTesting()) {
             $games = [];
             for ($i = 1; $i <= $numberOfGames; $i++) {
-                $games[] = ['id' => (string)$i, 'name' => "Game$i"];
+                $games[] = ['id' => (string)$i, 'name' => "Game $i"];
             }
             return $games;
         }
@@ -61,7 +61,7 @@ class TwitchManager
         if ($this->isTesting()) {
             return [
                 [
-                    'user_name'          => "User$gameId",
+                    'user_name'          => "User $gameId",
                     'view_count'         => 1000,
                     'title'              => "Top video $gameId",
                     'duration'           => '1h',
@@ -90,7 +90,7 @@ class TwitchManager
             $lastDigit = substr($userId, -1);
             return [[
                 'id'               => $userId,
-                'login'            => "login$userId",
+                'login'            => "login $userId",
                 'display_name'     => "Display $lastDigit",
                 'type'             => '',
                 'broadcaster_type' => 'partner',
@@ -134,7 +134,7 @@ class TwitchManager
                 $out[] = [
                     'id'           => (string)(1000 + $i),
                     'user_id'      => (string)(2000 + $i),
-                    'user_name'    => "TopStreamer$i",
+                    'user_name'    => "TopStreamer $i",
                     'viewer_count' => 1000 * $i,
                     'title'        => "Epic Gaming Session $i",
                 ];
