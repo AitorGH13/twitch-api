@@ -1,7 +1,5 @@
 <?php
 
-// app/Services/TwitchManager.php
-
 namespace App\Manager;
 
 use App\Exceptions\TwitchApiNotResponding;
@@ -36,7 +34,6 @@ class TwitchManager
 
     private function isTesting(): bool
     {
-        // getenv sí recogerá el APP_ENV=testing que viene de phpunit.xml
         return getenv('APP_ENV') === 'testing';
     }
 
@@ -116,7 +113,6 @@ class TwitchManager
     public function getLiveStreams(): array
     {
         if ($this->isTesting()) {
-            // stub para 3 streams
             return [
                 ['title' => 'Title of Stream 1','user_name' => 'User1'],
                 ['title' => 'Title of Stream 2','user_name' => 'User2'],

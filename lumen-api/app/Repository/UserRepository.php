@@ -1,11 +1,8 @@
 <?php
 
-// app/Repository/UserRepository.php
-
 namespace App\Repository;
 
 use Illuminate\Support\Facades\DB;
-use stdClass;
 
 class UserRepository
 {

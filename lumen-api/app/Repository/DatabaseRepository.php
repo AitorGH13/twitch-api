@@ -1,7 +1,5 @@
 <?php
 
-// app/Repository/DatabaseRepository.php
-
 namespace App\Repository;
 
 use Illuminate\Support\Facades\DB;
@@ -13,7 +11,7 @@ class DatabaseRepository
     {
         return DB::table('users')
             ->where('email', $email)
-            ->first();               // devuelve null o un objeto stdClass
+            ->first();
     }
 
     public function registerEmailAndApiKey(string $email, string $apiKey): void
@@ -33,7 +31,7 @@ class DatabaseRepository
     {
         return DB::table('users')
             ->where(['email' => $email, 'api_key' => $apiKey])
-            ->value('id');         // devuelve null o el id
+            ->value('id');
     }
 
     public function getSession(int $userId): ?stdClass
