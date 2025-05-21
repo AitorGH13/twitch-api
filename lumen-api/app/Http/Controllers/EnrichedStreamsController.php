@@ -14,8 +14,8 @@ use App\Exceptions\UnauthorizedException;
 class EnrichedStreamsController extends BaseController
 {
     public function __construct(
-        private EnrichedStreamsRequestValidator $validator,
-        private EnrichedStreamsService $service
+        private readonly EnrichedStreamsRequestValidator $validator,
+        private readonly EnrichedStreamsService $service
     ) {
         $this->middleware(AuthMiddleware::class);
     }
