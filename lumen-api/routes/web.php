@@ -24,5 +24,5 @@ $router->group(['middleware' => 'auth.token'], function () use ($router) {
     $router->get('/analytics/topsofthetops', 'TopOfTheTopsController@list');
     $router->get('/analytics/streams', 'StreamsController@index');
     $router->get('/analytics/streams/enriched', 'EnrichedStreamsController@index');
-    $router->get('/analytics/user', 'UserController@profile');
+    $router->get('/analytics/user', 'StreamerController@profile');
 });

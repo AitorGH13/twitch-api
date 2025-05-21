@@ -11,7 +11,7 @@ use App\Services\UserService;
 use App\Exceptions\EmptyIdException;
 use App\Exceptions\UserNotFoundException;
 
-class UserController extends BaseController
+class StreamerController extends BaseController
 {
     public function __construct(
         private StreamerRequestValidator $validator,
