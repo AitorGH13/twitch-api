@@ -27,10 +27,10 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-        command: >-
-          --default-authentication-plugin=mysql_native_password
-          -e MYSQL_ALLOW_EMPTY_PASSWORD=no
-          --pid-file=/var/lib/mysql/mysql.pid
+        command: [
+          '--default-authentication-plugin=mysql_native_password',
+          '--pid-file=/var/lib/mysql/mysql.pid'
+        ]
 
     steps:
       - uses: actions/checkout@v4
