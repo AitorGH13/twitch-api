@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Exceptions\UnauthorizedException;
 use App\Manager\TwitchManager;
 
-class StreamsService
+readonly class StreamsService
 {
     public function __construct(
         private AuthService $authService,
@@ -14,7 +14,7 @@ class StreamsService
     }
 
     /**
-     * Valida token y devuelve lista de streams formateados.
+     * Valída token y devuelve lista de streams formateados.
      *
      * @param string $token
      * @return array<int,array{title:string,user_name:string}>
