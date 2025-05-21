@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -14,12 +15,15 @@ use App\Exceptions\UserNotFoundException;
 class StreamerController extends BaseController
 {
     public function __construct(
-        private StreamerRequestValidator $validator,
-        private StreamerService $service
+        private readonly StreamerRequestValidator $validator,
+        private readonly StreamerService $service
     ) {
         $this->middleware(AuthMiddleware::class);
     }
 
+    /**
+     * @throws Exception
+     */
     public function profile(Request $request): JsonResponse
     {
         try {
