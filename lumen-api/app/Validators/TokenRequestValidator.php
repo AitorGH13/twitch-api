@@ -1,7 +1,5 @@
 <?php
 
-// app/Validators/TokenRequestValidator.php
-
 namespace App\Validators;
 
 use Illuminate\Http\Request;

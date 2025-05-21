@@ -8,7 +8,6 @@ use App\Exceptions\UnauthorizedException;
 use App\Exceptions\UserNotFoundException;
 use App\Manager\TwitchManager;
 use App\Repository\UserRepository;
-use App\Services\AuthService;
 use DateTime;
 
 class UserService
