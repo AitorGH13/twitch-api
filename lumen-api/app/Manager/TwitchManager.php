@@ -2,7 +2,7 @@
 
 namespace App\Manager;
 
-use App\Exceptions\TwitchApiNotResponding;
+use App\Exceptions\TwitchApiException;
 use App\Services\TwitchAuthService;
 use Illuminate\Support\Facades\Http;
 
@@ -26,7 +26,7 @@ class TwitchManager
             ->get($url, $query);
 
         if (! $response->ok()) {
-            throw new RuntimeException('Twitch API error: ' . $response->status());
+            throw new TwitchApiException('Twitch API error: ' . $response->status());
         }
 
         return $response->json();
