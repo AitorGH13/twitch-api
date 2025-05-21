@@ -47,7 +47,7 @@ class TokenControllerTest extends TestCase
     {
         $this->post('/token', [
             'email'   => 'user@example.com',
-            'api_key' => 'abcd1234'
+            'api_key' => 'abed1234'
         ]);
         $this->seeStatusCode(401)
             ->seeJsonEquals(['error' => 'Unauthorized. API access token is invalid.']);
