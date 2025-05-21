@@ -1,13 +1,6 @@
 <?php
 
-// app/Services/AuthService.php
-
 namespace App\Services;
-
-use Illuminate\Http\JsonResponse;
-use App\Services\RegisterService;
-use App\Services\TokenService;
-use App\Exceptions\InvalidApiKeyException;
 
 class AuthService
 {
@@ -29,7 +22,6 @@ class AuthService
     public function registerEmail(string $email): string
     {
         $response = $this->registerService->registerUser($email);
-        // getData(true) devuelve el body como array
         $data = $response->getData(true);
         return $data['api_key'];
     }

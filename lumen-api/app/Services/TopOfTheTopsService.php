@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Services;
 
 use App\Exceptions\NoGamesFoundException;
@@ -9,7 +7,6 @@ use App\Exceptions\NoVideosFoundException;
 use App\Exceptions\UnauthorizedException;
 use App\Manager\TwitchManager;
 use App\Repository\TopOfTheTopsRepository;
-use App\Services\AuthService;
 use DateTime;
 
 class TopOfTheTopsService
@@ -39,7 +36,6 @@ class TopOfTheTopsService
         $meta = $this->repo->getCacheMeta();
         $now = time();
 
-        // Devolver cache si sigue válida y sin parámetro 'since'
         if (
             $meta
             && strtotime($meta->expires_at) >= $now
@@ -48,7 +44,6 @@ class TopOfTheTopsService
             return $this->repo->all();
         }
 
-        // Refrescar cache
         $this->repo->clearCache();
 
         $ttl = $since ?? 600;
