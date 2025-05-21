@@ -27,11 +27,9 @@ class TopOfTheTopsControllerTest extends TestCase
     /** @test */
     public function testInvalidTokenReturns401()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@v.com')->getData(true)['api_key'];
-
         $this->get(
             '/analytics/topsofthetops?since=abc',
-            ['Authorization' => "Bearer abcd1234"]
+            ['Authorization' => "Bearer abed1234"]
         );
         $this->seeStatusCode(401)
             ->seeJsonEquals(['error' => 'Unauthorized. Twitch access token is invalid or has expired.']);
@@ -45,7 +43,7 @@ class TopOfTheTopsControllerTest extends TestCase
 
         $this->get(
             '/analytics/topsofthetops?since=abc',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => "Invalid 'since' parameter."]);
@@ -58,8 +56,8 @@ class TopOfTheTopsControllerTest extends TestCase
         $token  = app(TokenService::class)->createToken('u@v.com', $apiKey)->getData(true)['token'];
 
         $this->get(
-            '/analytics/topsofthetops?sinc=1',
-            ['Authorization' => "Bearer {$token}"]
+            '/analytics/topsofthetops?sing=1',
+            ['Authorization' => "Bearer $token"]
         );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => "Invalid 'since' parameter."]);
@@ -73,7 +71,7 @@ class TopOfTheTopsControllerTest extends TestCase
 
         $this->get(
             '/analytics/topsofthetops',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
 
         $this->seeStatusCode(200)
