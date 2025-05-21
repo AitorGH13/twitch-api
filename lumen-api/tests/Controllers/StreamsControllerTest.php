@@ -37,7 +37,7 @@ class StreamsControllerTest extends TestCase
 
         $this->get(
             '/analytics/streams',
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
 
         $this->seeStatusCode(200)
