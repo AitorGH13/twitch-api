@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
-class InvalidSinceException extends \RuntimeException
+use RuntimeException;
+
+class InvalidSinceException extends RuntimeException
 {
     public function __construct()
     {

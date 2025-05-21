@@ -2,9 +2,10 @@
 
 namespace App\Exceptions;
 
+use RuntimeException;
 use Throwable;
 
-class TwitchApiException extends \RuntimeException
+class TwitchApiException extends RuntimeException
 {
     /**
      * @param string         $message  Custom error message

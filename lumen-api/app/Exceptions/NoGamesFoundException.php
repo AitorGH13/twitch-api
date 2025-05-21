@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
-class NoGamesFoundException extends \RuntimeException
+use RuntimeException;
+
+class NoGamesFoundException extends RuntimeException
 {
     public function __construct()
     {

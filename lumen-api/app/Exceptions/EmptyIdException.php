@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
-class EmptyIdException extends \RuntimeException
+use RuntimeException;
+
+class EmptyIdException extends RuntimeException
 {
     public function __construct()
     {

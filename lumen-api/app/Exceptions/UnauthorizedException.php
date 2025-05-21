@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
-class UnauthorizedException extends \RuntimeException
+use RuntimeException;
+
+class UnauthorizedException extends RuntimeException
 {
     public function __construct()
     {

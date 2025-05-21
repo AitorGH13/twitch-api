@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
-class InvalidEmailAddressException extends \RuntimeException
+use RuntimeException;
+
+class InvalidEmailAddressException extends RuntimeException
 {
     public function __construct()
     {

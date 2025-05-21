@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
-class NoVideosFoundException extends \RuntimeException
+use RuntimeException;
+
+class NoVideosFoundException extends RuntimeException
 {
     public function __construct()
     {
