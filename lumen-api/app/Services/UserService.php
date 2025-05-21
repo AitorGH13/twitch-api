@@ -7,6 +7,7 @@ use App\Exceptions\UserNotFoundException;
 use App\Manager\TwitchManager;
 use App\Repository\UserRepository;
 use DateTime;
+use Exception;
 
 class UserService
 {
@@ -29,10 +30,11 @@ class UserService
      *
      * @param array $input [0 => int userId, 1 => string accessToken]
      *
-     * @throws UnauthorizedException
+     * @return array
      * @throws UserNotFoundException
      *
-     * @return array
+     * @throws UnauthorizedException
+     * @throws Exception
      */
     public function getUserProfile(array $input): array
     {
