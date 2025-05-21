@@ -7,7 +7,7 @@ use Laravel\Lumen\Testing\TestCase;
 use App\Services\RegisterService;
 use App\Services\AuthService;
 
-class UserControllerTest extends TestCase
+class StreamerControllerTest extends TestCase
 {
     use DatabaseMigrations;
 
