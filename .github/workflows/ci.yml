@@ -11,6 +11,7 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+
     services:
       mysql:
         image: mysql:8.0
@@ -28,6 +29,7 @@ jobs:
           --health-retries=3
         command: >-
           --default-authentication-plugin=mysql_native_password
+          -e MYSQL_ALLOW_EMPTY_PASSWORD=no
           --pid-file=/var/lib/mysql/mysql.pid
 
     steps:
@@ -83,4 +85,3 @@ jobs:
           DB_DATABASE: twitchanalytics
           DB_USERNAME: root
           DB_PASSWORD: dxl2025*
-
