@@ -21,10 +21,10 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysql -uroot -pdxl2025* -e 'SHOW DATABASES;'"
+          --health-cmd="mysqladmin ping -h localhost -u root -pdxl2025*"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=10
+          --health-retries=5
 
     steps:
       - uses: actions/checkout@v4
@@ -66,16 +66,6 @@ jobs:
         run: |
           sed -i 's/DB_HOST=db/DB_HOST=127.0.0.1/g' .env.testing
           cp .env.testing .env
-
-      - name: Wait for MySQL Service
-        run: |
-          echo "Esperando al servicio MySQL..."
-          for i in {1..10}; do
-            mysqladmin ping -h127.0.0.1 -uroot -pdxl2025* && break
-            echo "MySQL no está listo todavía. Intentando de nuevo en 5 segundos..."
-            sleep 5
-          done
-          echo "¡MySQL está listo!"
 
       - name: Run Tests
         working-directory: ./lumen-api
