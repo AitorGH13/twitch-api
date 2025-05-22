@@ -9,16 +9,9 @@ use Carbon\Carbon;
 
 trait AuthenticationTestsTrait
 {
-    /**
-     * Cada controlador que use este trait debe
-     * definir esta función para indicar la ruta protegida.
-     */
     abstract protected function getProtectedUrl(): string;
 
-    /**
-     * Helper para crear un token válido (y poder reusar el valor).
-     */
-    protected function createValidToken(string $email = 'u@e.com'): string
+    protected function createValidToken(string $email = 'user@example.com'): string
     {
         $apiKey = app(RegisterService::class)
             ->registerUser($email)
