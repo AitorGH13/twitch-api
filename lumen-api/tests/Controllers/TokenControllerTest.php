@@ -2,6 +2,7 @@
 
 namespace Tests\Controllers;
 
+use App\Services\RegisterService;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase;
 use App\Services\AuthService;
@@ -18,10 +19,23 @@ class TokenControllerTest extends TestCase
         return require __DIR__ . '/../../bootstrap/app.php';
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $email = 'user@example.com';
+        $validKey = app(AuthService::class)->registerEmail($email);
+
+        $this->validKey = $validKey;
+        $this->validEmail   = $email;
+    }
+
     /** @test */
     public function tokenWithoutEmailReturns400()
     {
-        $this->post('/token', ['api_key' => 'any']);
+        $this->post('/token', [
+            'api_key' => $this->validKey,
+        ]);
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => 'The email is mandatory']);
     }
@@ -29,7 +43,31 @@ class TokenControllerTest extends TestCase
     /** @test */
     public function tokenWithoutApiKeyReturns400()
     {
-        $this->post('/token', ['email' => 'user@example.com']);
+        $this->post('/token', [
+            'email' => $this->validEmail,
+        ]);
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => 'The api_key is mandatory']);
+    }
+
+    /** @test */
+    public function tokenWithEmptyEmailReturns400()
+    {
+        $this->post('/token', [
+            'email' => '',
+            'api_key' => $this->validKey,
+        ]);
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => 'The email is mandatory']);
+    }
+
+    /** @test */
+    public function tokenWithEmptyApiKeyReturns400()
+    {
+        $this->post('/token', [
+            'email' => $this->validEmail,
+            'api_key' => '',
+        ]);
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => 'The api_key is mandatory']);
     }
@@ -37,7 +75,10 @@ class TokenControllerTest extends TestCase
     /** @test */
     public function tokenWithInvalidEmailReturns400()
     {
-        $this->post('/token', ['email' => 'not_email@.com', 'api_key' => 'abc']);
+        $this->post('/token', [
+            'email' => 'not_email@.com',
+            'api_key' => $this->validKey,
+        ]);
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => 'The email must be a valid email address']);
     }
@@ -46,7 +87,7 @@ class TokenControllerTest extends TestCase
     public function tokenWithInvalidApiKeyReturns401()
     {
         $this->post('/token', [
-            'email'   => 'user@example.com',
+            'email'   => $this->validEmail,
             'api_key' => 'abed1234'
         ]);
         $this->seeStatusCode(401)
@@ -56,12 +97,9 @@ class TokenControllerTest extends TestCase
     /** @test */
     public function tokenWithValidCredentialsReturnsToken()
     {
-        $email    = 'user@example.com';
-        $validKey = app(AuthService::class)->registerEmail($email);
-
         $this->post('/token', [
-            'email'   => $email,
-            'api_key' => $validKey,
+            'email'   => $this->validEmail,
+            'api_key' => $this->validKey,
         ]);
         $this->seeStatusCode(200)
             ->seeJsonStructure(['token']);
