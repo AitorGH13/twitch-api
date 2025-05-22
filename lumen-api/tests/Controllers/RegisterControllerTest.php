@@ -48,7 +48,9 @@ class RegisterControllerTest extends TestCase
     /** @test */
     public function registerWithValidEmailReturnsApiKey()
     {
-        $this->post('/register', ['email' => 'user@example.com']);
+        $this->post('/register', [
+            'email' => 'user@example.com'
+        ]);
         $this->seeStatusCode(200)
             ->seeJsonStructure(['api_key']);
 
