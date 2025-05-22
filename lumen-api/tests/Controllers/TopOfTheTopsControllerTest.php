@@ -28,11 +28,11 @@ class TopOfTheTopsControllerTest extends TestCase
         parent::setUp();
 
         $apiKey = app(RegisterService::class)
-            ->registerUser('test@test.com')
+            ->registerUser('user@example.com')
             ->getData(true)['api_key'];
 
         $token = app(AuthService::class)
-            ->createAccessToken('test@test.com', $apiKey);
+            ->createAccessToken('user@example.com', $apiKey);
 
         $this->authHeaders = ['Authorization' => "Bearer $token"];
     }
