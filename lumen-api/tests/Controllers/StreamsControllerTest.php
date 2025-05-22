@@ -6,14 +6,21 @@ use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase;
 use App\Services\RegisterService;
 use App\Services\AuthService;
+use Tests\Traits\AuthenticationTestsTrait;
 
 class StreamsControllerTest extends TestCase
 {
     use DatabaseMigrations;
+    use AuthenticationTestsTrait;
 
     public function createApplication()
     {
         return require __DIR__ . '/../../bootstrap/app.php';
+    }
+
+    protected function getProtectedUrl(): string
+    {
+        return '/analytics/streams';
     }
 
     protected function setUp(): void
@@ -31,20 +38,10 @@ class StreamsControllerTest extends TestCase
     }
 
     /** @test */
-    public function noTokenReturns401()
-    {
-        $this->get('/analytics/streams');
-        $this->seeStatusCode(401)
-            ->seeJsonEquals([
-                'error' => 'Unauthorized. Twitch access token is invalid or has expired.'
-            ]);
-    }
-
-    /** @test */
     public function validRequestReturnsStreamsList()
     {
         $this->get(
-            '/analytics/streams',
+            $this->getProtectedUrl(),
             $this->authHeaders
         );
 
