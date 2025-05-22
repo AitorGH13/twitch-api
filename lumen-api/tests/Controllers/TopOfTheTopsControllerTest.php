@@ -82,7 +82,31 @@ class TopOfTheTopsControllerTest extends TestCase
     }
 
     /** @test */
-    public function validRequestReturnsTopOfTheTopsList()
+    public function validRequestWithSinceReturnsTopOfTheTopsList()
+    {
+        $this->get(
+            $this->getProtectedUrl(),
+            $this->authHeaders
+        );
+
+        $this->seeStatusCode(200)
+            ->seeJsonStructure([
+                [
+                    'game_id',
+                    'game_name',
+                    'user_name',
+                    'total_videos',
+                    'total_views',
+                    'most_viewed_title',
+                    'most_viewed_views',
+                    'most_viewed_duration',
+                    'most_viewed_created_at'
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function validRequestWithoutSinceReturnsTopOfTheTopsList()
     {
         $this->get(
             $this->getProtectedUrl(),
