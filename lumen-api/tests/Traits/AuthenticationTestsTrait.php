@@ -7,7 +7,7 @@ trait AuthenticationTestsTrait
     abstract protected function getProtectedUrl(): string;
 
     /** @test */
-    public function missingAuthorizationHeaderReturns401()
+    public function missingAuthorizationHeaderReturns401(): void
     {
         $this->get($this->getProtectedUrl());
         $this->seeStatusCode(401)
@@ -15,7 +15,7 @@ trait AuthenticationTestsTrait
     }
 
     /** @test */
-    public function emptyAuthorizationTokenReturns401()
+    public function emptyAuthorizationTokenReturns401(): void
     {
         $this->get(
             $this->getProtectedUrl(),
@@ -26,11 +26,11 @@ trait AuthenticationTestsTrait
     }
 
     /** @test */
-    public function invalidAuthorizationTokenReturns401()
+    public function invalidAuthorizationTokenReturns401(): void
     {
         $this->get(
             $this->getProtectedUrl(),
-            ['Authorization' => 'Bearer abed123']
+            ['Authorization' => 'Bearer thisIsAnInvalidToken1234567890']
         );
         $this->seeStatusCode(401)
             ->seeJsonEquals(['error' => 'Unauthorized. Twitch access token is invalid or has expired.']);
