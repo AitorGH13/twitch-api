@@ -40,7 +40,7 @@ WORKDIR /var/www
 COPY composer.json composer.lock ./
 
 # 6) Instalamos dependencias de Composer
-RUN composer install --no-dev --optimize-autoloader --no-progress --no-interaction
+RUN composer install --optimize-autoloader --no-progress --no-interaction
 
 # 7) Copiamos el resto de la aplicación
 COPY . .

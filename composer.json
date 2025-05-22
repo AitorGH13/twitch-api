@@ -1,31 +1,54 @@
 {
-  "require": {
-    "php": ">=7.4.0 <8.4.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "App\\": "lumen-api/app/"
+    "name": "tu/proyecto-lumen",
+    "description": "Proyecto Lumen + Docker",
+    "type": "project",
+    "require": {
+        "php": ">=8.1 <8.4.0",
+        "guzzlehttp/guzzle": "^7.9",
+        "laravel/lumen-framework": "^10.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.12",
+        "phpmd/phpmd": "^2.15",
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "phpro/grumphp": "2.10.*",
+        "fakerphp/faker": "^1.9.1",
+        "mockery/mockery": "^1.4.4",
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "phpro/grumphp": true
+        },
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-install-cmd": [
+            "@composer dump-autoload",
+            "vendor/bin/grumphp git:init"
+        ],
+        "post-update-cmd": [
+            "@composer dump-autoload",
+            "vendor/bin/grumphp git:init"
+        ]
     }
-  },
-  "require-dev": {
-    "squizlabs/php_codesniffer": "^3.12",
-    "phpmd/phpmd": "^2.15",
-    "friendsofphp/php-cs-fixer": "^3.75",
-    "phpro/grumphp": "^2.12"
-  },
-  "config": {
-    "allow-plugins": {
-      "phpro/grumphp": true
-    }
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "@composer dump-autoload",
-      "vendor/bin/grumphp git:init"
-    ],
-    "post-update-cmd": [
-      "@composer dump-autoload",
-      "vendor/bin/grumphp git:init"
-    ]
-  }
 }
