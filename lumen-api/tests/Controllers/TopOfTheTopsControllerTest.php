@@ -6,15 +6,21 @@ use App\Services\AuthService;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase;
 use App\Services\RegisterService;
-use App\Services\TokenService;
+use Tests\Traits\AuthenticationTestsTrait;
 
 class TopOfTheTopsControllerTest extends TestCase
 {
     use DatabaseMigrations;
+    use AuthenticationTestsTrait;
 
     public function createApplication()
     {
         return require __DIR__ . '/../../bootstrap/app.php';
+    }
+
+    protected function getProtectedUrl(): string
+    {
+        return '/analytics/topsofthetops';
     }
 
     protected function setUp(): void
@@ -29,36 +35,6 @@ class TopOfTheTopsControllerTest extends TestCase
             ->createAccessToken('test@test.com', $apiKey);
 
         $this->authHeaders = ['Authorization' => "Bearer $token"];
-    }
-
-    /** @test */
-    public function missingAuthorizationHeaderReturns401()
-    {
-        $this->get('/analytics/topsofthetops');
-        $this->seeStatusCode(401)
-            ->seeJsonEquals(['error' => 'Unauthorized. Twitch access token is invalid or has expired.']);
-    }
-
-    /** @test */
-    public function emptyAuthorizationTokenReturns401()
-    {
-        $this->get(
-            '/analytics/topsofthetops?since=2',
-            ['Authorization' => "Bearer "]
-        );
-        $this->seeStatusCode(401)
-            ->seeJsonEquals(['error' => 'Unauthorized. Twitch access token is invalid or has expired.']);
-    }
-
-    /** @test */
-    public function invalidAuthorizationTokenReturns401()
-    {
-        $this->get(
-            '/analytics/topsofthetops?since=2',
-            ['Authorization' => "Bearer abed1234"]
-        );
-        $this->seeStatusCode(401)
-            ->seeJsonEquals(['error' => 'Unauthorized. Twitch access token is invalid or has expired.']);
     }
 
     /** @test */
@@ -109,7 +85,7 @@ class TopOfTheTopsControllerTest extends TestCase
     public function validRequestReturnsTopOfTheTopsList()
     {
         $this->get(
-            '/analytics/topsofthetops',
+            $this->getProtectedUrl(),
             $this->authHeaders
         );
 
