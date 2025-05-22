@@ -18,7 +18,7 @@ class RegisterControllerTest extends TestCase
     }
 
     /** @test */
-    public function testRegisterWithoutEmailReturns400()
+    public function registerWithoutEmailReturns400()
     {
         $this->post('/register');
         $this->seeStatusCode(400)
@@ -26,17 +26,31 @@ class RegisterControllerTest extends TestCase
     }
 
     /** @test */
-    public function testRegisterWithInvalidEmailReturns400()
+    public function registerWithEmptyEmailReturns400()
     {
-        $this->post('/register', ['email' => 'foo@.com']);
+        $this->post('/register', [
+            'email' => ''
+        ]);
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => 'The email is mandatory']);
+    }
+
+    /** @test */
+    public function registerWithInvalidEmailReturns400()
+    {
+        $this->post('/register', [
+            'email' => 'not_email@.com'
+        ]);
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => 'The email must be a valid email address']);
     }
 
     /** @test */
-    public function testRegisterWithValidEmailReturnsApiKey()
+    public function registerWithValidEmailReturnsApiKey()
     {
-        $this->post('/register', ['email' => 'user@example.com']);
+        $this->post('/register', [
+            'email' => 'user@example.com'
+        ]);
         $this->seeStatusCode(200)
             ->seeJsonStructure(['api_key']);
 

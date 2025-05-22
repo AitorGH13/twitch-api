@@ -2,76 +2,115 @@
 
 namespace Tests\Controllers;
 
+use App\Services\AuthService;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase;
 use App\Services\RegisterService;
-use App\Services\TokenService;
+use Tests\Traits\AuthenticationTestsTrait;
 
 class TopOfTheTopsControllerTest extends TestCase
 {
     use DatabaseMigrations;
+    use AuthenticationTestsTrait;
 
     public function createApplication()
     {
         return require __DIR__ . '/../../bootstrap/app.php';
     }
 
-    /** @test */
-    public function testNoTokenReturns401()
+    protected function getProtectedUrl(): string
     {
-        $this->get('/analytics/topsofthetops');
-        $this->seeStatusCode(401)
-            ->seeJsonEquals(['error' => 'Unauthorized. Twitch access token is invalid or has expired.']);
+        return '/analytics/topsofthetops';
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $apiKey = app(RegisterService::class)
+            ->registerUser('user@example.com')
+            ->getData(true)['api_key'];
+
+        $token = app(AuthService::class)
+            ->createAccessToken('user@example.com', $apiKey);
+
+        $this->authHeaders = ['Authorization' => "Bearer $token"];
     }
 
     /** @test */
-    public function testInvalidTokenReturns401()
+    public function invalidSinceParameterReturns400()
     {
         $this->get(
-            '/analytics/topsofthetops?since=abc',
-            ['Authorization' => "Bearer abed1234"]
-        );
-        $this->seeStatusCode(401)
-            ->seeJsonEquals(['error' => 'Unauthorized. Twitch access token is invalid or has expired.']);
-    }
-
-    /** @test */
-    public function testInvalidSinceParameterReturns400()
-    {
-        $apiKey = app(RegisterService::class)->registerUser('u@v.com')->getData(true)['api_key'];
-        $token  = app(TokenService::class)->createToken('u@v.com', $apiKey)->getData(true)['token'];
-
-        $this->get(
-            '/analytics/topsofthetops?since=abc',
-            ['Authorization' => "Bearer $token"]
+            '/analytics/topsofthetops?sing=2',
+            $this->authHeaders
         );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => "Invalid 'since' parameter."]);
     }
 
     /** @test */
-    public function testInvalidSinceReturns400()
+    public function emptySinceValueReturns400()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@v.com')->getData(true)['api_key'];
-        $token  = app(TokenService::class)->createToken('u@v.com', $apiKey)->getData(true)['token'];
-
         $this->get(
-            '/analytics/topsofthetops?sing=1',
-            ['Authorization' => "Bearer $token"]
+            '/analytics/topsofthetops?since=',
+            $this->authHeaders
         );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => "Invalid 'since' parameter."]);
     }
 
     /** @test */
-    public function testValidRequestReturnsStructure()
+    public function nonNumericSinceValueReturns400()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@w.com')->getData(true)['api_key'];
-        $token  = app(TokenService::class)->createToken('u@w.com', $apiKey)->getData(true)['token'];
-
         $this->get(
-            '/analytics/topsofthetops',
-            ['Authorization' => "Bearer $token"]
+            '/analytics/topsofthetops?since=a',
+            $this->authHeaders
+        );
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => "Invalid 'since' parameter."]);
+    }
+
+    /** @test */
+    public function negativeSinceValueReturns400()
+    {
+        $this->get(
+            '/analytics/topsofthetops?since=-2',
+            $this->authHeaders
+        );
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => "Invalid 'since' parameter."]);
+    }
+
+    /** @test */
+    public function validRequestWithSinceReturnsTopOfTheTopsList()
+    {
+        $this->get(
+            $this->getProtectedUrl(),
+            $this->authHeaders
+        );
+
+        $this->seeStatusCode(200)
+            ->seeJsonStructure([
+                [
+                    'game_id',
+                    'game_name',
+                    'user_name',
+                    'total_videos',
+                    'total_views',
+                    'most_viewed_title',
+                    'most_viewed_views',
+                    'most_viewed_duration',
+                    'most_viewed_created_at'
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function validRequestWithoutSinceReturnsTopOfTheTopsList()
+    {
+        $this->get(
+            $this->getProtectedUrl(),
+            $this->authHeaders
         );
 
         $this->seeStatusCode(200)

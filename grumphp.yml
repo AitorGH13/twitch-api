@@ -18,11 +18,13 @@ grumphp:
         - 'vendor/*'
 
     phpmd:
-      ruleset: 
+      ruleset:
         - cleancode
         - codesize
         - naming
       triggered_by: ['php']
+      exclude:
+        - 'vendor/*'
 
     phpcsfixer:
       config: .php-cs-fixer.php

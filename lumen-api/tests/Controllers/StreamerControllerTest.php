@@ -6,36 +6,43 @@ use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase;
 use App\Services\RegisterService;
 use App\Services\AuthService;
+use Tests\Traits\AuthenticationTestsTrait;
 
 class StreamerControllerTest extends TestCase
 {
     use DatabaseMigrations;
+    use AuthenticationTestsTrait;
 
     public function createApplication()
     {
         return require __DIR__ . '/../../bootstrap/app.php';
     }
 
-    /** @test */
-    public function testNoTokenReturns401()
+    protected function getProtectedUrl(): string
     {
-        $this->get(
-            '/analytics/user?id=1234'
-        );
+        return '/analytics/user?id=1';
+    }
 
-        $this->seeStatusCode(401)
-            ->seeJsonEquals(['error' => 'Unauthorized. Twitch access token is invalid or has expired.']);
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $apiKey = app(RegisterService::class)
+            ->registerUser('test@test.com')
+            ->getData(true)['api_key'];
+
+        $token = app(AuthService::class)
+            ->createAccessToken('test@test.com', $apiKey);
+
+        $this->authHeaders = ['Authorization' => "Bearer $token"];
     }
 
     /** @test */
-    public function testMissingIdReturns400()
+    public function missingIdParameterReturns400()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@t.com')->getData(true)['api_key'];
-        $token  = app(AuthService::class)->createAccessToken('u@t.com', $apiKey);
-
         $this->get(
             '/analytics/user',
-            ['Authorization' => "Bearer $token"]
+            $this->authHeaders
         );
 
         $this->seeStatusCode(400)
@@ -43,14 +50,35 @@ class StreamerControllerTest extends TestCase
     }
 
     /** @test */
-    public function testInvalidIdParameterReturns400()
+    public function invalidIdParameterReturns400()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@x.com')->getData(true)['api_key'];
-        $token  = app(AuthService::class)->createAccessToken('u@x.com', $apiKey);
+        $this->get(
+            '/analytics/user?idd=1',
+            $this->authHeaders
+        );
 
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => "Invalid or missing 'id' parameter."]);
+    }
+
+    /** @test */
+    public function emptyIdValueReturns400()
+    {
+        $this->get(
+            '/analytics/user?id=',
+            $this->authHeaders
+        );
+
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => "Invalid or missing 'id' parameter."]);
+    }
+
+    /** @test */
+    public function nonNumericIdValueReturns400()
+    {
         $this->get(
             '/analytics/user?id=abc',
-            ['Authorization' => "Bearer $token"]
+            $this->authHeaders
         );
 
         $this->seeStatusCode(400)
@@ -58,14 +86,11 @@ class StreamerControllerTest extends TestCase
     }
 
     /** @test */
-    public function testInvalidIdReturns400()
+    public function negativeIdValueReturns400()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@x.com')->getData(true)['api_key'];
-        $token  = app(AuthService::class)->createAccessToken('u@x.com', $apiKey);
-
         $this->get(
-            '/analytics/user?i=1',
-            ['Authorization' => "Bearer $token"]
+            '/analytics/user?id=-1',
+            $this->authHeaders
         );
 
         $this->seeStatusCode(400)
@@ -73,14 +98,11 @@ class StreamerControllerTest extends TestCase
     }
 
     /** @test */
-    public function testNotFoundReturns404()
+    public function notFoundIdReturns404()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@x.com')->getData(true)['api_key'];
-        $token  = app(AuthService::class)->createAccessToken('u@x.com', $apiKey);
-
         $this->get(
             '/analytics/user?id=9999',
-            ['Authorization' => "Bearer $token"]
+            $this->authHeaders
         );
 
         $this->seeStatusCode(404)
@@ -88,14 +110,11 @@ class StreamerControllerTest extends TestCase
     }
 
     /** @test */
-    public function testValidRequestReturnsUserStructure()
+    public function validRequestReturnsStreamerInfo()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@y.com')->getData(true)['api_key'];
-        $token  = app(AuthService::class)->createAccessToken('u@y.com', $apiKey);
-
         $this->get(
-            '/analytics/user?id=42',
-            ['Authorization' => "Bearer $token"]
+            $this->getProtectedUrl(),
+            $this->authHeaders
         );
 
         $this->seeStatusCode(200)
