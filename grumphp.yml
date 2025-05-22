@@ -1,5 +1,6 @@
 grumphp:
   hooks_dir: .git/hooks
+  stop_on_failure: true
 
   tasks:
     git_commit_message:
@@ -23,6 +24,8 @@ grumphp:
         - codesize
         - naming
       triggered_by: ['php']
+      exclude:
+        - 'vendor/*'
 
     phpcsfixer:
       config: .php-cs-fixer.php
@@ -30,5 +33,6 @@ grumphp:
 
     shell:
       scripts:
-        - 'lumen-api/vendor/bin/phpunit --configuration lumen-api/phpunit.xml'
-      triggered_by: [ 'php' ]
+        - 'cd ./lumen-api'
+        - './vendor/bin/phpunit --configuration ./phpunit.xml --testdox --colors=always'
+      triggered_by: ['php']
