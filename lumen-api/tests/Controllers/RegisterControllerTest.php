@@ -26,9 +26,21 @@ class RegisterControllerTest extends TestCase
     }
 
     /** @test */
+    public function registerWithEmptyEmailReturns400()
+    {
+        $this->post('/register', [
+            'email' => ''
+        ]);
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => 'The email is mandatory']);
+    }
+
+    /** @test */
     public function registerWithInvalidEmailReturns400()
     {
-        $this->post('/register', ['email' => 'foo@.com']);
+        $this->post('/register', [
+            'email' => 'not_email@.com'
+        ]);
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => 'The email must be a valid email address']);
     }
