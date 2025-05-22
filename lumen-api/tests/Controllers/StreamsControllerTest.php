@@ -16,8 +16,22 @@ class StreamsControllerTest extends TestCase
         return require __DIR__ . '/../../bootstrap/app.php';
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $apiKey = app(RegisterService::class)
+            ->registerUser('test@test.com')
+            ->getData(true)['api_key'];
+
+        $token = app(AuthService::class)
+            ->createAccessToken('test@test.com', $apiKey);
+
+        $this->authHeaders = ['Authorization' => "Bearer $token"];
+    }
+
     /** @test */
-    public function testNoTokenReturns401()
+    public function noTokenReturns401()
     {
         $this->get('/analytics/streams');
         $this->seeStatusCode(401)
@@ -27,17 +41,11 @@ class StreamsControllerTest extends TestCase
     }
 
     /** @test */
-    public function testValidRequestReturnsStreamsList()
+    public function validRequestReturnsStreamsList()
     {
-        $apiKey = app(RegisterService::class)
-            ->registerUser('u@s.com')
-            ->getData(true)['api_key'];
-        $token  = app(AuthService::class)
-            ->createAccessToken('u@s.com', $apiKey);
-
         $this->get(
             '/analytics/streams',
-            ['Authorization' => "Bearer $token"]
+            $this->authHeaders
         );
 
         $this->seeStatusCode(200)

@@ -18,7 +18,7 @@ class RegisterControllerTest extends TestCase
     }
 
     /** @test */
-    public function testRegisterWithoutEmailReturns400()
+    public function registerWithoutEmailReturns400()
     {
         $this->post('/register');
         $this->seeStatusCode(400)
@@ -26,7 +26,7 @@ class RegisterControllerTest extends TestCase
     }
 
     /** @test */
-    public function testRegisterWithInvalidEmailReturns400()
+    public function registerWithInvalidEmailReturns400()
     {
         $this->post('/register', ['email' => 'foo@.com']);
         $this->seeStatusCode(400)
@@ -34,7 +34,7 @@ class RegisterControllerTest extends TestCase
     }
 
     /** @test */
-    public function testRegisterWithValidEmailReturnsApiKey()
+    public function registerWithValidEmailReturnsApiKey()
     {
         $this->post('/register', ['email' => 'user@example.com']);
         $this->seeStatusCode(200)

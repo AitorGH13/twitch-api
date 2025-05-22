@@ -16,6 +16,20 @@ class EnrichedStreamsControllerTest extends TestCase
         return require __DIR__ . '/../../bootstrap/app.php';
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $apiKey = app(RegisterService::class)
+            ->registerUser('test@test.com')
+            ->getData(true)['api_key'];
+
+        $token = app(AuthService::class)
+            ->createAccessToken('test@test.com', $apiKey);
+
+        $this->authHeaders = ['Authorization' => "Bearer $token"];
+    }
+
     /** @test */
     public function testNoTokenReturns401()
     {
@@ -27,51 +41,66 @@ class EnrichedStreamsControllerTest extends TestCase
     }
 
     /** @test */
-    public function testInvalidLimitParameterReturns400()
+    public function invalidLimitParameterReturns400()
     {
-        $apiKey = app(RegisterService::class)
-            ->registerUser('u@e.com')
-            ->getData(true)['api_key'];
-        $token  = app(AuthService::class)
-            ->createAccessToken('u@e.com', $apiKey);
+        $this->get(
+            '/analytics/streams/enriched?lim=3',
+            $this->authHeaders
+        );
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => "Invalid 'limit' parameter."]);
+    }
 
+    /** @test */
+    public function missingLimitValueReturns400()
+    {
+        $this->get(
+            '/analytics/streams/enriched?limit=',
+            $this->authHeaders
+        );
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => "Invalid 'limit' parameter."]);
+    }
+
+    /** @test */
+    public function limitValueOfZeroReturns400()
+    {
         $this->get(
             '/analytics/streams/enriched?limit=0',
-            ['Authorization' => "Bearer $token"]
+            $this->authHeaders
         );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => "Invalid 'limit' parameter."]);
     }
 
     /** @test */
-    public function testInvalidLimitReturns400()
+    public function negativeLimitValueReturns400()
     {
-        $apiKey = app(RegisterService::class)
-            ->registerUser('u@e.com')
-            ->getData(true)['api_key'];
-        $token  = app(AuthService::class)
-            ->createAccessToken('u@e.com', $apiKey);
-
         $this->get(
-            '/analytics/streams/enriched?lim=0',
-            ['Authorization' => "Bearer $token"]
+            '/analytics/streams/enriched?limit=-1',
+            $this->authHeaders
         );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => "Invalid 'limit' parameter."]);
     }
 
     /** @test */
-    public function testValidRequestReturnsEnrichedStreams()
+    public function nonNumericLimitValueReturns400()
     {
-        $apiKey = app(RegisterService::class)
-            ->registerUser('u@e2.com')
-            ->getData(true)['api_key'];
-        $token  = app(AuthService::class)
-            ->createAccessToken('u@e2.com', $apiKey);
+        $this->get(
+            '/analytics/streams/enriched?limit=a',
+            $this->authHeaders
+        );
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => "Invalid 'limit' parameter."]);
+    }
 
+    /** @test */
+    public function validRequestReturnsEnrichedStreamsList()
+    {
         $this->get(
             '/analytics/streams/enriched?limit=3',
-            ['Authorization' => "Bearer $token"]
+            $this->authHeaders
         );
 
         $this->seeStatusCode(200)

@@ -2,6 +2,7 @@
 
 namespace Tests\Controllers;
 
+use App\Services\AuthService;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase;
 use App\Services\RegisterService;
@@ -16,8 +17,22 @@ class TopOfTheTopsControllerTest extends TestCase
         return require __DIR__ . '/../../bootstrap/app.php';
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $apiKey = app(RegisterService::class)
+            ->registerUser('test@test.com')
+            ->getData(true)['api_key'];
+
+        $token = app(AuthService::class)
+            ->createAccessToken('test@test.com', $apiKey);
+
+        $this->authHeaders = ['Authorization' => "Bearer $token"];
+    }
+
     /** @test */
-    public function testNoTokenReturns401()
+    public function noTokenReturns401()
     {
         $this->get('/analytics/topsofthetops');
         $this->seeStatusCode(401)
@@ -25,10 +40,10 @@ class TopOfTheTopsControllerTest extends TestCase
     }
 
     /** @test */
-    public function testInvalidTokenReturns401()
+    public function invalidTokenReturns401()
     {
         $this->get(
-            '/analytics/topsofthetops?since=abc',
+            '/analytics/topsofthetops?since=2',
             ['Authorization' => "Bearer abed1234"]
         );
         $this->seeStatusCode(401)
@@ -36,42 +51,55 @@ class TopOfTheTopsControllerTest extends TestCase
     }
 
     /** @test */
-    public function testInvalidSinceParameterReturns400()
+    public function invalidSinceParameterReturns400()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@v.com')->getData(true)['api_key'];
-        $token  = app(TokenService::class)->createToken('u@v.com', $apiKey)->getData(true)['token'];
-
         $this->get(
-            '/analytics/topsofthetops?since=abc',
-            ['Authorization' => "Bearer $token"]
+            '/analytics/topsofthetops?sing=2',
+            $this->authHeaders
         );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => "Invalid 'since' parameter."]);
     }
 
     /** @test */
-    public function testInvalidSinceReturns400()
+    public function missingSinceValueReturns400()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@v.com')->getData(true)['api_key'];
-        $token  = app(TokenService::class)->createToken('u@v.com', $apiKey)->getData(true)['token'];
-
         $this->get(
-            '/analytics/topsofthetops?sing=1',
-            ['Authorization' => "Bearer $token"]
+            '/analytics/topsofthetops?since=',
+            $this->authHeaders
         );
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => "Invalid 'since' parameter."]);
     }
 
     /** @test */
-    public function testValidRequestReturnsStructure()
+    public function nonNumericSinceValueReturns400()
     {
-        $apiKey = app(RegisterService::class)->registerUser('u@w.com')->getData(true)['api_key'];
-        $token  = app(TokenService::class)->createToken('u@w.com', $apiKey)->getData(true)['token'];
+        $this->get(
+            '/analytics/topsofthetops?since=a',
+            $this->authHeaders
+        );
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => "Invalid 'since' parameter."]);
+    }
 
+    /** @test */
+    public function negativeSinceValueReturns400()
+    {
+        $this->get(
+            '/analytics/topsofthetops?since=-2',
+            $this->authHeaders
+        );
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => "Invalid 'since' parameter."]);
+    }
+
+    /** @test */
+    public function validRequestReturnsTopOfTheTopsList()
+    {
         $this->get(
             '/analytics/topsofthetops',
-            ['Authorization' => "Bearer $token"]
+            $this->authHeaders
         );
 
         $this->seeStatusCode(200)

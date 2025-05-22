@@ -19,7 +19,7 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function testTokenWithoutEmailReturns400()
+    public function tokenWithoutEmailReturns400()
     {
         $this->post('/token', ['api_key' => 'any']);
         $this->seeStatusCode(400)
@@ -27,7 +27,7 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function testTokenWithoutApiKeyReturns400()
+    public function tokenWithoutApiKeyReturns400()
     {
         $this->post('/token', ['email' => 'user@example.com']);
         $this->seeStatusCode(400)
@@ -35,15 +35,15 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function testTokenWithInvalidEmailReturns400()
+    public function tokenWithInvalidEmailReturns400()
     {
-        $this->post('/token', ['email' => 'not-an-email', 'api_key' => 'abc']);
+        $this->post('/token', ['email' => 'not_email@.com', 'api_key' => 'abc']);
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => 'The email must be a valid email address']);
     }
 
     /** @test */
-    public function testTokenWithInvalidApiKeyReturns401()
+    public function tokenWithInvalidApiKeyReturns401()
     {
         $this->post('/token', [
             'email'   => 'user@example.com',
@@ -54,7 +54,7 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function testTokenWithValidCredentialsReturnsToken()
+    public function tokenWithValidCredentialsReturnsToken()
     {
         $email    = 'user@example.com';
         $validKey = app(AuthService::class)->registerEmail($email);
