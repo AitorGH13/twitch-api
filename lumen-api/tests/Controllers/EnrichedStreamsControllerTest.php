@@ -6,14 +6,21 @@ use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase;
 use App\Services\RegisterService;
 use App\Services\AuthService;
+use Tests\Traits\AuthenticationTestsTrait;
 
 class EnrichedStreamsControllerTest extends TestCase
 {
     use DatabaseMigrations;
+    use AuthenticationTestsTrait;
 
     public function createApplication()
     {
         return require __DIR__ . '/../../bootstrap/app.php';
+    }
+
+    protected function getProtectedUrl(): string
+    {
+        return '/analytics/streams/enriched?limit=3';
     }
 
     protected function setUp(): void
@@ -21,23 +28,24 @@ class EnrichedStreamsControllerTest extends TestCase
         parent::setUp();
 
         $apiKey = app(RegisterService::class)
-            ->registerUser('test@test.com')
+            ->registerUser('user@example.com')
             ->getData(true)['api_key'];
 
         $token = app(AuthService::class)
-            ->createAccessToken('test@test.com', $apiKey);
+            ->createAccessToken('user@example.com', $apiKey);
 
         $this->authHeaders = ['Authorization' => "Bearer $token"];
     }
 
     /** @test */
-    public function testNoTokenReturns401()
+    public function missingLimitParameterReturns400()
     {
-        $this->get('/analytics/streams/enriched?limit=3');
-        $this->seeStatusCode(401)
-            ->seeJsonEquals([
-                'error' => 'Unauthorized. Twitch access token is invalid or has expired.'
-            ]);
+        $this->get(
+            '/analytics/streams/enriched',
+            $this->authHeaders
+        );
+        $this->seeStatusCode(400)
+            ->seeJsonEquals(['error' => "Invalid 'limit' parameter."]);
     }
 
     /** @test */
@@ -52,7 +60,7 @@ class EnrichedStreamsControllerTest extends TestCase
     }
 
     /** @test */
-    public function missingLimitValueReturns400()
+    public function emptyLimitValueReturns400()
     {
         $this->get(
             '/analytics/streams/enriched?limit=',
@@ -99,7 +107,7 @@ class EnrichedStreamsControllerTest extends TestCase
     public function validRequestReturnsEnrichedStreamsList()
     {
         $this->get(
-            '/analytics/streams/enriched?limit=3',
+            $this->getProtectedUrl(),
             $this->authHeaders
         );
 
