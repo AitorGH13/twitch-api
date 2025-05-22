@@ -32,7 +32,7 @@ class TopOfTheTopsControllerTest extends TestCase
     }
 
     /** @test */
-    public function noTokenReturns401()
+    public function missingAuthorizationHeaderReturns401()
     {
         $this->get('/analytics/topsofthetops');
         $this->seeStatusCode(401)
@@ -40,7 +40,18 @@ class TopOfTheTopsControllerTest extends TestCase
     }
 
     /** @test */
-    public function invalidTokenReturns401()
+    public function emptyAuthorizationTokenReturns401()
+    {
+        $this->get(
+            '/analytics/topsofthetops?since=2',
+            ['Authorization' => "Bearer "]
+        );
+        $this->seeStatusCode(401)
+            ->seeJsonEquals(['error' => 'Unauthorized. Twitch access token is invalid or has expired.']);
+    }
+
+    /** @test */
+    public function invalidAuthorizationTokenReturns401()
     {
         $this->get(
             '/analytics/topsofthetops?since=2',
@@ -62,7 +73,7 @@ class TopOfTheTopsControllerTest extends TestCase
     }
 
     /** @test */
-    public function missingSinceValueReturns400()
+    public function emptySinceValueReturns400()
     {
         $this->get(
             '/analytics/topsofthetops?since=',
