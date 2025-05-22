@@ -62,7 +62,7 @@ trait AuthenticationTestsTrait
 
         $this->get(
             $this->getProtectedUrl(),
-            ['Authorization' => "Bearer {$token}"]
+            ['Authorization' => "Bearer $token"]
         );
 
         $this->seeStatusCode(401)
