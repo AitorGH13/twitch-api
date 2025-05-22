@@ -12,3 +12,5 @@ Homestead.yaml
 /temp/
 /build/
 
+/vendor/
+.idea
