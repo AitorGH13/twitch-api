@@ -21,7 +21,7 @@ class StreamsController extends BaseController
     public function index(Request $request): JsonResponse
     {
         $token   = $this->validator->validate($request);
-        $streams = $this->service->getLiveStreams($token);
+        $streams = $this->service->getLiveStreams($token, 3);
         return response()->json(
             $streams,
             200,

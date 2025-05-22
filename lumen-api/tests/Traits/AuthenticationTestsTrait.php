@@ -11,7 +11,7 @@ trait AuthenticationTestsTrait
 {
     abstract protected function getProtectedUrl(): string;
 
-    protected function createValidToken(string $email = 'user@example.com'): string
+    protected function createValidToken(string $email = 'u@e.com'): string
     {
         $apiKey = app(RegisterService::class)
             ->registerUser($email)

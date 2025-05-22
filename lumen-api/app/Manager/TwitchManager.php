@@ -110,7 +110,7 @@ class TwitchManager
      *
      * @return array<int,array{title:string,user_name:string}>
      */
-    public function getLiveStreams(): array
+    public function getLiveStreams(int $limit): array
     {
         if ($this->isTesting()) {
             return [
@@ -120,7 +120,7 @@ class TwitchManager
             ];
         }
 
-        return $this->request('https://api.twitch.tv/helix/streams')['data'] ?? [];
+        return $this->request('https://api.twitch.tv/helix/streams', ['first' => $limit])['data'] ?? [];
     }
 
     /**
