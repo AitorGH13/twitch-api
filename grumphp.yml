@@ -27,3 +27,8 @@ grumphp:
     phpcsfixer:
       config: .php-cs-fixer.php
       triggered_by: ['php']
+
+    shell:
+      scripts:
+        - 'lumen-api/vendor/bin/phpunit --configuration lumen-api/phpunit.xml'
+      triggered_by: [ 'php' ]
