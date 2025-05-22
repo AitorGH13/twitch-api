@@ -2,7 +2,6 @@
 
 namespace Tests\Controllers;
 
-use App\Services\RegisterService;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase;
 use App\Services\AuthService;
