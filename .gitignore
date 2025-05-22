@@ -1,14 +1,11 @@
-# 1) Dependencias de Composer
 /vendor/
-
-# 2) Cache de PHP-CS-Fixer
+/.idea/
+Homestead.json
+Homestead.yaml
+.env
+.phpunit.result.cache
 .php-cs-fixer.cache
-
-# 3) Archivos de log, caché o compilados
 /logs/
 /cache/
 /temp/
 /build/
-
-# 4) Carpeta que guarda la configuración del proyecto
-.idea/
