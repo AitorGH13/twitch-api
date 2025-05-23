@@ -18,9 +18,8 @@ composer install
 ```bash
 cp .env.example .env
 ```
-> [!NOTE]
-> TWITCH_CLIENT_ID=tu_client_id_aquí  
-> TWITCH_CLIENT_SECRET=tu_client_secret_aquí
+> [!IMPORTANT]
+> Asegúrate de completar correctamente las variables `TWITCH_CLIENT_ID` y `TWITCH_CLIENT_SECRET` en el archivo `.env` para que la autenticación con Twitch funcione correctamente.
 ## Uso
 - Para **construir y levantar** los contenedores desde cero, ejecuta el siguiente comando:
 ```bash
@@ -51,8 +50,8 @@ make shell
 make migrate
 ```
 ## Endpoints 
-> [!NOTE]
-> Las migraciones debén estar aplicadas.
+> [!IMPORTANT]
+> Antes de ejecutar cualquier endpoint, asegúrate de haber aplicado las migraciones de la base de datos.
 ### · Registrar usuario:
 ```bash
 curl -X POST http://localhost:8000/register \
@@ -86,34 +85,5 @@ curl -X GET "http://localhost:8000/analytics/streams" \
 curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=3" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
-## Prueba remota sin contenedor
-### · Registrar usuario:
-```bash
-curl -X POST "http://54.219.250.68/register" \
-  -d '{"email": "tu_correo@example.com"}'
-```
-### · Obtener token:
-```bash
-curl -X POST "http://54.219.250.68/token" \
-  -d '{"email": "tu_correo@example.com", "api_key": "tu_clave"}'
-```
-### · Obtener Tops of the tops:
-```bash
-curl -X GET "http://54.219.250.68/analytics/topsofthetops" \
-  -H "Authorization: Bearer TU_TOKEN_AQUI"
-```
-### · Obtener información de un usuario:
-```bash
-curl -X GET "http://54.219.250.68/analytics/user?id=1" \
-  -H "Authorization: Bearer TU_TOKEN_AQUI"
-```
-### · Obtener streams en vivo:
-```bash
-curl -X GET "http://54.219.250.68/analytics/streams" \
-  -H "Authorization: Bearer TU_TOKEN_AQUI"
-```
-### · Obtener streams mas enriquecidos:
-```bash
-curl -X GET "http://54.219.250.68/analytics/streams/enriched?limit=3" \
-  -H "Authorization: Bearer TU_TOKEN_AQUI"
-```
+> [!NOTE]
+> Si deseas probar la API desplegada en un servidor remoto, simplemente reemplaza `localhost:8000` por `54.219.250.68`.
