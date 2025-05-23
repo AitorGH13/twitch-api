@@ -24,7 +24,7 @@ cp .env.example .env
 ## Uso
 - Para **construir y levantar** los contenedores desde cero, ejecuta el siguiente comando:
 ```bash
-- make build
+make build
 ```
 - Para **levantar** los contenedores ya existentes, ejecuta el siguiente comando:
 ```bash
