@@ -19,7 +19,7 @@ composer install
 cp .env.example .env
 ```
 > [!IMPORTANT]
-> Asegúrate de completar correctamente las variables `TWITCH_CLIENT_ID` y `TWITCH_CLIENT_SECRET` en el archivo `.env`.
+> Completa correctamente las variables `TWITCH_CLIENT_ID` y `TWITCH_CLIENT_SECRET` en el archivo `.env`.
 # Uso
 - Para **construir y levantar** los contenedores desde cero, ejecuta el siguiente comando:
 ```bash
@@ -86,4 +86,4 @@ curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=3" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
 > [!NOTE]
-> Para probar la API desplegada en un servidor remoto, simplemente reemplaza `localhost:8000` por `54.219.250.68`.
+> Prueba la API desplegada en un servidor remoto reemplazando `localhost:8000` por `54.219.250.68`.
