@@ -15,8 +15,6 @@ class TokenService
         $this->manager = $manager;
     }
 
-    /**
-     */
     public function createToken(string $email, string $apiKey): JsonResponse
     {
         $userId = $this->manager->checkUser($email, $apiKey);
