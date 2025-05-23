@@ -19,7 +19,7 @@ composer install
 cp .env.example .env
 ```
 > [!IMPORTANT]
-> Asegúrate de completar correctamente las variables `TWITCH_CLIENT_ID` y `TWITCH_CLIENT_SECRET` en el archivo `.env` para que la autenticación con Twitch funcione correctamente.
+> Asegúrate de completar correctamente las variables `TWITCH_CLIENT_ID` y `TWITCH_CLIENT_SECRET` en el archivo `.env`.
 # Uso
 - Para **construir y levantar** los contenedores desde cero, ejecuta el siguiente comando:
 ```bash
