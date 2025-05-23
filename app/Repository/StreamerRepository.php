@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use Illuminate\Support\Facades\DB;
 
-class UserRepository
+class StreamerRepository
 {
     public function findById(string $userId): ?array
     {

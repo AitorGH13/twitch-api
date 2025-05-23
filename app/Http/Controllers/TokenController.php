@@ -21,9 +21,6 @@ class TokenController extends BaseController
     ) {
     }
 
-    /**
-     * @throws RandomException
-     */
     public function __invoke(Request $request): JsonResponse
     {
         try {

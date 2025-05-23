@@ -35,7 +35,6 @@ class AuthService
      * para que app(AuthService::class)->createAccessToken() funcione.
      * Lanza InvalidApiKeyException si no coincide.
      * @used-by /lumen-api/tests*
-     * @throws RandomException
      */
     public function createAccessToken(string $email, string $apiKey): string
     {
