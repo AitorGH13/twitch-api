@@ -20,7 +20,7 @@ cp .env.example .env
 ```
 > [!IMPORTANT]
 > Asegúrate de completar correctamente las variables `TWITCH_CLIENT_ID` y `TWITCH_CLIENT_SECRET` en el archivo `.env` para que la autenticación con Twitch funcione correctamente.
-## Uso
+# Uso
 - Para **construir y levantar** los contenedores desde cero, ejecuta el siguiente comando:
 ```bash
 make build
@@ -49,7 +49,7 @@ make shell
 ```bash
 make migrate
 ```
-## Endpoints 
+# Endpoints 
 > [!IMPORTANT]
 > Antes de ejecutar cualquier endpoint, asegúrate de haber aplicado las migraciones de la base de datos.
 ### · Registrar usuario:
