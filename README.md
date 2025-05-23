@@ -52,7 +52,7 @@ make migrate
 ```
 ## Endpoints 
 > [!NOTE]
-> Las migraciones debén estar aplicadas
+> Las migraciones debén estar aplicadas.
 ### · Registrar usuario:
 ```bash
 curl -X POST http://localhost:8000/register \
