@@ -145,8 +145,8 @@ $app->singleton(
     App\Repository\TopOfTheTopsRepository::class
 );
 $app->singleton(
-    App\Repository\UserRepository::class,
-    App\Repository\UserRepository::class
+    App\Repository\StreamerRepository::class,
+    App\Repository\StreamerRepository::class
 );*/
 
 // Servicios

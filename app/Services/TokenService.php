@@ -2,47 +2,50 @@
 
 namespace App\Services;
 
-use App\Repository\DatabaseRepository;
 use Illuminate\Http\JsonResponse;
 use App\Exceptions\InvalidApiKeyException;
-use Random\RandomException;
+use App\Manager\TokenManager;
 
 class TokenService
 {
-    private DatabaseRepository $repo;
+    private TokenManager $manager;
 
-    public function __construct(DatabaseRepository $repo)
+    public function __construct(TokenManager $manager)
     {
-        $this->repo = $repo;
+        $this->manager = $manager;
     }
 
     /**
-     * @throws RandomException
      */
     public function createToken(string $email, string $apiKey): JsonResponse
     {
-        $userId = $this->repo->getUserIdByCredentials($email, $apiKey);
+        $userId = $this->manager->checkUser($email, $apiKey);
+
         if (! $userId) {
             throw new InvalidApiKeyException();
         }
 
-        $now       = time();
-        $expiresAt = $now + 3 * 24 * 3600;
-        $session   = $this->repo->getSession($userId);
+        // Intentamos obtener token existente (y su expiración)
+        $response = $this->manager->getToken($userId);
+        $data     = json_decode($response->getContent(), true);
+        $token    = $data['token'];
+        $expires  = $data['expires_at'];
 
-        if ($session && strtotime($session->expires_at) >= $now) {
-            return new JsonResponse(['token' => $session->token], 200);
+        // Si no había token o ha expirado, generamos uno nuevo
+        if (! $token || strtotime($expires) < time()) {
+            $newResp = $this->manager->generateToken();
+            $newData = json_decode($newResp->getContent(), true);
+
+            $token   = $newData['token'];
+            $expires = $newData['expires_at'];
+
+            $this->manager->updateToken($token, $expires, $userId);
         }
 
-        $token = bin2hex(random_bytes(16));
-
-        if ($session) {
-            $this->repo->updateSession($userId, $token, $expiresAt);
-            return new JsonResponse(['token' => $token], 200);
-        }
-
-        $this->repo->registerSession($userId, $token, $expiresAt);
-        return new JsonResponse(['token' => $token], 200);
+        // Devolver token:
+        return new JsonResponse([
+            'token'      => $token,
+        ], 200);
     }
 
     /**
@@ -50,10 +53,6 @@ class TokenService
      */
     public function validateAccessToken(string $token): bool
     {
-        $session = $this->repo->getSessionByToken($token);
-        if (! $session) {
-            return false;
-        }
-        return strtotime($session->expires_at) >= time();
+        return $this->manager->tokenIsActive($token);
     }
 }

@@ -41,23 +41,23 @@ class DatabaseRepository
             ->first();
     }
 
-    public function registerSession(int $userId, string $token, int $expiresAt): void
+    public function registerSession(int $userId, string $token, string $expiresAt): void
     {
         DB::table('sessions')
             ->insert([
                 'user_id'    => $userId,
                 'token'      => $token,
-                'expires_at' => date('Y-m-d H:i:s', $expiresAt),
+                'expires_at' => $expiresAt,
             ]);
     }
 
-    public function updateSession(int $userId, string $token, int $expiresAt): void
+    public function updateSession(int $userId, string $token, string $expiresAt): void
     {
         DB::table('sessions')
             ->where('user_id', $userId)
             ->update([
                 'token'      => $token,
-                'expires_at' => date('Y-m-d H:i:s', $expiresAt),
+                'expires_at' => $expiresAt,
             ]);
     }
 
