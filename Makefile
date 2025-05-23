@@ -1,4 +1,4 @@
-.PHONY: start stop clean tests shell
+.PHONY: start stop clean tests shell migrate
 
 start:
 	@docker-compose up -d --build
@@ -14,3 +14,6 @@ tests:
 
 shell:
 	@docker-compose exec app /bin/bash
+
+migrate:
+	@docker-compose exec app php artisan migrate
