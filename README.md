@@ -65,7 +65,7 @@ curl -X POST http://localhost:8000/token \
   -H "Content-Type: application/json" \
   -d '{"email": "tu_correo@example.com", "api_key": "tu_clave"}'
 ```
-### · Consultar "Tops Of The Tops":
+### · Consultar "Top Of The Tops":
 ```bash
 curl -X GET "http://localhost:8000/analytics/topsofthetops" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
