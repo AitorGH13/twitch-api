@@ -86,4 +86,4 @@ curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=3" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
 > [!NOTE]
-> Si deseas probar la API desplegada en un servidor remoto, simplemente reemplaza `localhost:8000` por `54.219.250.68`.
+> Para probar la API desplegada en un servidor remoto, simplemente reemplaza `localhost:8000` por `54.219.250.68`.
