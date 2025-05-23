@@ -1,6 +1,6 @@
-.PHONY: start up stop clean tests shell migrate
+.PHONY: build up stop clean tests shell migrate
 
-start:
+build:
 	@docker-compose up -d --build
 
 up:
@@ -12,7 +12,7 @@ stop:
 clean:
 	@docker-compose down --volumes --remove-orphans
 
-tests:
+test:
 	@docker-compose run --rm app vendor/bin/phpunit --testdox
 
 shell:
