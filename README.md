@@ -52,35 +52,35 @@ make migrate
 # Endpoints 
 > [!IMPORTANT]
 > Antes de ejecutar cualquier endpoint, asegúrate de haber aplicado las migraciones de la base de datos.
-### · Registrar usuario:
+### · Registro de Usuarios:
 ```bash
 curl -X POST http://localhost:8000/register \
   -H "Content-Type: application/json" \
   -d '{"email": "tu_correo@example.com"}'
 ```
-### · Obtener token:
+### · Obtención de Token de Sesión:
 
 ```bash
 curl -X POST http://localhost:8000/token \
   -H "Content-Type: application/json" \
   -d '{"email": "tu_correo@example.com", "api_key": "tu_clave"}'
 ```
-### · Obtener Tops of the tops:
+### · Consultar "Tops Of The Tops":
 ```bash
 curl -X GET "http://localhost:8000/analytics/topsofthetops" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
-### · Obtener información de un usuario:
+### · Consultar Información de un Streamer:
 ```bash
 curl -X GET "http://localhost:8000/analytics/user?id=1" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
-### · Obtener streams en vivo:
+### · Consultar Streams en vivo:
 ```bash
 curl -X GET "http://localhost:8000/analytics/streams" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
-### · Obtener streams mas enriquecidos:
+### · Consultar “Top Streams Enriquecidos”:
 ```bash
 curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=3" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
