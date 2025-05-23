@@ -13,7 +13,7 @@ git clone https://github.com/AitorGH13/twitchapi.git ; cd twitchapi
 ```bash
 composer install
 ```
-3. Copia el archivo `.env.example` a `.env`
+3. Copia el archivo `.env.example` a `.env`:
 
 ```bash
 cp .env.example .env
