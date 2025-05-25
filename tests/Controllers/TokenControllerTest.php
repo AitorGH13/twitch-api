@@ -106,4 +106,26 @@ class TokenControllerTest extends TestCase
         $body = json_decode($this->response->getContent(), true);
         $this->assertEquals(32, strlen($body['token']));
     }
+
+    /** @test */
+    public function tokenWithSameCredentialsReturnsSameToken()
+    {
+        $this->post('/token', [
+            'email'   => $this->validEmail,
+            'api_key' => $this->validKey,
+        ]);
+        $this->seeStatusCode(200);
+        $firstBody = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('token', $firstBody);
+        $firstToken = $firstBody['token'];
+        $this->post('/token', [
+            'email'   => $this->validEmail,
+            'api_key' => $this->validKey,
+        ]);
+        $this->seeStatusCode(200);
+        $secondBody = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('token', $secondBody);
+        $secondToken = $secondBody['token'];
+        $this->assertEquals($firstToken, $secondToken);
+    }
 }
