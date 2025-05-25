@@ -62,16 +62,19 @@ class RegisterControllerTest extends TestCase
     public function registeringSameEmailReturnsDifferentApiKey()
     {
         $email = 'user@example.com';
+
         $this->post('/register', ['email' => $email]);
         $this->seeStatusCode(200);
         $firstBody = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('api_key', $firstBody);
         $firstApiKey = $firstBody['api_key'];
+
         $this->post('/register', ['email' => $email]);
         $this->seeStatusCode(200);
         $secondBody = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('api_key', $secondBody);
         $secondApiKey = $secondBody['api_key'];
+
         $this->assertNotEquals($firstApiKey, $secondApiKey);
     }
 }
