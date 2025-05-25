@@ -16,13 +16,10 @@ class DatabaseRepository
 
     public function registerEmailAndApiKey(string $email, string $apiKey): void
     {
-        $user = $this->getUserByEmail($email);
-        if ($user) {
-            $this->updateApiKey($email, $apiKey);
-            return;
-        }
-        DB::table('users')
-            ->insert(['email' => $email, 'api_key' => $apiKey]);
+        DB::table('users')->updateOrInsert(
+            ['email'   => $email],
+            ['api_key' => $apiKey]
+        );
     }
 
     public function updateApiKey(string $email, string $apiKey): void
