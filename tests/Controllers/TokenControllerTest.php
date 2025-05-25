@@ -118,6 +118,7 @@ class TokenControllerTest extends TestCase
         $firstBody = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('token', $firstBody);
         $firstToken = $firstBody['token'];
+
         $this->post('/token', [
             'email'   => $this->validEmail,
             'api_key' => $this->validKey,
@@ -126,6 +127,7 @@ class TokenControllerTest extends TestCase
         $secondBody = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('token', $secondBody);
         $secondToken = $secondBody['token'];
+
         $this->assertEquals($firstToken, $secondToken);
     }
 }

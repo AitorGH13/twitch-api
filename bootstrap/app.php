@@ -1,7 +1,5 @@
 <?php
 
-// bootstrap/app.php
-
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
@@ -47,7 +45,7 @@ $app = new Laravel\Lumen\Application(
 |
 | Now we will register a few bindings in the service container. We will
 | register the exception handler and the console kernel. You may add
-| your own bindings here if you like or you can make another file.
+| your own bindings here if you like, or you can make another file.
 |
 */
 
@@ -67,7 +65,7 @@ $app->singleton(
 |--------------------------------------------------------------------------
 |
 | Now we will register the "app" configuration file. If the file exists in
-| your configuration directory it will be loaded; otherwise, we'll load
+| your configuration directory, it will be loaded; otherwise, we'll load
 | the default version. You may register other files below as needed.
 |
 */
@@ -80,7 +78,7 @@ $app->configure('app');
 |--------------------------------------------------------------------------
 |
 | Next, we will register the middleware with the application. These can
-| be global middleware that run before and after each request into a
+| be global middleware that runs before and after each request into a
 | route or middleware that'll be assigned to some specific routes.
 |
 */
@@ -102,7 +100,7 @@ $app->routeMiddleware([
 | Register Service Providers
 |--------------------------------------------------------------------------
 |
-| Here we will register all of the application's service providers which
+| Here we will register all the application's service providers which
 | are used to bind services into the container. Service providers are
 | totally optional, so you are not required to uncomment this line.
 |
@@ -117,8 +115,8 @@ $app->routeMiddleware([
 | Load The Application Routes
 |--------------------------------------------------------------------------
 |
-| Next we will include the routes file so that they can all be added to
-| the application. This will provide all of the URLs the application
+| Next we will include the routes' file so that they can all be added to
+| the application. This will provide all the URLs the application
 | can respond to, as well as the controllers that may handle them.
 |
 */
@@ -135,43 +133,50 @@ if (! class_exists('DB')) {
     class_alias(\Illuminate\Support\Facades\DB::class, 'DB');
 }
 
-// Repositorios
-/*$app->singleton(
+// Manager
+/*
+$app->singleton(
+    App\Services\TokenManager::class,
+    App\Services\TokenManager::class
+);
+$app->singleton(
+    App\Services\TwitchManager::class,
+    App\Services\TwitchManager::class
+);
+*/
+
+// Repository
+/*
+$app->singleton(
     App\Repository\DatabaseRepository::class,
     App\Repository\DatabaseRepository::class
+);
+$app->singleton(
+    App\Repository\StreamerRepository::class,
+    App\Repository\StreamerRepository::class
 );
 $app->singleton(
     App\Repository\TopOfTheTopsRepository::class,
     App\Repository\TopOfTheTopsRepository::class
 );
-$app->singleton(
-    App\Repository\StreamerRepository::class,
-    App\Repository\StreamerRepository::class
-);*/
+*/
 
-// Servicios
-/*$app->singleton(
-    App\Services\TwitchManager::class,
-    App\Services\TwitchManager::class
+// Services
+/*
+$app->singleton(
+    App\Services\AuthService::class,
+    App\Services\AuthService::class
 );
 $app->singleton(
-    App\Services\TopOfTheTopsService::class,
-    App\Services\TopOfTheTopsService::class
+    App\Services\EnrichedStreamsService::class,
+    App\Services\EnrichedStreamsService::class
 );
 $app->singleton(
     App\Services\RegisterService::class,
     App\Services\RegisterService::class
 );
 $app->singleton(
-    App\Services\TokenService::class,
-    App\Services\TokenService::class
-);
-$app->singleton(
-    App\Services\AuthService::class,
-    App\Services\AuthService::class
-);
-$app->singleton(
-    App\Services\RegisterService::class,
+    App\Services\StreamerService::class,
     App\Services\StreamerService::class
 );
 $app->singleton(
@@ -179,26 +184,28 @@ $app->singleton(
     App\Services\StreamsService::class
 );
 $app->singleton(
-    App\Services\EnrichedStreamsService::class,
-    App\Services\EnrichedStreamsService::class
+    App\Services\TokenService::class,
+    App\Services\TokenService::class
+);
+$app->singleton(
+    App\Services\TopOfTheTopsService::class,
+    App\Services\TopOfTheTopsService::class
 );
 $app->singleton(
     App\Services\TwitchAuthService::class,
     App\Services\TwitchAuthService::class
-);*/
+);
+*/
 
 // Validators
-/*$app->singleton(
-    App\Validators\TopOfTheTopsRequestValidator::class,
-    App\Validators\TopOfTheTopsRequestValidator::class
+/*
+$app->singleton(
+    App\Validators\EnrichedStreamsRequestValidator::class,
+    App\Validators\EnrichedStreamsRequestValidator::class
 );
 $app->singleton(
     App\Validators\RegisterRequestValidator::class,
     App\Validators\RegisterRequestValidator::class
-);
-$app->singleton(
-    App\Validators\TokenRequestValidator::class,
-    App\Validators\TokenRequestValidator::class
 );
 $app->singleton(
     App\Validators\StreamerRequestValidator::class,
@@ -209,8 +216,13 @@ $app->singleton(
     App\Validators\StreamsRequestValidator::class
 );
 $app->singleton(
-    App\Validators\EnrichedStreamsRequestValidator::class,
-    App\Validators\EnrichedStreamsRequestValidator::class
-);*/
+    App\Validators\TokenRequestValidator::class,
+    App\Validators\TokenRequestValidator::class
+);
+$app->singleton(
+    App\Validators\TopOfTheTopsRequestValidator::class,
+    App\Validators\TopOfTheTopsRequestValidator::class
+);
+*/
 
 return $app;
