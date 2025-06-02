@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit;
+namespace Unit\Services;
 
-use Random\RandomException;
-use Tests\BaseUnitTestCase;
 use App\Services\AuthService;
 use App\Services\RegisterService;
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
+use Random\RandomException;
+use Unit\BaseUnitTestCase;
 
 class AuthServiceTest extends BaseUnitTestCase
 {

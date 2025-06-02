@@ -10,7 +10,7 @@
         </testsuite>
 
         <testsuite name="Feature">
-            <directory>./tests/Controllers</directory>
+            <directory>./tests/Integration</directory>
         </testsuite>
 
         <testsuite name="Application Test Suite">

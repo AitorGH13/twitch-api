@@ -8,13 +8,13 @@ use App\Manager\TokenManager;
 
 class TokenService
 {
-    private TokenManager $manager;
-
-    public function __construct(TokenManager $manager)
+    public function __construct(private readonly TokenManager $manager)
     {
-        $this->manager = $manager;
     }
 
+    /**
+     * Devuelve un access-token válido para el par (email, apiKey).
+     */
     public function createToken(string $email, string $apiKey): JsonResponse
     {
         $userId = $this->manager->checkUser($email, $apiKey);
@@ -23,29 +23,15 @@ class TokenService
             throw new InvalidApiKeyException();
         }
 
-        $response = $this->manager->getToken($userId);
-        $data     = json_decode($response->getContent(), true);
-        $token    = $data['token'];
-        $expires  = $data['expires_at'];
+        $token = $this->manager->provideToken($userId);
 
-        if (! $token || strtotime($expires) < time()) {
-            $newResp = $this->manager->generateToken();
-            $newData = json_decode($newResp->getContent(), true);
-
-            $token   = $newData['token'];
-            $expires = $newData['expires_at'];
-
-            $this->manager->updateToken($token, $expires, $userId);
-        }
-
-        // Devolver token:
         return new JsonResponse([
-            'token'      => $token,
+            'token'      => $token->value,
         ], 200);
     }
 
     /**
-     * Valida un access token.
+     * Valida un access-token.
      */
     public function validateAccessToken(string $token): bool
     {

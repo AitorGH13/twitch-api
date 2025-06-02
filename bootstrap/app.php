@@ -109,6 +109,7 @@ $app->routeMiddleware([
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\RepositoryServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -148,8 +149,8 @@ $app->singleton(
 // Repository
 /*
 $app->singleton(
-    App\Repository\DatabaseRepository::class,
-    App\Repository\DatabaseRepository::class
+    App\Repository\DatabaseUserRepository::class,
+    App\Repository\DatabaseUserRepository::class
 );
 $app->singleton(
     App\Repository\StreamerRepository::class,

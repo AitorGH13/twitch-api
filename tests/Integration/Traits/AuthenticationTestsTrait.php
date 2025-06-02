@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Traits;
+namespace Integration\Traits;
 
-use App\Services\RegisterService;
 use App\Services\AuthService;
-use Illuminate\Support\Facades\DB;
+use App\Services\RegisterService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 trait AuthenticationTestsTrait
 {

@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Exceptions\NoGamesFoundException;
 use App\Exceptions\NoVideosFoundException;
 use App\Exceptions\UnauthorizedException;
-use App\Manager\TwitchManager;
+use App\Interfaces\TwitchClientInterface;
 use App\Repository\TopOfTheTopsRepository;
 use DateTime;
 use Exception;
@@ -14,12 +14,12 @@ class TopOfTheTopsService
 {
     private TopOfTheTopsRepository $repo;
     private AuthService $authService;
-    private TwitchManager $twitchClient;
+    private TwitchClientInterface $twitchClient;
 
     public function __construct(
         TopOfTheTopsRepository $repo,
         AuthService $authService,
-        TwitchManager $twitchClient
+        TwitchClientInterface $twitchClient
     ) {
         $this->repo = $repo;
         $this->authService = $authService;

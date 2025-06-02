@@ -25,7 +25,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Integration\\": "tests/Integration/",
+            "Unit\\":        "tests/Unit/",
+            "Fakes\\":       "tests/Fakes/"
         }
     },
     "config": {

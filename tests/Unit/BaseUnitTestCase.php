@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+namespace Unit;
 
-namespace Tests;
-
+use Mockery\Container;
 use Mockery\Exception\RuntimeException;
 use PHPUnit\Framework\TestCase as BaseTestCase;
-use Mockery\Container;
 use ReflectionException;
 
 abstract class BaseUnitTestCase extends BaseTestCase

@@ -1,11 +1,13 @@
 <?php
 
-namespace Tests\Controllers;
+namespace Integration\Controllers;
 
-use Tests\BaseIntegrationTestCase;
-use Tests\Traits\AuthenticationTestsTrait;
-use App\Services\RegisterService;
 use App\Services\AuthService;
+use App\Services\RegisterService;
+use Integration\BaseIntegrationTestCase;
+use Integration\Traits\AuthenticationTestsTrait;
+use Fakes\FakeTwitchClient;
+use App\Interfaces\TwitchClientInterface;
 
 class TopOfTheTopsControllerTest extends BaseIntegrationTestCase
 {
@@ -16,6 +18,8 @@ class TopOfTheTopsControllerTest extends BaseIntegrationTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->app->instance(TwitchClientInterface::class, new FakeTwitchClient());
 
         $apiKey = app(RegisterService::class)
             ->registerUser('tops@example.com')

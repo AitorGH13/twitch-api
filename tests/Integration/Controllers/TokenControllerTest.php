@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Controllers;
+namespace Integration\Controllers;
 
-use Tests\BaseIntegrationTestCase;
 use App\Services\AuthService;
+use Integration\BaseIntegrationTestCase;
 
 class TokenControllerTest extends BaseIntegrationTestCase
 {

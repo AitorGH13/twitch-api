@@ -2,82 +2,58 @@
 
 namespace App\Manager;
 
-use Illuminate\Http\JsonResponse;
-use App\Repository\DatabaseRepository;
+use App\Interfaces\UserRepositoryInterface;
+use App\Interfaces\TokenRepositoryInterface;
+use App\Support\TokenGenerator;
+use App\Domain\Token;
+use DateTimeImmutable;
+use Random\RandomException;
 
 class TokenManager
 {
-    private DatabaseRepository $repo;
-
-    public function __construct(DatabaseRepository $repo)
-    {
-        $this->repo = $repo;
+    public function __construct(
+        private readonly UserRepositoryInterface $users,
+        private readonly TokenRepositoryInterface $tokens,
+        private readonly TokenGenerator $generator,
+    ) {
     }
 
-    /**
-     * Comprueba credenciales y devuelve el user_id o null.
-     */
     public function checkUser(string $email, string $apiKey): ?int
     {
-        return $this->repo->getUserIdByCredentials($email, $apiKey);
+        return $this->users->idByCredentials($email, $apiKey);
     }
 
-    /**
-     * Devuelve JsonResponse con token y expires_at si existe sesión.
-     */
-    public function getToken(int $userId): JsonResponse
+    public function provideToken(int $userId): Token
     {
-        $session = $this->repo->getSession($userId);
+        $token = $this->tokens->findActiveByUserId($userId);
 
-        if ($session) {
-            return new JsonResponse([
-                'token'      => $session->token,
-                'expires_at' => $session->expires_at,
-            ], 200);
+        if (! $token || $token->isExpired()) {
+            $token = $this->generateAndSaveToken($userId);
         }
 
-        return new JsonResponse(['token' => null, 'expires_at' => null], 200);
+        return $token;
+    }
+
+    public function tokenIsActive(string $value): bool
+    {
+        $token = $this->tokens->findByValue($value);
+
+        return $token && ! $token->isExpired();
     }
 
     /**
-     * Genera un nuevo token y fecha de expiración (3 días).
+     * @throws RandomException
      */
-    public function generateToken(): JsonResponse
+    private function generateAndSaveToken(int $userId): Token
     {
-        $token     = bin2hex(random_bytes(16));
-        $expiresAt = date('Y-m-d H:i:s', time() + 3 * 24 * 3600);
+        $token = new Token(
+            $this->generator->generate(),
+            $userId,
+            new DateTimeImmutable('+3 days'),
+        );
 
-        return new JsonResponse([
-            'token'      => $token,
-            'expires_at' => $expiresAt,
-        ], 200);
-    }
+        $this->tokens->save($token);
 
-    /**
-     * Registra o actualiza en BD el token y su expiración.
-     */
-    public function updateToken(string $token, string $expiresAt, int $userId): void
-    {
-        $session = $this->repo->getSession($userId);
-
-        if ($session) {
-            $this->repo->updateSession($userId, $token, $expiresAt);
-        }
-
-        $this->repo->registerSession($userId, $token, $expiresAt);
-    }
-
-    /**
-     * Comprueba si un token dado sigue activo.
-     */
-    public function tokenIsActive(string $token): bool
-    {
-        $session = $this->repo->getSessionByToken($token);
-
-        if (! $session) {
-            return false;
-        }
-
-        return strtotime($session->expires_at) >= time();
+        return $token;
     }
 }

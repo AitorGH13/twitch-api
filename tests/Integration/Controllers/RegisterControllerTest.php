@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Controllers;
+namespace Integration\Controllers;
 
-use Tests\BaseIntegrationTestCase;
+use Integration\BaseIntegrationTestCase;
 
 class RegisterControllerTest extends BaseIntegrationTestCase
 {
