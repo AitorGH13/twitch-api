@@ -2,48 +2,40 @@
 
 namespace Tests\Controllers;
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\TestCase;
+use Tests\BaseIntegrationTestCase;
+use Tests\Traits\AuthenticationTestsTrait;
 use App\Services\RegisterService;
 use App\Services\AuthService;
-use Tests\Traits\AuthenticationTestsTrait;
 
-class StreamsControllerTest extends TestCase
+class StreamsControllerTest extends BaseIntegrationTestCase
 {
-    use DatabaseMigrations;
     use AuthenticationTestsTrait;
 
-    public function createApplication()
-    {
-        return require __DIR__ . '/../../bootstrap/app.php';
-    }
-
-    protected function getProtectedUrl(): string
-    {
-        return '/analytics/streams';
-    }
+    private array $authHeaders = [];
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $apiKey = app(RegisterService::class)
-            ->registerUser('test@test.com')
+            ->registerUser('streams@test.com')
             ->getData(true)['api_key'];
 
         $token = app(AuthService::class)
-            ->createAccessToken('test@test.com', $apiKey);
+            ->createAccessToken('streams@test.com', $apiKey);
 
         $this->authHeaders = ['Authorization' => "Bearer $token"];
+    }
+
+    protected function getProtectedUrl(): string
+    {
+        return 'analytics/streams?limit=3';
     }
 
     /** @test */
     public function validRequestReturnsStreamsList()
     {
-        $this->get(
-            $this->getProtectedUrl(),
-            $this->authHeaders
-        );
+        $this->get('analytics/streams?limit=3', $this->authHeaders);
 
         $this->seeStatusCode(200)
             ->seeJsonEquals([

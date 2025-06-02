@@ -2,39 +2,34 @@
 
 namespace Tests\Controllers;
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\TestCase;
+use Tests\BaseIntegrationTestCase;
+use Tests\Traits\AuthenticationTestsTrait;
 use App\Services\RegisterService;
 use App\Services\AuthService;
-use Tests\Traits\AuthenticationTestsTrait;
 
-class StreamerControllerTest extends TestCase
+class StreamerControllerTest extends BaseIntegrationTestCase
 {
-    use DatabaseMigrations;
     use AuthenticationTestsTrait;
 
-    public function createApplication()
-    {
-        return require __DIR__ . '/../../bootstrap/app.php';
-    }
-
-    protected function getProtectedUrl(): string
-    {
-        return '/analytics/user?id=1';
-    }
+    private array $authHeaders = [];
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $apiKey = app(RegisterService::class)
-            ->registerUser('test@test.com')
+            ->registerUser('streamer@test.com')
             ->getData(true)['api_key'];
 
         $token = app(AuthService::class)
-            ->createAccessToken('test@test.com', $apiKey);
+            ->createAccessToken('streamer@test.com', $apiKey);
 
         $this->authHeaders = ['Authorization' => "Bearer $token"];
+    }
+
+    protected function getProtectedUrl(): string
+    {
+        return '/analytics/user?id=1';
     }
 
     /** @test */
@@ -112,10 +107,7 @@ class StreamerControllerTest extends TestCase
     /** @test */
     public function validRequestReturnsStreamerInfo()
     {
-        $this->get(
-            $this->getProtectedUrl(),
-            $this->authHeaders
-        );
+        $this->get('/analytics/user?id=1', $this->authHeaders);
 
         $this->seeStatusCode(200)
             ->seeJsonStructure([

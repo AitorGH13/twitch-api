@@ -2,39 +2,34 @@
 
 namespace Tests\Controllers;
 
-use App\Services\AuthService;
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\TestCase;
-use App\Services\RegisterService;
+use Tests\BaseIntegrationTestCase;
 use Tests\Traits\AuthenticationTestsTrait;
+use App\Services\RegisterService;
+use App\Services\AuthService;
 
-class TopOfTheTopsControllerTest extends TestCase
+class TopOfTheTopsControllerTest extends BaseIntegrationTestCase
 {
-    use DatabaseMigrations;
     use AuthenticationTestsTrait;
 
-    public function createApplication()
-    {
-        return require __DIR__ . '/../../bootstrap/app.php';
-    }
-
-    protected function getProtectedUrl(): string
-    {
-        return '/analytics/topsofthetops';
-    }
+    private array $authHeaders = [];
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $apiKey = app(RegisterService::class)
-            ->registerUser('user@example.com')
+            ->registerUser('tops@example.com')
             ->getData(true)['api_key'];
 
         $token = app(AuthService::class)
-            ->createAccessToken('user@example.com', $apiKey);
+            ->createAccessToken('tops@example.com', $apiKey);
 
         $this->authHeaders = ['Authorization' => "Bearer $token"];
+    }
+
+    protected function getProtectedUrl(): string
+    {
+        return '/analytics/topsofthetops';
     }
 
     /** @test */
@@ -82,16 +77,13 @@ class TopOfTheTopsControllerTest extends TestCase
     }
 
     /** @test */
-    public function validRequestWithSinceReturnsTopOfTheTopsList()
+    public function validRequestReturnsTopOfTheTopsList()
     {
-        $this->get(
-            $this->getProtectedUrl(),
-            $this->authHeaders
-        );
+        $this->get('/analytics/topsofthetops', $this->authHeaders);
 
         $this->seeStatusCode(200)
             ->seeJsonStructure([
-                [
+                '*' => [
                     'game_id',
                     'game_name',
                     'user_name',
@@ -100,32 +92,8 @@ class TopOfTheTopsControllerTest extends TestCase
                     'most_viewed_title',
                     'most_viewed_views',
                     'most_viewed_duration',
-                    'most_viewed_created_at'
-                ]
-            ]);
-    }
-
-    /** @test */
-    public function validRequestWithoutSinceReturnsTopOfTheTopsList()
-    {
-        $this->get(
-            $this->getProtectedUrl(),
-            $this->authHeaders
-        );
-
-        $this->seeStatusCode(200)
-            ->seeJsonStructure([
-                [
-                    'game_id',
-                    'game_name',
-                    'user_name',
-                    'total_videos',
-                    'total_views',
-                    'most_viewed_title',
-                    'most_viewed_views',
-                    'most_viewed_duration',
-                    'most_viewed_created_at'
-                ]
+                    'most_viewed_created_at',
+                ],
             ]);
     }
 }

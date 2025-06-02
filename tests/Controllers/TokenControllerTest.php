@@ -2,31 +2,20 @@
 
 namespace Tests\Controllers;
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\TestCase;
+use Tests\BaseIntegrationTestCase;
 use App\Services\AuthService;
 
-class TokenControllerTest extends TestCase
+class TokenControllerTest extends BaseIntegrationTestCase
 {
-    use DatabaseMigrations;
-
-    /**
-     * Define application setup.
-     */
-    public function createApplication()
-    {
-        return require __DIR__ . '/../../bootstrap/app.php';
-    }
+    private string $validKey;
+    private string $validEmail;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $email = 'user@example.com';
-        $validKey = app(AuthService::class)->registerEmail($email);
-
-        $this->validKey = $validKey;
-        $this->validEmail   = $email;
+        $this->validEmail = 'token@test.com';
+        $this->validKey   = app(AuthService::class)->registerEmail($this->validEmail);
     }
 
     /** @test */
@@ -86,7 +75,7 @@ class TokenControllerTest extends TestCase
     public function tokenWithInvalidApiKeyReturns401()
     {
         $this->post('/token', [
-            'email'   => $this->validEmail,
+            'email' => $this->validEmail,
             'api_key' => 'abed1234'
         ]);
         $this->seeStatusCode(401)
@@ -94,24 +83,25 @@ class TokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function tokenWithValidCredentialsReturnsToken()
+    public function validCredentialsReturnToken()
     {
         $this->post('/token', [
             'email'   => $this->validEmail,
             'api_key' => $this->validKey,
         ]);
+
         $this->seeStatusCode(200)
             ->seeJsonStructure(['token']);
 
-        $body = json_decode($this->response->getContent(), true);
-        $this->assertEquals(32, strlen($body['token']));
+        $token = json_decode($this->response->getContent(), true)['token'];
+        $this->assertEquals(32, strlen($token));
     }
 
     /** @test */
     public function tokenWithSameCredentialsReturnsSameToken()
     {
         $this->post('/token', [
-            'email'   => $this->validEmail,
+            'email' => $this->validEmail,
             'api_key' => $this->validKey,
         ]);
         $this->seeStatusCode(200);
@@ -120,7 +110,7 @@ class TokenControllerTest extends TestCase
         $firstToken = $firstBody['token'];
 
         $this->post('/token', [
-            'email'   => $this->validEmail,
+            'email' => $this->validEmail,
             'api_key' => $this->validKey,
         ]);
         $this->seeStatusCode(200);

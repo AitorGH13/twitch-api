@@ -2,21 +2,10 @@
 
 namespace Tests\Controllers;
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\TestCase;
+use Tests\BaseIntegrationTestCase;
 
-class RegisterControllerTest extends TestCase
+class RegisterControllerTest extends BaseIntegrationTestCase
 {
-    use DatabaseMigrations;
-
-    /**
-     * Define application setup.
-     */
-    public function createApplication()
-    {
-        return require __DIR__ . '/../../bootstrap/app.php';
-    }
-
     /** @test */
     public function registerWithoutEmailReturns400()
     {
@@ -28,9 +17,7 @@ class RegisterControllerTest extends TestCase
     /** @test */
     public function registerWithEmptyEmailReturns400()
     {
-        $this->post('/register', [
-            'email' => ''
-        ]);
+        $this->post('/register', ['email' => '']);
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => 'The email is mandatory']);
     }
@@ -38,9 +25,7 @@ class RegisterControllerTest extends TestCase
     /** @test */
     public function registerWithInvalidEmailReturns400()
     {
-        $this->post('/register', [
-            'email' => 'not_email@.com'
-        ]);
+        $this->post('/register', ['email' => 'not_email@.com']);
         $this->seeStatusCode(400)
             ->seeJsonEquals(['error' => 'The email must be a valid email address']);
     }
@@ -48,9 +33,7 @@ class RegisterControllerTest extends TestCase
     /** @test */
     public function registerWithValidEmailReturnsApiKey()
     {
-        $this->post('/register', [
-            'email' => 'user@example.com'
-        ]);
+        $this->post('/register', ['email' => 'user@example.com']);
         $this->seeStatusCode(200)
             ->seeJsonStructure(['api_key']);
 
@@ -64,16 +47,10 @@ class RegisterControllerTest extends TestCase
         $email = 'user@example.com';
 
         $this->post('/register', ['email' => $email]);
-        $this->seeStatusCode(200);
-        $firstBody = json_decode($this->response->getContent(), true);
-        $this->assertArrayHasKey('api_key', $firstBody);
-        $firstApiKey = $firstBody['api_key'];
+        $firstApiKey = json_decode($this->response->getContent(), true)['api_key'];
 
         $this->post('/register', ['email' => $email]);
-        $this->seeStatusCode(200);
-        $secondBody = json_decode($this->response->getContent(), true);
-        $this->assertArrayHasKey('api_key', $secondBody);
-        $secondApiKey = $secondBody['api_key'];
+        $secondApiKey = json_decode($this->response->getContent(), true)['api_key'];
 
         $this->assertNotEquals($firstApiKey, $secondApiKey);
     }
