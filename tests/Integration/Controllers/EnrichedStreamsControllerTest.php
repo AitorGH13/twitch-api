@@ -2,8 +2,10 @@
 
 namespace Integration\Controllers;
 
+use App\Interfaces\TwitchClientInterface;
 use App\Services\AuthService;
 use App\Services\RegisterService;
+use Fakes\FakeTwitchClient;
 use Integration\BaseIntegrationTestCase;
 use Integration\Traits\AuthenticationTestsTrait;
 
@@ -16,6 +18,8 @@ class EnrichedStreamsControllerTest extends BaseIntegrationTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->app->instance(TwitchClientInterface::class, new FakeTwitchClient());
 
         $apiKey = app(RegisterService::class)
             ->registerUser('enriched@example.com')
