@@ -11,7 +11,7 @@ use Unit\BaseUnitTestCase;
 class StreamsServiceTest extends BaseUnitTestCase
 {
     /** @test */
-    public function invalidTokenThrowsUnauthorized()
+    public function invalidTokenThrowsUnauthorizedException()
     {
         $auth = $this->mock(AuthService::class);
         $auth->shouldReceive('validateAccessToken')

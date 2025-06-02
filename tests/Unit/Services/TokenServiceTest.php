@@ -12,7 +12,7 @@ use Unit\BaseUnitTestCase;
 class TokenServiceTest extends BaseUnitTestCase
 {
     /** @test */
-    public function invalidCredentialsThrowsInvalidApiKey()
+    public function invalidCredentialsThrowsInvalidApiKeyException()
     {
         $manager = $this->mock(TokenManager::class);
 

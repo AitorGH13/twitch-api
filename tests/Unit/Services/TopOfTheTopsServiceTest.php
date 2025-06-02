@@ -14,7 +14,7 @@ use Unit\BaseUnitTestCase;
 class TopOfTheTopsServiceTest extends BaseUnitTestCase
 {
     /** @test */
-    public function invalidTokenThrowsUnauthorized()
+    public function invalidTokenThrowsUnauthorizedException()
     {
         $repo   = $this->mock(TopOfTheTopsRepository::class);
         $auth   = $this->mock(AuthService::class);
@@ -30,7 +30,7 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
     }
 
     /** @test */
-    public function whenClientReturnsEmptyGamesThrowsNoGamesFound()
+    public function whenClientReturnsEmptyGamesThrowsNoGamesFoundException()
     {
         $repo   = $this->mock(TopOfTheTopsRepository::class);
         $auth   = $this->mock(AuthService::class);
@@ -49,7 +49,7 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
     }
 
     /** @test */
-    public function whenFirstGameHasNoVideosThrowsNoVideosFound()
+    public function whenFirstGameHasNoVideosThrowsNoVideosFoundException()
     {
         $repo   = $this->mock(TopOfTheTopsRepository::class);
         $auth   = $this->mock(AuthService::class);

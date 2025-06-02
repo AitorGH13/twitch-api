@@ -50,7 +50,7 @@ class AuthServiceTest extends BaseUnitTestCase
     }
 
     /** @test */
-    public function createAccessTokenPropagatesInvalidApiKeyException()
+    public function createAccessTokenReturnsInvalidApiKeyException()
     {
         $register     = $this->mock(RegisterService::class);
         $tokenService = $this->mock(TokenService::class);

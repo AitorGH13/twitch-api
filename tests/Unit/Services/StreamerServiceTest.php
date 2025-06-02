@@ -52,7 +52,7 @@ class StreamerServiceTest extends BaseUnitTestCase
     }
 
     /** @test */
-    public function apiReturnsEmptyThrowsUserNotFound()
+    public function whenApiReturnsEmptyThrowsUserNotFoundException()
     {
         $userId = 999;
 
