@@ -8,13 +8,12 @@ use App\Services\AuthService;
 use App\Services\StreamerService;
 use App\Interfaces\TwitchClientInterface;
 use App\Repository\StreamerRepository;
-use Mockery;
 use Unit\BaseUnitTestCase;
 
 class StreamerServiceTest extends BaseUnitTestCase
 {
     /** @test */
-    public function tokenIsInvalidThrowsUnauthorized()
+    public function invalidTokenThrowsUnauthorized()
     {
         $repo        = $this->mock(StreamerRepository::class);
         $auth        = $this->mock(AuthService::class);
@@ -41,7 +40,7 @@ class StreamerServiceTest extends BaseUnitTestCase
         $twitch = $this->mock(TwitchClientInterface::class);
 
         $auth->shouldReceive('validateAccessToken')
-            ->once()->with('good')->andReturnTrue();
+            ->once()->with('goodToken')->andReturnTrue();
         $repo->shouldReceive('findById')
             ->once()->with($userId)->andReturn($cached);
         $twitch->shouldNotReceive('getUserById');
@@ -49,7 +48,7 @@ class StreamerServiceTest extends BaseUnitTestCase
 
         $service = new StreamerService($repo, $auth, $twitch);
 
-        $this->assertSame($cached, $service->getUserProfile([$userId, 'good']));
+        $this->assertSame($cached, $service->getUserProfile([$userId, 'goodToken']));
     }
 
     /** @test */
