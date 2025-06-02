@@ -30,7 +30,7 @@ class TokenManagerTest extends BaseUnitTestCase
 
         $tokenRepo->shouldReceive('save')
             ->once()
-            ->with(Mockery::type(Token::class)); // phpcs:ignore StaticAccess
+            ->with(Mockery::type(Token::class));
 
         $generator = new TokenGenerator();
         $manager   = new TokenManager($userRepo, $tokenRepo, $generator);

@@ -5,6 +5,7 @@ namespace Unit\Services;
 use App\Services\AuthService;
 use App\Services\RegisterService;
 use App\Services\TokenService;
+use App\Exceptions\InvalidApiKeyException;
 use Illuminate\Http\JsonResponse;
 use Random\RandomException;
 use Unit\BaseUnitTestCase;
@@ -14,38 +15,67 @@ class AuthServiceTest extends BaseUnitTestCase
     /** @test
      * @throws RandomException
      */
-    public function registerEmailReturns32CharApiKey()
+    public function registerEmailReturnsTheApiKeyString()
     {
         $register = $this->mock(RegisterService::class);
         $register->shouldReceive('registerUser')
-            ->once()
-            ->with('user@example.com')
-            ->andReturn(new JsonResponse(['api_key' => str_repeat('A', 32)], 201));
+            ->once()->with('test@testing.com')
+            ->andReturn(new JsonResponse(['api_key' => 'abcdef']));
 
-        $tokenSrv = $this->mock(TokenService::class);
+        $tokenService = $this->mock(TokenService::class);
 
-        $service = new AuthService($register, $tokenSrv);
+        $service = new AuthService($register, $tokenService);
 
-        $apiKey = $service->registerEmail('user@example.com');
+        $key = $service->registerEmail('test@testing.com');
 
-        $this->assertEquals(32, strlen($apiKey));
+        $this->assertSame('abcdef', $key);
     }
 
     /** @test */
-    public function createAccessTokenDelegatesToTokenService()
+    public function createAccessTokenReturnsTheTokenString()
     {
-        $register = $this->mock(RegisterService::class);
+        $register     = $this->mock(RegisterService::class);
+        $tokenService = $this->mock(TokenService::class);
 
-        $tokenSrv = $this->mock(TokenService::class);
-        $tokenSrv->shouldReceive('createToken')
+        $tokenService->shouldReceive('createToken')
             ->once()
-            ->with('user@example.com', 'valid-key')
-            ->andReturn(new JsonResponse(['token' => str_repeat('B', 32)], 200));
+            ->with('test@testing.com', 'apikey')
+            ->andReturn(new JsonResponse(['token' => 'xyz']));
 
-        $service = new AuthService($register, $tokenSrv);
+        $service = new AuthService($register, $tokenService);
 
-        $token = $service->createAccessToken('user@example.com', 'valid-key');
+        $token = $service->createAccessToken('test@testing.com', 'apikey');
 
-        $this->assertEquals(32, strlen($token));
+        $this->assertSame('xyz', $token);
+    }
+
+    /** @test */
+    public function createAccessTokenPropagatesInvalidApiKeyException()
+    {
+        $register     = $this->mock(RegisterService::class);
+        $tokenService = $this->mock(TokenService::class);
+
+        $tokenService->shouldReceive('createToken')
+            ->once()
+            ->andThrow(InvalidApiKeyException::class);
+
+        $service = new AuthService($register, $tokenService);
+
+        $this->expectException(InvalidApiKeyException::class);
+        $service->createAccessToken('test@testing.com', 'wrongApiKey');
+    }
+
+    /** @test */
+    public function validateAccessTokenIsASimpleProxy()
+    {
+        $register     = $this->mock(RegisterService::class);
+        $tokenService = $this->mock(TokenService::class);
+
+        $tokenService->shouldReceive('validateAccessToken')
+            ->once()->with('token123')->andReturnTrue();
+
+        $service = new AuthService($register, $tokenService);
+
+        $this->assertTrue($service->validateAccessToken('token123'));
     }
 }
