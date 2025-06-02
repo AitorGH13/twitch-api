@@ -49,15 +49,18 @@ jobs:
       - name: Run code quality checks
         run: vendor/bin/grumphp run --verbose
 
+      - name: Run Unit Tests
+        run: vendor/bin/phpunit --testsuite Unit --testdox --configuration phpunit.xml
+
       - name: Prepare Environment
         run: |
           sed -i 's/DB_HOST=db/DB_HOST=127.0.0.1/g' .env.testing
           cp .env.testing .env
 
-      - name: Run Tests
+      - name: Run Integration Tests
         run: |
           php artisan migrate:fresh --force
-          vendor/bin/phpunit --testdox --configuration phpunit.xml
+          vendor/bin/phpunit --testsuite Feature --testdox --configuration phpunit.xml
         env:
           APP_ENV: testing
           DB_HOST: 127.0.0.1

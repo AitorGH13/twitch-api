@@ -20,3 +20,14 @@ shell:
 
 migrate:
 	@docker-compose exec app php artisan migrate
+
+unit:
+	@docker-compose run --rm app vendor/bin/phpunit \
+		--testsuite Unit --testdox
+
+integration:
+	@docker-compose run --rm app vendor/bin/phpunit \
+		--testsuite Feature --testdox
+
+tests: unit integration
+
