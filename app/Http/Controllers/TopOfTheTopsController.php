@@ -7,7 +7,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Middleware\AuthMiddleware;
-use App\Validators\TopOfTheTopsRequestValidator;
+use App\Validators\TopOfTheTopsValidator;
 use App\Services\TopOfTheTopsService;
 use App\Exceptions\InvalidSinceException;
 use App\Exceptions\NoGamesFoundException;
@@ -16,7 +16,7 @@ use App\Exceptions\NoVideosFoundException;
 class TopOfTheTopsController extends BaseController
 {
     public function __construct(
-        private readonly TopOfTheTopsRequestValidator $validator,
+        private readonly TopOfTheTopsValidator $validator,
         private readonly TopOfTheTopsService $service
     ) {
         $this->middleware(AuthMiddleware::class);

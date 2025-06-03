@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\InvalidLimitException;
 use App\Exceptions\UnauthorizedException;
 
-class EnrichedStreamsRequestValidator
+class EnrichedStreamsValidator
 {
     /**
      * @return array{int,string}  [$limit, $token]

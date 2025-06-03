@@ -5,7 +5,7 @@ namespace App\Validators;
 use Illuminate\Http\Request;
 use App\Exceptions\UnauthorizedException;
 
-class StreamsRequestValidator
+class StreamsValidator
 {
     /**
      * @return string $token

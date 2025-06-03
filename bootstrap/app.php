@@ -201,28 +201,28 @@ $app->singleton(
 // Validators
 /*
 $app->singleton(
-    App\Validators\EnrichedStreamsRequestValidator::class,
-    App\Validators\EnrichedStreamsRequestValidator::class
+    App\Validators\EnrichedStreamsValidator::class,
+    App\Validators\EnrichedStreamsValidator::class
 );
 $app->singleton(
-    App\Validators\RegisterRequestValidator::class,
-    App\Validators\RegisterRequestValidator::class
+    App\Validators\RegisterValidator::class,
+    App\Validators\RegisterValidator::class
 );
 $app->singleton(
-    App\Validators\StreamerRequestValidator::class,
-    App\Validators\StreamerRequestValidator::class
+    App\Validators\StreamerValidator::class,
+    App\Validators\StreamerValidator::class
 );
 $app->singleton(
-    App\Validators\StreamsRequestValidator::class,
-    App\Validators\StreamsRequestValidator::class
+    App\Validators\StreamsValidator::class,
+    App\Validators\StreamsValidator::class
 );
 $app->singleton(
-    App\Validators\TokenRequestValidator::class,
-    App\Validators\TokenRequestValidator::class
+    App\Validators\TokenValidator::class,
+    App\Validators\TokenValidator::class
 );
 $app->singleton(
-    App\Validators\TopOfTheTopsRequestValidator::class,
-    App\Validators\TopOfTheTopsRequestValidator::class
+    App\Validators\TopOfTheTopsValidator::class,
+    App\Validators\TopOfTheTopsValidator::class
 );
 */
 

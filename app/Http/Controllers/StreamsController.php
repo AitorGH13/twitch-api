@@ -6,13 +6,13 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Middleware\AuthMiddleware;
-use App\Validators\StreamsRequestValidator;
+use App\Validators\StreamsValidator;
 use App\Services\StreamsService;
 
 class StreamsController extends BaseController
 {
     public function __construct(
-        private readonly StreamsRequestValidator $validator,
+        private readonly StreamsValidator $validator,
         private readonly StreamsService $service
     ) {
         $this->middleware(AuthMiddleware::class);

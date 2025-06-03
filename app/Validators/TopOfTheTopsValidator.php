@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\UnauthorizedException;
 use App\Exceptions\InvalidSinceException;
 
-class TopOfTheTopsRequestValidator
+class TopOfTheTopsValidator
 {
     /**
      * @return array{string,int|null}  [$token, $since]

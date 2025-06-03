@@ -7,7 +7,7 @@ use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
 use App\Exceptions\EmptyApiKeyException;
 
-class TokenRequestValidator
+class TokenValidator
 {
     public function validate(Request $request): array
     {

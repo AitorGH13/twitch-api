@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
 
-class RegisterRequestValidator
+class RegisterValidator
 {
     public function validate(Request $request): string
     {
