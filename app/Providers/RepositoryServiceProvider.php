@@ -7,6 +7,8 @@ use App\Interfaces\StreamerRepositoryInterface;
 use App\Repository\StreamerRepository;
 use App\Interfaces\TokenRepositoryInterface;
 use App\Repository\TokenRepository;
+use App\Interfaces\TopOfTheTopsRepositoryInterface;
+use App\Repository\TopOfTheTopsRepository;
 use App\Interfaces\UserRepositoryInterface;
 use App\Repository\UserRepository;
 use App\Interfaces\TwitchClientInterface;
@@ -23,6 +25,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             TokenRepositoryInterface::class,
             TokenRepository::class
+        );
+        $this->app->bind(
+            TopOfTheTopsRepositoryInterface::class,
+            TopOfTheTopsRepository::class
         );
         $this->app->bind(
             UserRepositoryInterface::class,

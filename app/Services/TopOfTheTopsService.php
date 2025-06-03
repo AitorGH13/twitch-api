@@ -6,18 +6,18 @@ use App\Exceptions\NoGamesFoundException;
 use App\Exceptions\NoVideosFoundException;
 use App\Exceptions\UnauthorizedException;
 use App\Interfaces\TwitchClientInterface;
-use App\Repository\TopOfTheTopsRepository;
+use App\Interfaces\TopOfTheTopsRepositoryInterface;
 use DateTime;
 use Exception;
 
 class TopOfTheTopsService
 {
-    private TopOfTheTopsRepository $repo;
+    private TopOfTheTopsRepositoryInterface $repo;
     private AuthService $authService;
     private TwitchClientInterface $twitchClient;
 
     public function __construct(
-        TopOfTheTopsRepository $repo,
+        TopOfTheTopsRepositoryInterface $repo,
         AuthService $authService,
         TwitchClientInterface $twitchClient
     ) {

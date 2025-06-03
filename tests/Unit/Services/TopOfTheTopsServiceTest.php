@@ -8,7 +8,7 @@ use App\Exceptions\UnauthorizedException;
 use App\Services\AuthService;
 use App\Services\TopOfTheTopsService;
 use App\Interfaces\TwitchClientInterface;
-use App\Repository\TopOfTheTopsRepository;
+use App\Interfaces\TopOfTheTopsRepositoryInterface;
 use Unit\BaseUnitTestCase;
 
 class TopOfTheTopsServiceTest extends BaseUnitTestCase
@@ -16,7 +16,7 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
     /** @test */
     public function invalidTokenThrowsUnauthorizedException()
     {
-        $repo   = $this->mock(TopOfTheTopsRepository::class);
+        $repo   = $this->mock(TopOfTheTopsRepositoryInterface::class);
         $auth   = $this->mock(AuthService::class);
         $client = $this->mock(TwitchClientInterface::class);
 
@@ -32,7 +32,7 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
     /** @test */
     public function whenClientReturnsEmptyGamesThrowsNoGamesFoundException()
     {
-        $repo   = $this->mock(TopOfTheTopsRepository::class);
+        $repo   = $this->mock(TopOfTheTopsRepositoryInterface::class);
         $auth   = $this->mock(AuthService::class);
         $client = $this->mock(TwitchClientInterface::class);
 
@@ -51,7 +51,7 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
     /** @test */
     public function whenFirstGameHasNoVideosThrowsNoVideosFoundException()
     {
-        $repo   = $this->mock(TopOfTheTopsRepository::class);
+        $repo   = $this->mock(TopOfTheTopsRepositoryInterface::class);
         $auth   = $this->mock(AuthService::class);
         $client = $this->mock(TwitchClientInterface::class);
 
