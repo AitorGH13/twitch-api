@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use DateTimeImmutable;
 
-final class DatabaseTokenRepository implements TokenRepositoryInterface
+final class TokenRepository implements TokenRepositoryInterface
 {
     /**
      * @throws Exception

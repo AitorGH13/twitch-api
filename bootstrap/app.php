@@ -149,8 +149,8 @@ $app->singleton(
 // Repository
 /*
 $app->singleton(
-    App\Repository\DatabaseUserRepository::class,
-    App\Repository\DatabaseUserRepository::class
+    App\Repository\UserRepository::class,
+    App\Repository\UserRepository::class
 );
 $app->singleton(
     App\Repository\StreamerRepository::class,

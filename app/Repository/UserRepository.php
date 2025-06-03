@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use stdClass;
 use App\Interfaces\UserRepositoryInterface;
 
-final class DatabaseUserRepository implements UserRepositoryInterface
+final class UserRepository implements UserRepositoryInterface
 {
     public function getByEmail(string $email): ?stdClass
     {
