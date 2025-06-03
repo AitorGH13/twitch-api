@@ -15,7 +15,7 @@ class EnrichedStreamsValidatorTest extends BaseUnitTestCase
      */
     private function makeRequest(array $query = [], array $attrs = []): Request
     {
-        $request = Request::create('/streams', 'GET', $query);
+        $request = Request::create('/streams/enriched?limt=3', 'GET', $query);
         foreach ($attrs as $k => $v) {
             $request->attributes->set($k, $v);
         }
