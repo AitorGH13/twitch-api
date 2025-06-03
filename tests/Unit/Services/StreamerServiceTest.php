@@ -7,7 +7,7 @@ use App\Exceptions\UserNotFoundException;
 use App\Services\AuthService;
 use App\Services\StreamerService;
 use App\Interfaces\TwitchClientInterface;
-use App\Repository\StreamerRepository;
+use App\Interfaces\StreamerRepositoryInterface;
 use Unit\BaseUnitTestCase;
 
 class StreamerServiceTest extends BaseUnitTestCase
@@ -15,7 +15,7 @@ class StreamerServiceTest extends BaseUnitTestCase
     /** @test */
     public function invalidTokenThrowsUnauthorized()
     {
-        $repo        = $this->mock(StreamerRepository::class);
+        $repo        = $this->mock(StreamerRepositoryInterface::class);
         $auth        = $this->mock(AuthService::class);
         $twitch      = $this->mock(TwitchClientInterface::class);
 
@@ -35,7 +35,7 @@ class StreamerServiceTest extends BaseUnitTestCase
         $userId   = 42;
         $cached   = ['id' => $userId, 'user_name' => 'test'];
 
-        $repo   = $this->mock(StreamerRepository::class);
+        $repo   = $this->mock(StreamerRepositoryInterface::class);
         $auth   = $this->mock(AuthService::class);
         $twitch = $this->mock(TwitchClientInterface::class);
 
@@ -56,7 +56,7 @@ class StreamerServiceTest extends BaseUnitTestCase
     {
         $userId = 999;
 
-        $repo   = $this->mock(StreamerRepository::class);
+        $repo   = $this->mock(StreamerRepositoryInterface::class);
         $auth   = $this->mock(AuthService::class);
         $twitch = $this->mock(TwitchClientInterface::class);
 
@@ -89,7 +89,7 @@ class StreamerServiceTest extends BaseUnitTestCase
         $expected = $apiUser;
         $expected['created_at'] = '2024-01-15 12:34:56';
 
-        $repo   = $this->mock(StreamerRepository::class);
+        $repo   = $this->mock(StreamerRepositoryInterface::class);
         $auth   = $this->mock(AuthService::class);
         $twitch = $this->mock(TwitchClientInterface::class);
 

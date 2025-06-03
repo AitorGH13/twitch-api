@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Interfaces\StreamerRepositoryInterface;
+use App\Repository\StreamerRepository;
 use App\Interfaces\TokenRepositoryInterface;
 use App\Repository\TokenRepository;
 use App\Interfaces\UserRepositoryInterface;
@@ -14,6 +16,10 @@ class RepositoryServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->bind(
+            StreamerRepositoryInterface::class,
+            StreamerRepository::class
+        );
         $this->app->bind(
             TokenRepositoryInterface::class,
             TokenRepository::class

@@ -19,8 +19,6 @@ class TopOfTheTopsControllerTest extends BaseIntegrationTestCase
     {
         parent::setUp();
 
-        $this->app->instance(TwitchClientInterface::class, new FakeTwitchClient());
-
         $apiKey = app(RegisterService::class)
             ->registerUser('tops@example.com')
             ->getData(true)['api_key'];

@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Interfaces\StreamerRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
-class StreamerRepository
+final class StreamerRepository implements StreamerRepositoryInterface
 {
     public function findById(string $userId): ?array
     {

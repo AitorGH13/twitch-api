@@ -5,18 +5,18 @@ namespace App\Services;
 use App\Exceptions\UnauthorizedException;
 use App\Exceptions\UserNotFoundException;
 use App\Interfaces\TwitchClientInterface;
-use App\Repository\StreamerRepository;
+use App\Interfaces\StreamerRepositoryInterface;
 use DateTime;
 use Exception;
 
 class StreamerService
 {
-    private StreamerRepository $repo;
+    private StreamerRepositoryInterface $repo;
     private AuthService $authService;
     private TwitchClientInterface $twitchClient;
 
     public function __construct(
-        StreamerRepository $repo,
+        StreamerRepositoryInterface $repo,
         AuthService $authService,
         TwitchClientInterface $twitchClient
     ) {

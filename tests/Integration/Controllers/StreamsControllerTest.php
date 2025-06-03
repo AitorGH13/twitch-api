@@ -19,8 +19,6 @@ class StreamsControllerTest extends BaseIntegrationTestCase
     {
         parent::setUp();
 
-        $this->app->instance(TwitchClientInterface::class, new FakeTwitchClient());
-
         $apiKey = app(RegisterService::class)
             ->registerUser('streams@test.com')
             ->getData(true)['api_key'];

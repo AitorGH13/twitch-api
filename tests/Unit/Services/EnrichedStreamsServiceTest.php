@@ -7,7 +7,6 @@ use App\Exceptions\UnauthorizedException;
 use App\Services\AuthService;
 use App\Services\EnrichedStreamsService;
 use App\Interfaces\TwitchClientInterface;
-use Mockery;
 use Unit\BaseUnitTestCase;
 
 class EnrichedStreamsServiceTest extends BaseUnitTestCase
