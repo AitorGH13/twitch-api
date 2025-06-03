@@ -6,8 +6,6 @@ use App\Services\AuthService;
 use App\Services\RegisterService;
 use Integration\BaseIntegrationTestCase;
 use Integration\Traits\AuthenticationTestsTrait;
-use Fakes\FakeTwitchClient;
-use App\Interfaces\TwitchClientInterface;
 
 class TopOfTheTopsControllerTest extends BaseIntegrationTestCase
 {

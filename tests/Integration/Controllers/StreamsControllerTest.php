@@ -2,10 +2,8 @@
 
 namespace Integration\Controllers;
 
-use App\Interfaces\TwitchClientInterface;
 use App\Services\AuthService;
 use App\Services\RegisterService;
-use Fakes\FakeTwitchClient;
 use Integration\BaseIntegrationTestCase;
 use Integration\Traits\AuthenticationTestsTrait;
 
