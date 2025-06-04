@@ -20,7 +20,7 @@ class EnrichedStreamsValidator
         }
 
         $limit = $request->query('limit');
-        if ($limit === '' || ! ctype_digit($limit)) {
+        if ($limit === '' || ! ctype_digit($limit) || (int)$limit <= 0) {
             throw new InvalidLimitException();
         }
 

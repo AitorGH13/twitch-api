@@ -16,59 +16,114 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
     /** @test */
     public function invalidTokenThrowsUnauthorizedException()
     {
-        $repo   = $this->mock(TopOfTheTopsRepositoryInterface::class);
-        $auth   = $this->mock(AuthService::class);
-        $client = $this->mock(TwitchClientInterface::class);
+        $repoMock = $this->mock(TopOfTheTopsRepositoryInterface::class);
+        $authMock = $this->mock(AuthService::class);
+        $clientMock = $this->mock(TwitchClientInterface::class);
 
-        $auth->shouldReceive('validateAccessToken')->once()->with('badToken')->andReturnFalse();
-        $repo->shouldNotReceive('getCacheMeta');
+        $invalidAccessToken = 'badToken';
 
-        $service = new TopOfTheTopsService($repo, $auth, $client);
+        $authMock->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($invalidAccessToken)
+            ->andReturnFalse();
+
+        $repoMock->shouldNotReceive('getCacheMeta');
+
+        $topOfTheTopsService = new TopOfTheTopsService(
+            $repoMock,
+            $authMock,
+            $clientMock
+        );
 
         $this->expectException(UnauthorizedException::class);
-        $service->getTopOfTheTops(['badToken', null]);
+        $topOfTheTopsService->getTopOfTheTops([$invalidAccessToken, null]);
     }
 
     /** @test */
     public function whenClientReturnsEmptyGamesThrowsNoGamesFoundException()
     {
-        $repo   = $this->mock(TopOfTheTopsRepositoryInterface::class);
-        $auth   = $this->mock(AuthService::class);
-        $client = $this->mock(TwitchClientInterface::class);
+        $repoMock = $this->mock(TopOfTheTopsRepositoryInterface::class);
+        $authMock = $this->mock(AuthService::class);
+        $clientMock = $this->mock(TwitchClientInterface::class);
 
-        $auth->shouldReceive('validateAccessToken')->once()->with('validToken')->andReturnTrue();
-        $repo->shouldReceive('getCacheMeta')->once()->andReturnNull();
-        $repo->shouldReceive('clearCache')->once();
+        $validAccessToken = 'validToken';
+        $topGamesLimit = 3;
+        $requestParams = [$validAccessToken, null]; // [accessToken, sinceTimestamp]
 
-        $client->shouldReceive('getTopGames')->once()->with(3)->andReturn([]);
+        $authMock->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($validAccessToken)
+            ->andReturnTrue();
 
-        $service = new TopOfTheTopsService($repo, $auth, $client);
+        $repoMock->shouldReceive('getCacheMeta')
+            ->once()
+            ->andReturnNull();
+
+        $repoMock->shouldReceive('clearCache')
+            ->once();
+
+        $clientMock->shouldReceive('getTopGames')
+            ->once()
+            ->with($topGamesLimit)
+            ->andReturn([]);
+
+        $topOfTheTopsService = new TopOfTheTopsService(
+            $repoMock,
+            $authMock,
+            $clientMock
+        );
 
         $this->expectException(NoGamesFoundException::class);
-        $service->getTopOfTheTops(['validToken', null]);
+        $topOfTheTopsService->getTopOfTheTops($requestParams);
     }
 
     /** @test */
     public function whenFirstGameHasNoVideosThrowsNoVideosFoundException()
     {
-        $repo   = $this->mock(TopOfTheTopsRepositoryInterface::class);
-        $auth   = $this->mock(AuthService::class);
-        $client = $this->mock(TwitchClientInterface::class);
+        $repoMock = $this->mock(TopOfTheTopsRepositoryInterface::class);
+        $authMock = $this->mock(AuthService::class);
+        $clientMock = $this->mock(TwitchClientInterface::class);
 
-        $auth->shouldReceive('validateAccessToken')->once()->with('validToken')->andReturnTrue();
-        $repo->shouldReceive('getCacheMeta')->once()->andReturnNull();
-        $repo->shouldReceive('clearCache')->once();
+        $validAccessToken = 'validToken';
+        $topGamesLimit = 3;
+        $topVideosLimit = 40;
+        $requestParams = [$validAccessToken, null]; // [accessToken, sinceTimestamp]
 
-        $client->shouldReceive('getTopGames')->once()->with(3)->andReturn([
+        $mockGameData = [
             ['id' => '1', 'name' => 'Game1'],
-        ]);
+        ];
 
-        $client->shouldReceive('getTopVideos')
-            ->once()->with('1', 40)->andReturn([]);
+        $firstGameId = '1';
 
-        $service = new TopOfTheTopsService($repo, $auth, $client);
+        $authMock->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($validAccessToken)
+            ->andReturnTrue();
+
+        $repoMock->shouldReceive('getCacheMeta')
+            ->once()
+            ->andReturnNull();
+
+        $repoMock->shouldReceive('clearCache')
+            ->once();
+
+        $clientMock->shouldReceive('getTopGames')
+            ->once()
+            ->with($topGamesLimit)
+            ->andReturn($mockGameData);
+
+        $clientMock->shouldReceive('getTopVideos')
+            ->once()
+            ->with($firstGameId, $topVideosLimit)
+            ->andReturn([]);
+
+        $topOfTheTopsService = new TopOfTheTopsService(
+            $repoMock,
+            $authMock,
+            $clientMock
+        );
 
         $this->expectException(NoVideosFoundException::class);
-        $service->getTopOfTheTops(['validToken', null]);
+        $topOfTheTopsService->getTopOfTheTops($requestParams);
     }
 }

@@ -14,64 +14,86 @@ class EnrichedStreamsServiceTest extends BaseUnitTestCase
     /** @test */
     public function invalidTokenThrowsUnauthorizedException()
     {
-        $auth = $this->mock(AuthService::class);
-        $auth->shouldReceive('validateAccessToken')
-            ->once()->with('badToken')->andReturnFalse();
+        $authMock = $this->mock(AuthService::class);
+        $clientMock = $this->mock(TwitchClientInterface::class);
 
-        $client = $this->mock(TwitchClientInterface::class);
-        $client->shouldNotReceive('getStreams');
+        $badToken = 'badToken';
+        $limit = 5;
 
-        $service = new EnrichedStreamsService($auth, $client);
+        $authMock->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($badToken)
+            ->andReturnFalse();
+
+        $clientMock->shouldNotReceive('getStreams');
+
+        $service = new EnrichedStreamsService(
+            $authMock,
+            $clientMock
+        );
 
         $this->expectException(UnauthorizedException::class);
-        $service->getTopEnrichedStreams(5, 'badToken');
+        $service->getTopEnrichedStreams($limit, $badToken);
     }
 
     /** @test */
     public function nonPositiveLimitThrowsInvalidLimitException()
     {
-        $auth = $this->mock(AuthService::class);
-        $auth->shouldReceive('validateAccessToken')
-            ->once()->with('goodToken')->andReturnTrue();
+        $authMock = $this->mock(AuthService::class);
+        $clientMock = $this->mock(TwitchClientInterface::class);
 
-        $client = $this->mock(TwitchClientInterface::class);
-        $client->shouldNotReceive('getStreams');
+        $goodToken = 'goodToken';
+        $zeroLimit = 0;
 
-        $service = new EnrichedStreamsService($auth, $client);
+        $authMock->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($goodToken)
+            ->andReturnTrue();
+
+        $clientMock->shouldNotReceive('getStreams');
+
+        $service = new EnrichedStreamsService(
+            $authMock,
+            $clientMock
+        );
 
         $this->expectException(InvalidLimitException::class);
-        $service->getTopEnrichedStreams(0, 'goodToken');
+        $service->getTopEnrichedStreams($zeroLimit, $goodToken);
     }
 
     /** @test */
     public function validRequestReturnsEnrichedStreams()
     {
-        $auth = $this->mock(AuthService::class);
-        $auth->shouldReceive('validateAccessToken')
-            ->once()->with('validToken')->andReturnTrue();
+        $authMock = $this->mock(AuthService::class);
+        $clientMock = $this->mock(TwitchClientInterface::class);
 
-        $client = $this->mock(TwitchClientInterface::class);
+        $goodToken = 'validToken';
+        $limit = 2;
 
-        $client->shouldReceive('getStreams')
-            ->once()->with(2)->andReturn([
-                ['id' => '11', 'user_id' => '100', 'user_name' => 'test1',
-                    'viewer_count' => 10, 'title' => 'Title1'],
-                ['id' => '22', 'user_id' => '200', 'user_name' => 'test2',
-                    'viewer_count' => 20, 'title' => 'Title2'],
-            ]);
+        $streamsMock = [
+            [
+                'id'            => '11',
+                'user_id'       => '100',
+                'user_name'     => 'test1',
+                'viewer_count'  => 10,
+                'title'         => 'Title1'
+            ],
+            [
+                'id'            => '22',
+                'user_id'       => '200',
+                'user_name'     => 'test2',
+                'viewer_count'  => 20,
+                'title'         => 'Title2'
+            ],
+        ];
 
-        $client->shouldReceive('getUserById')
-            ->once()->with('100')->andReturn([
-                ['display_name' => 'Test1', 'profile_image_url' => 'urlA']
-            ]);
-        $client->shouldReceive('getUserById')
-            ->once()->with('200')->andReturn([]);
+        $userData100Mock = [
+            ['display_name' => 'Test1', 'profile_image_url' => 'urlA']
+        ];
 
-        $service = new EnrichedStreamsService($auth, $client);
+        $userData200Mock = [];
 
-        $result = $service->getTopEnrichedStreams(2, 'validToken');
-
-        $this->assertSame([
+        $expectedStreams = [
             [
                 'stream_id'         => '11',
                 'user_id'           => '100',
@@ -90,6 +112,38 @@ class EnrichedStreamsServiceTest extends BaseUnitTestCase
                 'user_display_name' => '',
                 'profile_image_url' => '',
             ],
-        ], $result);
+        ];
+
+        $authMock->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($goodToken)
+            ->andReturnTrue();
+
+        $clientMock->shouldReceive('getStreams')
+            ->once()
+            ->with($limit)
+            ->andReturn($streamsMock);
+
+        $clientMock->shouldReceive('getUserById')
+            ->once()
+            ->with('100')
+            ->andReturn($userData100Mock);
+
+        $clientMock->shouldReceive('getUserById')
+            ->once()
+            ->with('200')
+            ->andReturn($userData200Mock);
+
+        $service = new EnrichedStreamsService(
+            $authMock,
+            $clientMock
+        );
+
+        $actualStreams = $service->getTopEnrichedStreams(
+            $limit,
+            $goodToken
+        );
+
+        $this->assertSame($expectedStreams, $actualStreams);
     }
 }

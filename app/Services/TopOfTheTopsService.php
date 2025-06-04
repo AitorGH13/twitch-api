@@ -12,16 +12,16 @@ use Exception;
 
 class TopOfTheTopsService
 {
-    private TopOfTheTopsRepositoryInterface $repo;
+    private TopOfTheTopsRepositoryInterface $topsRepository;
     private AuthService $authService;
     private TwitchClientInterface $twitchClient;
 
     public function __construct(
-        TopOfTheTopsRepositoryInterface $repo,
+        TopOfTheTopsRepositoryInterface $topsRepository,
         AuthService $authService,
         TwitchClientInterface $twitchClient
     ) {
-        $this->repo = $repo;
+        $this->topsRepository = $topsRepository;
         $this->authService = $authService;
         $this->twitchClient = $twitchClient;
     }
@@ -37,7 +37,7 @@ class TopOfTheTopsService
             throw new UnauthorizedException();
         }
 
-        $meta = $this->repo->getCacheMeta();
+        $meta = $this->topsRepository->getCacheMeta();
         $now = time();
 
         if (
@@ -45,10 +45,10 @@ class TopOfTheTopsService
             && strtotime($meta->expires_at) >= $now
             && $since === null
         ) {
-            return $this->repo->all();
+            return $this->topsRepository->all();
         }
 
-        $this->repo->clearCache();
+        $this->topsRepository->clearCache();
 
         $ttl = $since ?? 600;
         $expiresAt = (new DateTime())->modify("+$ttl seconds")->format('Y-m-d H:i:s');
@@ -87,7 +87,7 @@ class TopOfTheTopsService
                 'most_viewed_created_at' => $mysqlCreatedAt,
             ];
 
-            $this->repo->insert($row, $expiresAt);
+            $this->topsRepository->insert($row, $expiresAt);
             $response[] = $row;
         }
 

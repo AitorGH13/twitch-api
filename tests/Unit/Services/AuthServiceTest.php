@@ -17,65 +17,77 @@ class AuthServiceTest extends BaseUnitTestCase
      */
     public function registerEmailReturnsTheApiKeyString()
     {
-        $register = $this->mock(RegisterService::class);
-        $register->shouldReceive('registerUser')
-            ->once()->with('test@testing.com')
-            ->andReturn(new JsonResponse(['api_key' => 'abcdef']));
+        $mockRegisterService = $this->mock(RegisterService::class);
+        $testEmail = 'test@testing.com';
+        $expectedApiKey = 'abcdef';
 
-        $tokenService = $this->mock(TokenService::class);
+        $mockRegisterService->shouldReceive('registerUser')
+            ->once()->with($testEmail)
+            ->andReturn(new JsonResponse(['api_key' => $expectedApiKey]));
 
-        $service = new AuthService($register, $tokenService);
+        $mockTokenService = $this->mock(TokenService::class);
 
-        $key = $service->registerEmail('test@testing.com');
+        $authService = new AuthService($mockRegisterService, $mockTokenService);
 
-        $this->assertSame('abcdef', $key);
+        $returnedApiKey = $authService->registerEmail($testEmail);
+
+        $this->assertSame($expectedApiKey, $returnedApiKey);
     }
 
     /** @test */
     public function createAccessTokenReturnsTheTokenString()
     {
-        $register     = $this->mock(RegisterService::class);
-        $tokenService = $this->mock(TokenService::class);
+        $mockRegisterService = $this->mock(RegisterService::class);
+        $mockTokenService = $this->mock(TokenService::class);
 
-        $tokenService->shouldReceive('createToken')
+        $testEmail = 'test@testing.com';
+        $testApiKey = 'apikey';
+        $expectedToken = 'xyz';
+
+        $mockTokenService->shouldReceive('createToken')
             ->once()
-            ->with('test@testing.com', 'apikey')
-            ->andReturn(new JsonResponse(['token' => 'xyz']));
+            ->with($testEmail, $testApiKey)
+            ->andReturn(new JsonResponse(['token' => $expectedToken]));
 
-        $service = new AuthService($register, $tokenService);
+        $authService = new AuthService($mockRegisterService, $mockTokenService);
 
-        $token = $service->createAccessToken('test@testing.com', 'apikey');
+        $returnedToken = $authService->createAccessToken($testEmail, $testApiKey);
 
-        $this->assertSame('xyz', $token);
+        $this->assertSame($expectedToken, $returnedToken);
     }
 
     /** @test */
     public function createAccessTokenReturnsInvalidApiKeyException()
     {
-        $register     = $this->mock(RegisterService::class);
-        $tokenService = $this->mock(TokenService::class);
+        $mockRegisterService = $this->mock(RegisterService::class);
+        $mockTokenService = $this->mock(TokenService::class);
 
-        $tokenService->shouldReceive('createToken')
+        $testEmail = 'test@testing.com';
+        $invalidApiKey = 'wrongApiKey';
+
+        $mockTokenService->shouldReceive('createToken')
             ->once()
             ->andThrow(InvalidApiKeyException::class);
 
-        $service = new AuthService($register, $tokenService);
+        $authService = new AuthService($mockRegisterService, $mockTokenService);
 
         $this->expectException(InvalidApiKeyException::class);
-        $service->createAccessToken('test@testing.com', 'wrongApiKey');
+        $authService->createAccessToken($testEmail, $invalidApiKey);
     }
 
     /** @test */
     public function validateAccessTokenIsASimpleProxy()
     {
-        $register     = $this->mock(RegisterService::class);
-        $tokenService = $this->mock(TokenService::class);
+        $mockRegisterService = $this->mock(RegisterService::class);
+        $mockTokenService = $this->mock(TokenService::class);
 
-        $tokenService->shouldReceive('validateAccessToken')
-            ->once()->with('token123')->andReturnTrue();
+        $testAccessToken = 'token123';
 
-        $service = new AuthService($register, $tokenService);
+        $mockTokenService->shouldReceive('validateAccessToken')
+            ->once()->with($testAccessToken)->andReturnTrue();
 
-        $this->assertTrue($service->validateAccessToken('token123'));
+        $authService = new AuthService($mockRegisterService, $mockTokenService);
+
+        $this->assertTrue($authService->validateAccessToken($testAccessToken));
     }
 }

@@ -15,32 +15,36 @@ class RegisterServiceTest extends BaseUnitTestCase
      */
     public function registersANewUserWithoutUpdatingApiKey()
     {
-        $email = 'new@mail.com';
+        $testUserEmail = 'new@mail.com';
+        $apiKeyPattern = '/^[a-f0-9]{32}$/'; // MD5 hash pattern
+        $expectedStatusCode = 200;
 
-        $repo = $this->mock(UserRepositoryInterface::class);
+        $mockUserRepository = $this->mock(UserRepositoryInterface::class);
 
-        $repo->shouldReceive('getByEmail')
-            ->once()->with($email)->andReturnNull();
-
-        $repo->shouldNotReceive('updateApiKey');
-
-        $repo->shouldReceive('register')
+        $mockUserRepository->shouldReceive('getByEmail')
             ->once()
-            ->withArgs(function ($e, $apiKey) use ($email) {
-                $this->assertSame($email, $e);
-                $this->assertMatchesRegularExpression('/^[a-f0-9]{32}$/', $apiKey);
+            ->with($testUserEmail)
+            ->andReturnNull();
+
+        $mockUserRepository->shouldNotReceive('updateApiKey');
+
+        $mockUserRepository->shouldReceive('register')
+            ->once()
+            ->withArgs(function ($receivedEmail, $generatedApiKey) use ($testUserEmail, $apiKeyPattern) {
+                $this->assertSame($testUserEmail, $receivedEmail);
+                $this->assertMatchesRegularExpression($apiKeyPattern, $generatedApiKey);
                 return true;
             });
 
-        $service  = new RegisterService($repo);
-        $response = $service->registerUser($email);
+        $registerService = new RegisterService($mockUserRepository);
+        $apiResponse = $registerService->registerUser($testUserEmail);
 
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertSame(200, $response->getStatusCode());
-        $body = $response->getData(true);
+        $this->assertInstanceOf(JsonResponse::class, $apiResponse);
+        $this->assertSame($expectedStatusCode, $apiResponse->getStatusCode());
 
-        $this->assertArrayHasKey('api_key', $body);
-        $this->assertMatchesRegularExpression('/^[a-f0-9]{32}$/', $body['api_key']);
+        $responseBody = $apiResponse->getData(true);
+        $this->assertArrayHasKey('api_key', $responseBody);
+        $this->assertMatchesRegularExpression($apiKeyPattern, $responseBody['api_key']);
     }
 
     /** @test
@@ -48,34 +52,39 @@ class RegisterServiceTest extends BaseUnitTestCase
      */
     public function updatesApiKeyWhenUserAlreadyExists()
     {
-        $email = 'old@mail.com';
+        $existingUserEmail = 'old@mail.com';
+        $existingUserId = 1;
+        $expectedStatusCode = 200;
+        $capturedApiKey = null;
 
-        $repo = $this->mock(UserRepositoryInterface::class);
+        $mockUserRepository = $this->mock(UserRepositoryInterface::class);
 
-        $repo->shouldReceive('getByEmail')
-            ->once()->with($email)->andReturn((object) ['id' => 1]);
-
-        $repo->shouldReceive('updateApiKey')
+        $mockUserRepository->shouldReceive('getByEmail')
             ->once()
-            ->withArgs(function ($e, $apiKey) use ($email, &$capturedKey) {
-                $this->assertSame($email, $e);
-                $capturedKey = $apiKey;
+            ->with($existingUserEmail)
+            ->andReturn((object) ['id' => $existingUserId]);
+
+        $mockUserRepository->shouldReceive('updateApiKey')
+            ->once()
+            ->withArgs(function ($receivedEmail, $generatedApiKey) use ($existingUserEmail, &$capturedApiKey) {
+                $this->assertSame($existingUserEmail, $receivedEmail);
+                $capturedApiKey = $generatedApiKey;
                 return true;
             });
 
-        $repo->shouldReceive('register')
+        $mockUserRepository->shouldReceive('register')
             ->once()
-            ->withArgs(function ($e, $apiKey) use ($email, &$capturedKey) {
-                $this->assertSame($email, $e);
-                $this->assertSame($capturedKey, $apiKey);
+            ->withArgs(function ($receivedEmail, $apiKey) use ($existingUserEmail, &$capturedApiKey) {
+                $this->assertSame($existingUserEmail, $receivedEmail);
+                $this->assertSame($capturedApiKey, $apiKey);
                 return true;
             });
 
-        $service = new RegisterService($repo);
-        $resp    = $service->registerUser($email);
+        $registerService = new RegisterService($mockUserRepository);
+        $apiResponse = $registerService->registerUser($existingUserEmail);
 
-        $this->assertSame(200, $resp->getStatusCode());
-        $body = $resp->getData(true);
-        $this->assertSame($capturedKey, $body['api_key']);
+        $this->assertSame($expectedStatusCode, $apiResponse->getStatusCode());
+        $responseBody = $apiResponse->getData(true);
+        $this->assertSame($capturedApiKey, $responseBody['api_key']);
     }
 }

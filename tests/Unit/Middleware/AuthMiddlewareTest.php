@@ -10,79 +10,114 @@ use Unit\BaseUnitTestCase;
 
 class AuthMiddlewareTest extends BaseUnitTestCase
 {
-    /** @SuppressWarnings(PHPMD.StaticAccess) */
-    private function makeRequest(array $headers = []): Request
+    /**
+     * Creates a test HTTP request with optional headers
+     *
+     * @param array $headers Key-value pairs of HTTP headers to add to the request
+     * @return Request The constructed request object
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    private function createTestRequest(array $headers = []): Request
     {
-        $request = Request::create('/dummy', 'GET');
+        $testRequest = Request::create('/dummy-endpoint', 'GET');
 
-        foreach ($headers as $key => $value) {
-            $request->headers->set($key, $value);
+        foreach ($headers as $headerName => $headerValue) {
+            $testRequest->headers->set($headerName, $headerValue);
         }
 
-        return $request;
+        return $testRequest;
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function authorizationHeaderIsMissingReturns401()
     {
-        $authService = $this->mock(AuthService::class);
-        $authService->shouldNotReceive('validateAccessToken');
+        $mockAuthService = $this->mock(AuthService::class);
 
-        $middleware = new AuthMiddleware($authService);
+        $mockAuthService->shouldNotReceive('validateAccessToken');
 
-        $response = $middleware->handle(
-            $this->makeRequest(),
-            fn () => $this->fail('No debería llegar al siguiente middleware')
+        $authMiddleware = new AuthMiddleware($mockAuthService);
+
+        $expectedStatusCode = 401;
+        $expectedErrorMessage = 'Unauthorized. Twitch access token is invalid or has expired.';
+
+        $response = $authMiddleware->handle(
+            $this->createTestRequest(), // Empty request with no headers
+            function () {
+                $this->fail('Request should not reach the next middleware when Authorization header is missing');
+            }
         );
 
-        $this->assertSame(401, $response->getStatusCode());
+        $this->assertSame($expectedStatusCode, $response->getStatusCode());
         $this->assertSame(
-            ['error' => 'Unauthorized. Twitch access token is invalid or has expired.'],
+            ['error' => $expectedErrorMessage],
             $response->getData(true)
         );
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function tokenIsInvalidReturns401()
     {
-        $authService = $this->mock(AuthService::class);
-        $authService->shouldReceive('validateAccessToken')
+        $mockAuthService = $this->mock(AuthService::class);
+        $invalidAccessToken = 'badToken';
+        $authHeaderValue = "Bearer {$invalidAccessToken}";
+        $expectedStatusCode = 401;
+
+        $mockAuthService->shouldReceive('validateAccessToken')
             ->once()
-            ->with('badToken')
+            ->with($invalidAccessToken)
             ->andReturnFalse();
 
-        $middleware = new AuthMiddleware($authService);
+        $authMiddleware = new AuthMiddleware($mockAuthService);
 
-        $response = $middleware->handle(
-            $this->makeRequest(['Authorization' => 'Bearer badToken']),
-            fn () => $this->fail('No debería llegar al siguiente middleware')
+        $response = $authMiddleware->handle(
+            $this->createTestRequest(['Authorization' => $authHeaderValue]),
+            function () {
+                $this->fail('Request should not reach the next middleware with invalid token');
+            }
         );
 
-        $this->assertSame(401, $response->getStatusCode());
+        $this->assertSame($expectedStatusCode, $response->getStatusCode());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function whenTokenIsValidCallsNextAndSetsTokenAttribute()
     {
-        $authService = $this->mock(AuthService::class);
-        $authService->shouldReceive('validateAccessToken')
+        $mockAuthService = $this->mock(AuthService::class);
+        $validAccessToken = 'goodToken';
+        $authHeaderValue = "Bearer {$validAccessToken}";
+        $expectedStatusCode = 200;
+        $tokenAttributeName = 'token';
+
+        $mockAuthService->shouldReceive('validateAccessToken')
             ->once()
-            ->with('goodToken')
+            ->with($validAccessToken)
             ->andReturnTrue();
 
-        $middleware = new AuthMiddleware($authService);
+        $authMiddleware = new AuthMiddleware($mockAuthService);
 
         $capturedRequest = null;
 
-        $response = $middleware->handle(
-            $this->makeRequest(['Authorization' => 'Bearer goodToken']),
+        $response = $authMiddleware->handle(
+            $this->createTestRequest(['Authorization' => $authHeaderValue]),
             function ($request) use (&$capturedRequest) {
                 $capturedRequest = $request;
                 return new Response(200);
             }
         );
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('goodToken', $capturedRequest->attributes->get('token'));
+        $this->assertSame($expectedStatusCode, $response->getStatusCode());
+
+        $this->assertSame(
+            $validAccessToken,
+            $capturedRequest->attributes->get($tokenAttributeName),
+            'The access token should be available in the request attributes'
+        );
     }
 }

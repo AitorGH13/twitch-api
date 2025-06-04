@@ -13,12 +13,15 @@ class EnrichedStreamsValidatorTest extends BaseUnitTestCase
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function makeRequest(array $query = [], array $attrs = []): Request
+    private function createTestRequest(array $query = [], array $attrs = []): Request
     {
-        $request = Request::create('/streams/enriched?limt=3', 'GET', $query);
-        foreach ($attrs as $k => $v) {
-            $request->attributes->set($k, $v);
+        $testEndpoint = '/streams/enriched';
+        $request = Request::create($testEndpoint, 'GET', $query);
+
+        foreach ($attrs as $name => $value) {
+            $request->attributes->set($name, $value);
         }
+
         return $request;
     }
 
@@ -26,9 +29,11 @@ class EnrichedStreamsValidatorTest extends BaseUnitTestCase
     public function whenTokenIsMissingThrowsUnauthorizedException()
     {
         $validator = new EnrichedStreamsValidator();
+        $validLimit = '5';
+        $reqNoToken = $this->createTestRequest(['limit' => $validLimit]);
 
         $this->expectException(UnauthorizedException::class);
-        $validator->validate($this->makeRequest(['limit' => '5']));
+        $validator->validate($reqNoToken);
     }
 
     /**
@@ -38,19 +43,26 @@ class EnrichedStreamsValidatorTest extends BaseUnitTestCase
     public function throwsInvalidLimitExceptionForInvalidLimitValues(string $rawLimit)
     {
         $validator = new EnrichedStreamsValidator();
+        $mockToken = 'validToken123';
 
-        $req = $this->makeRequest(['limit' => $rawLimit], ['token' => 'tok']);
+        $reqInvalidLimit = $this->createTestRequest(
+            ['limit' => $rawLimit],
+            ['token' => $mockToken]
+        );
 
         $this->expectException(InvalidLimitException::class);
-        $validator->validate($req);
+        $validator->validate($reqInvalidLimit);
     }
 
     public static function invalidLimitProvider(): array
     {
         return [
-            'empty string'  => [''],
-            'non-numeric'   => ['abc'],
-            'mixed chars'   => ['12a'],
+            'empty string'      => [''],
+            'non-numeric'       => ['abc'],
+            'mixed chars'       => ['12a'],
+            'negative number'   => ['-5'],
+            'decimal number'    => ['3.5'],
+            'zero number'       => ['0'],
         ];
     }
 
@@ -58,12 +70,18 @@ class EnrichedStreamsValidatorTest extends BaseUnitTestCase
     public function validDataReturnsLimitAndToken()
     {
         $validator = new EnrichedStreamsValidator();
+        $validLimit = '10';
+        $expectedLimit = 10;
+        $validToken = 'token123';
 
-        $request = $this->makeRequest(['limit' => '10'], ['token' => 'token123']);
+        $reqValid = $this->createTestRequest(
+            ['limit' => $validLimit],
+            ['token' => $validToken]
+        );
 
-        [$limit, $token] = $validator->validate($request);
+        [$actualLimit, $actualToken] = $validator->validate($reqValid);
 
-        $this->assertSame(10, $limit);
-        $this->assertSame('token123', $token);
+        $this->assertSame($expectedLimit, $actualLimit);
+        $this->assertSame($validToken, $actualToken);
     }
 }

@@ -11,61 +11,156 @@ use Unit\BaseUnitTestCase;
 
 class TokenValidatorTest extends BaseUnitTestCase
 {
+    private TokenValidator $validator;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->validator = new TokenValidator();
+    }
+
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function makeRequest(?string $email, ?string $apiKey): Request
+    private function createTestRequest(?string $email = null, ?string $apiKey = null): Request
     {
-        $post = [];
+        $endpoint = '/token';
+        $method = 'POST';
+        $postData = [];
+
         if ($email !== null) {
-            $post['email']   = $email;
-        }
-        if ($apiKey !== null) {
-            $post['api_key'] = $apiKey;
+            $postData['email'] = $email;
         }
 
-        return Request::create('/token', 'POST', $post);
+        if ($apiKey !== null) {
+            $postData['api_key'] = $apiKey;
+        }
+
+        return Request::create($endpoint, $method, $postData);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group validationExceptions
+     */
     public function missingEmailThrowsEmptyEmailException()
     {
-        $validator = new TokenValidator();
+        $emptyEmail = '';
+        $validKey = 'apiKey123';
+        $reqEmptyEmail = $this->createTestRequest($emptyEmail, $validKey);
 
         $this->expectException(EmptyEmailException::class);
-        $validator->validate($this->makeRequest('', 'apiKey123'));
+        $this->validator->validate($reqEmptyEmail);
     }
 
-    /** @test */
-    public function badAddressesThrowsInvalidEmailException()
+    /**
+     * @test
+     * @dataProvider invalidEmailsProvider
+     * @group validationExceptions
+     */
+    public function badAddressesThrowsInvalidEmailException(string $invalidEmail)
     {
-        $validator = new TokenValidator();
+        $validKey = 'apiKey123';
+        $reqInvEmail = $this->createTestRequest($invalidEmail, $validKey);
 
         $this->expectException(InvalidEmailAddressException::class);
-        $validator->validate($this->makeRequest('test@.com', 'apiKey123'));
+        $this->validator->validate($reqInvEmail);
     }
 
-    /** @test */
+    public static function invalidEmailsProvider(): array
+    {
+        return [
+            'missing domain part' => ['notAnEmail@.com'],
+            'missing @' => ['notemail.com'],
+            'multiple @ symbols' => ['not@an@email.com'],
+            'invalid TLD' => ['email@domain.'],
+            'missing domain' => ['email@'],
+            'empty spaces only' => ['  '],
+            'only username' => ['username'],
+            'no TLD' => ['email@server'],
+            'special characters' => ['email!@#$%@domain.com'],
+        ];
+    }
+
+    /**
+     * @test
+     * @group validationExceptions
+     */
     public function missingApiKeyThrowsEmptyApiKeyException()
     {
-        $validator = new TokenValidator();
+        $validEmail = 'test@testing.com';
+        $emptyKey = '';
+        $reqEmptyKey = $this->createTestRequest($validEmail, $emptyKey);
 
         $this->expectException(EmptyApiKeyException::class);
-        $validator->validate($this->makeRequest('test@testing.com', ''));
+        $this->validator->validate($reqEmptyKey);
     }
 
-    /** @test */
-    public function validInputsReturnsSanitizedDataAndApiKey()
+    /**
+     * @test
+     * @group validationExceptions
+     */
+    public function apiKeyParameterCompletelyMissingThrowsEmptyApiKeyException()
     {
-        $validator = new TokenValidator();
+        $validEmail = 'complete@missing.com';
+        $reqNoApiKey = $this->createTestRequest($validEmail, null);
 
-        $result = $validator->validate(
-            $this->makeRequest('  test@testing.com ', 'abc123')
-        );
+        $this->expectException(EmptyApiKeyException::class);
+        $this->validator->validate($reqNoApiKey);
+    }
+
+    /**
+     * @test
+     * @group validationExceptions
+     */
+    public function bothParametersMissingThrowsEmptyEmailException()
+    {
+        $reqNoParams = $this->createTestRequest(null, null);
+
+        $this->expectException(EmptyEmailException::class);
+        $this->validator->validate($reqNoParams);
+    }
+
+    /**
+     * @test
+     * @group extraParameters
+     */
+    public function additionalParametersAreIgnored()
+    {
+        $validEmail = 'additional@params.com';
+        $validKey = 'xyz789';
+
+        $req = $this->createTestRequest($validEmail, $validKey);
+        $req->merge([
+            'extra_param'   => 'should be ignored',
+            'another_param' => 'also ignored'
+        ]);
+
+        $result = $this->validator->validate($req);
 
         $this->assertSame([
-            'email'   => 'test@testing.com',
-            'api_key' => 'abc123',
+            'email'   => $validEmail,
+            'api_key' => $validKey,
+        ], $result);
+    }
+
+    /**
+     * @test
+     * @group validInputs
+     */
+    public function validInputsReturnsSanitizedDataAndApiKey()
+    {
+        $rawEmail = '  test@testing.com ';
+        $sanitizedEmail = 'test@testing.com';
+        $validKey = 'abc123';
+
+        $reqValid = $this->createTestRequest($rawEmail, $validKey);
+
+        $result = $this->validator->validate($reqValid);
+
+        $this->assertSame([
+            'email'   => $sanitizedEmail,
+            'api_key' => $validKey,
         ], $result);
     }
 }

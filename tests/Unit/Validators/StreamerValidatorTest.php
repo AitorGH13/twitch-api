@@ -13,57 +13,114 @@ class StreamerValidatorTest extends BaseUnitTestCase
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function makeRequest(array $query = [], array $attrs = []): Request
+    private function createTestRequest(array $query = [], array $attrs = []): Request
     {
-        $request = Request::create('/streamer', 'GET', $query);
-        foreach ($attrs as $k => $v) {
-            $request->attributes->set($k, $v);
+        $endpoint = '/streamer';
+        $method = 'GET';
+
+        $request = Request::create($endpoint, $method, $query);
+
+        foreach ($attrs as $attributeName => $attributeValue) {
+            $request->attributes->set($attributeName, $attributeValue);
         }
+
         return $request;
     }
 
     /** @test */
     public function missingTokenThrowsUnauthorizedException()
     {
-        $validator = new StreamerValidator();
+        $streamerValidator = new StreamerValidator();
+        $validUserId = '123';
+        $requestWithoutToken = $this->createTestRequest(['id' => $validUserId]);
 
         $this->expectException(UnauthorizedException::class);
-        $validator->validate($this->makeRequest(['id' => '123']));
+        $streamerValidator->validate($requestWithoutToken);
+    }
+
+    /** @test */
+    public function missingIdParameterThrowsEmptyIdException()
+    {
+        $streamerValidator = new StreamerValidator();
+        $validAccessToken = 'validToken456';
+
+        $requestWithoutId = $this->createTestRequest(
+            [], // Sin parámetro ID
+            ['token' => $validAccessToken]
+        );
+
+        $this->expectException(EmptyIdException::class);
+        $streamerValidator->validate($requestWithoutId);
     }
 
     /**
      * @test
      * @dataProvider invalidIdProvider
+     * @group validationExceptions
      */
     public function throwsEmptyIdExceptionForInvalidIds(string $rawId)
     {
-        $validator = new StreamerValidator();
+        $streamerValidator = new StreamerValidator();
+        $mockAccessToken = 'validToken123';
 
-        $request = $this->makeRequest(['id' => $rawId], ['token' => 'tok']);
+        $requestWithInvalidId = $this->createTestRequest(
+            ['id' => $rawId],
+            ['token' => $mockAccessToken]
+        );
 
         $this->expectException(EmptyIdException::class);
-        $validator->validate($request);
+        $streamerValidator->validate($requestWithInvalidId);
     }
 
     public static function invalidIdProvider(): array
     {
         return [
-            'empty string'  => [''],
-            'letters only'  => ['abc'],
-            'mixed chars'   => ['12a'],
+            'empty string'      => [''],
+            'letters only'      => ['abc'],
+            'mixed chars'       => ['12a'],
+            'special chars'     => ['123-456'],
+            'whitespace'        => [' 123 '],
+            'negative number'   => ['-123'],
+            'decimal number'    => ['123.45'],
+            'unicode chars'     => ['123😊'],
+            'sql injection'     => ["123'; DROP TABLE users;--"],
+            'html tags'         => ['<script>alert(123)</script>'],
         ];
+    }
+
+    /** @test */
+    public function longNumericIdsAreAccepted()
+    {
+        $streamerValidator = new StreamerValidator();
+        $longNumericId = '123456789012345';
+        $validAccessToken = 'longIdToken';
+
+        $requestWithLongId = $this->createTestRequest(
+            ['id' => $longNumericId],
+            ['token' => $validAccessToken]
+        );
+
+        [$returnedId, $returnedToken] = $streamerValidator->validate($requestWithLongId);
+
+        $this->assertSame($longNumericId, $returnedId);
+        $this->assertSame($validAccessToken, $returnedToken);
     }
 
     /** @test */
     public function validDataReturnsIdAndToken()
     {
-        $validator = new StreamerValidator();
+        $streamerValidator = new StreamerValidator();
+        $validUserId = '456';
+        $validAccessToken = 'token123';
 
-        $request = $this->makeRequest(['id' => '456'], ['token' => 'token123']);
+        $requestWithValidData = $this->createTestRequest(
+            ['id' => $validUserId],
+            ['token' => $validAccessToken]
+        );
 
-        [$userId, $token] = $validator->validate($request);
+        [$returnedUserId, $returnedToken] = $streamerValidator->validate($requestWithValidData);
 
-        $this->assertSame('456', $userId);
-        $this->assertSame('token123', $token);
+        $this->assertSame($validUserId, $returnedUserId);
+        $this->assertSame($validAccessToken, $returnedToken);
     }
 }

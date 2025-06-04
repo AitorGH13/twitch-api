@@ -37,21 +37,21 @@ class RegisterControllerTest extends BaseIntegrationTestCase
         $this->seeStatusCode(200)
             ->seeJsonStructure(['api_key']);
 
-        $body = json_decode($this->response->getContent(), true);
-        $this->assertEquals(32, strlen($body['api_key']));
+        $responseData = json_decode($this->response->getContent(), true);
+        $this->assertEquals(32, strlen($responseData['api_key']));
     }
 
     /** @test */
     public function registeringSameEmailReturnsDifferentApiKey()
     {
-        $email = 'user@example.com';
+        $testEmail = 'user@example.com';
 
-        $this->post('/register', ['email' => $email]);
-        $firstApiKey = json_decode($this->response->getContent(), true)['api_key'];
+        $this->post('/register', ['email' => $testEmail]);
+        $initialApiKey = json_decode($this->response->getContent(), true)['api_key'];
 
-        $this->post('/register', ['email' => $email]);
-        $secondApiKey = json_decode($this->response->getContent(), true)['api_key'];
+        $this->post('/register', ['email' => $testEmail]);
+        $regeneratedApiKey = json_decode($this->response->getContent(), true)['api_key'];
 
-        $this->assertNotEquals($firstApiKey, $secondApiKey);
+        $this->assertNotEquals($initialApiKey, $regeneratedApiKey);
     }
 }

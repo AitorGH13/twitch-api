@@ -21,10 +21,10 @@ class StreamerControllerTest extends BaseIntegrationTestCase
             ->registerUser('streamer@test.com')
             ->getData(true)['api_key'];
 
-        $token = app(AuthService::class)
+        $accessToken = app(AuthService::class)
             ->createAccessToken('streamer@test.com', $apiKey);
 
-        $this->authHeaders = ['Authorization' => "Bearer $token"];
+        $this->authHeaders = ['Authorization' => "Bearer $accessToken"];
     }
 
     protected function getProtectedUrl(): string

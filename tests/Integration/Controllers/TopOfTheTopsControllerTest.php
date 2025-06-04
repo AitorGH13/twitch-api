@@ -21,10 +21,10 @@ class TopOfTheTopsControllerTest extends BaseIntegrationTestCase
             ->registerUser('tops@example.com')
             ->getData(true)['api_key'];
 
-        $token = app(AuthService::class)
+        $accessToken = app(AuthService::class)
             ->createAccessToken('tops@example.com', $apiKey);
 
-        $this->authHeaders = ['Authorization' => "Bearer $token"];
+        $this->authHeaders = ['Authorization' => "Bearer $accessToken"];
     }
 
     protected function getProtectedUrl(): string

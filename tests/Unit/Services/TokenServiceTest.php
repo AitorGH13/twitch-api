@@ -14,55 +14,63 @@ class TokenServiceTest extends BaseUnitTestCase
     /** @test */
     public function invalidCredentialsThrowsInvalidApiKeyException()
     {
-        $manager = $this->mock(TokenManager::class);
+        $mockTokenManager = $this->mock(TokenManager::class);
+        $testEmail = 'test@testing.com';
+        $invalidApiKey = 'badApiKey';
 
-        $manager->shouldReceive('checkUser')
-            ->once()->with('test@testing.com', 'badApiKey')
+        $mockTokenManager->shouldReceive('checkUser')
+            ->once()->with($testEmail, $invalidApiKey)
             ->andReturnNull();
 
-        $manager->shouldNotReceive('provideToken');
+        $mockTokenManager->shouldNotReceive('provideToken');
 
-        $service = new TokenService($manager);
+        $tokenService = new TokenService($mockTokenManager);
 
         $this->expectException(InvalidApiKeyException::class);
-        $service->createToken('test@testing.com', 'badApiKey');
+        $tokenService->createToken($testEmail, $invalidApiKey);
     }
 
     /** @test */
     public function validCredentialsReturnsJsonWithToken()
     {
-        $manager = $this->mock(TokenManager::class);
+        $mockTokenManager = $this->mock(TokenManager::class);
+        $testEmail = 'test@testing.com';
+        $validApiKey = 'goodApiKey';
+        $testUserId = 7;
+        $expectedTokenValue = 'token123';
 
-        $manager->shouldReceive('checkUser')
-            ->once()->with('test@testing.com', 'goodApiKey')
-            ->andReturn(7);
+        $mockTokenManager->shouldReceive('checkUser')
+            ->once()->with($testEmail, $validApiKey)
+            ->andReturn($testUserId);
 
-        $tokenObj = new Token(
-            'token123',
-            7,
+        $tokenObject = new Token(
+            $expectedTokenValue,
+            $testUserId,
             new DateTimeImmutable('+1 hour')
         );
 
-        $manager->shouldReceive('provideToken')
-            ->once()->with(7)
-            ->andReturn($tokenObj);
+        $mockTokenManager->shouldReceive('provideToken')
+            ->once()->with($testUserId)
+            ->andReturn($tokenObject);
 
-        $service  = new TokenService($manager);
-        $response = $service->createToken('test@testing.com', 'goodApiKey');
+        $tokenService = new TokenService($mockTokenManager);
+        $response = $tokenService->createToken($testEmail, $validApiKey);
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame(['token' => 'token123'], $response->getData(true));
+        $this->assertSame(['token' => $expectedTokenValue], $response->getData(true));
     }
 
     /** @test */
     public function validateAccessTokenIsASimpleProxy()
     {
-        $manager = $this->mock(TokenManager::class);
-        $manager->shouldReceive('tokenIsActive')
-            ->once()->with('validToken')->andReturnTrue();
+        $mockTokenManager = $this->mock(TokenManager::class);
+        $testAccessToken = 'validToken';
 
-        $service = new TokenService($manager);
+        $mockTokenManager->shouldReceive('tokenIsActive')
+            ->once()->with($testAccessToken)->andReturnTrue();
 
-        $this->assertTrue($service->validateAccessToken('validToken'));
+        $tokenService = new TokenService($mockTokenManager);
+
+        $this->assertTrue($tokenService->validateAccessToken($testAccessToken));
     }
 }

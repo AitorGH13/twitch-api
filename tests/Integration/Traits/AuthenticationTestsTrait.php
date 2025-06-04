@@ -54,15 +54,15 @@ trait AuthenticationTestsTrait
     /** @test */
     public function expiredAuthorizationTokenReturns401(): void
     {
-        $token = $this->createValidToken();
+        $expiredToken = $this->createValidToken();
 
         DB::table('sessions')
-            ->where('token', $token)
+            ->where('token', $expiredToken)
             ->update(['expires_at' => Carbon::now()->subHour()->toDateTimeString()]);
 
         $this->get(
             $this->getProtectedUrl(),
-            ['Authorization' => "Bearer $token"]
+            ['Authorization' => "Bearer $expiredToken"]
         );
 
         $this->seeStatusCode(401)

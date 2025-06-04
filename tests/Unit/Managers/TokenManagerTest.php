@@ -18,27 +18,32 @@ class TokenManagerTest extends BaseUnitTestCase
      */
     public function provideTokenGeneratesNewTokenWith32Characters()
     {
-        $userId = 1;
+        $testUserId = 1;
+        $expectedTokenLength = 32;
 
-        $userRepo = $this->mock(UserRepositoryInterface::class);
+        $mockUserRepository = $this->mock(UserRepositoryInterface::class);
+        $mockTokenRepository = $this->mock(TokenRepositoryInterface::class);
 
-        $tokenRepo = $this->mock(TokenRepositoryInterface::class);
-        $tokenRepo->shouldReceive('findActiveByUserId')
+        $mockTokenRepository->shouldReceive('findActiveByUserId')
             ->once()
-            ->with($userId)
+            ->with($testUserId)
             ->andReturn(null);
 
-        $tokenRepo->shouldReceive('save')
+        $mockTokenRepository->shouldReceive('save')
             ->once()
             ->with(Mockery::type(Token::class));
 
-        $generator = new TokenGenerator();
-        $manager   = new TokenManager($userRepo, $tokenRepo, $generator);
+        $realTokenGenerator = new TokenGenerator();
+        $tokenManager = new TokenManager(
+            $mockUserRepository,
+            $mockTokenRepository,
+            $realTokenGenerator
+        );
 
-        $token = $manager->provideToken($userId);
+        $generatedToken = $tokenManager->provideToken($testUserId);
 
-        $this->assertInstanceOf(Token::class, $token);
-        $this->assertEquals(32, strlen($token->value));
-        $this->assertFalse($token->isExpired());
+        $this->assertInstanceOf(Token::class, $generatedToken);
+        $this->assertEquals($expectedTokenLength, strlen($generatedToken->value));
+        $this->assertFalse($generatedToken->isExpired());
     }
 }

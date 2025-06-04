@@ -93,8 +93,8 @@ class TokenControllerTest extends BaseIntegrationTestCase
         $this->seeStatusCode(200)
             ->seeJsonStructure(['token']);
 
-        $token = json_decode($this->response->getContent(), true)['token'];
-        $this->assertEquals(32, strlen($token));
+        $returnedToken = json_decode($this->response->getContent(), true)['token'];
+        $this->assertEquals(32, strlen($returnedToken));
     }
 
     /** @test */
@@ -105,19 +105,19 @@ class TokenControllerTest extends BaseIntegrationTestCase
             'api_key' => $this->validKey,
         ]);
         $this->seeStatusCode(200);
-        $firstBody = json_decode($this->response->getContent(), true);
-        $this->assertArrayHasKey('token', $firstBody);
-        $firstToken = $firstBody['token'];
+        $firstResponseData = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('token', $firstResponseData);
+        $firstGeneratedToken = $firstResponseData['token'];
 
         $this->post('/token', [
             'email' => $this->validEmail,
             'api_key' => $this->validKey,
         ]);
         $this->seeStatusCode(200);
-        $secondBody = json_decode($this->response->getContent(), true);
-        $this->assertArrayHasKey('token', $secondBody);
-        $secondToken = $secondBody['token'];
+        $secondResponseData = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('token', $secondResponseData);
+        $secondGeneratedToken = $secondResponseData['token'];
 
-        $this->assertEquals($firstToken, $secondToken);
+        $this->assertEquals($firstGeneratedToken, $secondGeneratedToken);
     }
 }

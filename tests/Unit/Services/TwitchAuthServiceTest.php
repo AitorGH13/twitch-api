@@ -14,31 +14,47 @@ class TwitchAuthServiceTest extends BaseUnitTestCase
     /** @test */
     public function whenHttpClientFailsThrowsException()
     {
-        $cache = $this->mock(CacheRepository::class);
-        $http  = $this->mock(HttpClient::class);
-        $resp  = $this->mock(Response::class);
+        $mockCacheRepository = $this->mock(CacheRepository::class);
+        $mockHttpClient = $this->mock(HttpClient::class);
+        $mockHttpResponse = $this->mock(Response::class);
 
-        $resp->shouldReceive('ok')->andReturnFalse();
+        $mockHttpResponse->shouldReceive('ok')->andReturnFalse();
 
-        $cache->shouldReceive('remember')
+        $expectedCacheKey = 'twitch_app_token';
+        $defaultTokenTtl = 3600;
+        $bufferTime = 60;
+
+        $mockCacheRepository->shouldReceive('remember')
             ->once()
-            ->withArgs(function ($key, $ttl, $callback) use ($resp) {
-                $this->assertSame('twitch_app_token', $key);
+            ->withArgs(
+                function (
+                    $cacheKey,
+                    $cacheExpirationTime,
+                    $tokenGenerationCallback
+                ) use (
+                    $mockHttpResponse,
+                    $expectedCacheKey,
+                    $defaultTokenTtl,
+                    $bufferTime
+                ) {
+                    $this->assertSame($expectedCacheKey, $cacheKey);
 
-                $expectedTtl = (int) env('TWITCH_TOKEN_TTL', 3600) - 60;
-                $this->assertSame($expectedTtl, $ttl);
+                    $expectedCacheExpirationTime = (int) env('TWITCH_TOKEN_TTL', $defaultTokenTtl)
+                        - $bufferTime;
+                    $this->assertSame($expectedCacheExpirationTime, $cacheExpirationTime);
 
-                $this->assertIsCallable($callback);
+                    $this->assertIsCallable($tokenGenerationCallback);
 
-                return $callback();
-            });
+                    return $tokenGenerationCallback();
+                }
+            );
 
-        $http->shouldReceive('asForm')->andReturnSelf();
-        $http->shouldReceive('post')->andReturn($resp);
+        $mockHttpClient->shouldReceive('asForm')->andReturnSelf();
+        $mockHttpClient->shouldReceive('post')->andReturn($mockHttpResponse);
 
-        $service = new TwitchAuthService($cache, $http);
+        $twitchAuthService = new TwitchAuthService($mockCacheRepository, $mockHttpClient);
 
         $this->expectException(RuntimeException::class);
-        $service->getAppAccessToken();
+        $twitchAuthService->getAppAccessToken();
     }
 }

@@ -13,41 +13,58 @@ class StreamsServiceTest extends BaseUnitTestCase
     /** @test */
     public function invalidTokenThrowsUnauthorizedException()
     {
-        $auth = $this->mock(AuthService::class);
-        $auth->shouldReceive('validateAccessToken')
-            ->once()->with('badToken')->andReturnFalse();
+        $mockAuthService = $this->mock(AuthService::class);
+        $mockTwitchClient = $this->mock(TwitchClientInterface::class);
 
-        $client = $this->mock(TwitchClientInterface::class);
-        $client->shouldNotReceive('getLiveStreams');
+        $invalidAccessToken = 'badToken';
+        $requestedStreamLimit = 10;
 
-        $service = new StreamsService($auth, $client);
+        $mockAuthService->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($invalidAccessToken)
+            ->andReturnFalse();
+
+        $mockTwitchClient->shouldNotReceive('getLiveStreams');
+
+        $streamsService = new StreamsService($mockAuthService, $mockTwitchClient);
 
         $this->expectException(UnauthorizedException::class);
-        $service->getLiveStreams('badToken', 10);
+        $streamsService->getLiveStreams($invalidAccessToken, $requestedStreamLimit);
     }
 
     /** @test */
     public function validTokenReturnsMappedStreams()
     {
-        $auth = $this->mock(AuthService::class);
-        $auth->shouldReceive('validateAccessToken')
-            ->once()->with('goodToken')->andReturnTrue();
+        $mockAuthService = $this->mock(AuthService::class);
+        $mockTwitchClient = $this->mock(TwitchClientInterface::class);
 
-        $client = $this->mock(TwitchClientInterface::class);
-        $client->shouldReceive('getLiveStreams')
-            ->once()->with(3)
-            ->andReturn([
-                ['title' => 'Title1', 'user_name' => 'test1', 'viewer_count' => 50],
-                ['title' => 'Title2', 'user_name' => 'test2',   'viewer_count' => 60],
-            ]);
+        $validAccessToken = 'goodToken';
+        $requestedStreamLimit = 3;
 
-        $service = new StreamsService($auth, $client);
+        $mockStreamData = [
+            ['title' => 'Title1', 'user_name' => 'test1', 'viewer_count' => 50],
+            ['title' => 'Title2', 'user_name' => 'test2', 'viewer_count' => 60],
+        ];
 
-        $result = $service->getLiveStreams('goodToken', 3);
-
-        $this->assertSame([
+        $mappedStreams = [
             ['title' => 'Title1', 'user_name' => 'test1'],
             ['title' => 'Title2', 'user_name' => 'test2'],
-        ], $result);
+        ];
+
+        $mockAuthService->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($validAccessToken)
+            ->andReturnTrue();
+
+        $mockTwitchClient->shouldReceive('getLiveStreams')
+            ->once()
+            ->with($requestedStreamLimit)
+            ->andReturn($mockStreamData);
+
+        $streamsService = new StreamsService($mockAuthService, $mockTwitchClient);
+
+        $returnedStreams = $streamsService->getLiveStreams($validAccessToken, $requestedStreamLimit);
+
+        $this->assertSame($mappedStreams, $returnedStreams);
     }
 }

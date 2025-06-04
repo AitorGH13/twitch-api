@@ -15,97 +15,158 @@ class StreamerServiceTest extends BaseUnitTestCase
     /** @test */
     public function invalidTokenThrowsUnauthorized()
     {
-        $repo        = $this->mock(StreamerRepositoryInterface::class);
-        $auth        = $this->mock(AuthService::class);
-        $twitch      = $this->mock(TwitchClientInterface::class);
+        $repoMock = $this->mock(StreamerRepositoryInterface::class);
+        $authMock = $this->mock(AuthService::class);
+        $clientMock = $this->mock(TwitchClientInterface::class);
 
-        $auth->shouldReceive('validateAccessToken')
-            ->once()->with('badToken')->andReturnFalse();
-        $repo->shouldNotReceive('findById');
+        $testUserId = 123;
+        $badToken = 'badToken';
+        $params = [$testUserId, $badToken];
 
-        $service = new StreamerService($repo, $auth, $twitch);
+        $authMock->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($badToken)
+            ->andReturnFalse();
+
+        $repoMock->shouldNotReceive('findById');
+
+        $service = new StreamerService(
+            $repoMock,
+            $authMock,
+            $clientMock
+        );
 
         $this->expectException(UnauthorizedException::class);
-        $service->getUserProfile([123, 'badToken']);
+        $service->getUserProfile($params);
     }
 
     /** @test */
     public function withoutCallingApiReturnsCachedProfile()
     {
-        $userId   = 42;
-        $cached   = ['id' => $userId, 'user_name' => 'test'];
+        $userId = 42;
+        $goodToken = 'goodToken';
+        $cachedProfile = [
+            'id'        => $userId,
+            'user_name' => 'test'
+        ];
 
-        $repo   = $this->mock(StreamerRepositoryInterface::class);
-        $auth   = $this->mock(AuthService::class);
-        $twitch = $this->mock(TwitchClientInterface::class);
+        $params = [$userId, $goodToken];
 
-        $auth->shouldReceive('validateAccessToken')
-            ->once()->with('goodToken')->andReturnTrue();
-        $repo->shouldReceive('findById')
-            ->once()->with($userId)->andReturn($cached);
-        $twitch->shouldNotReceive('getUserById');
-        $repo->shouldNotReceive('insert');
+        $repoMock = $this->mock(StreamerRepositoryInterface::class);
+        $authMock = $this->mock(AuthService::class);
+        $clientMock = $this->mock(TwitchClientInterface::class);
 
-        $service = new StreamerService($repo, $auth, $twitch);
+        $authMock->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($goodToken)
+            ->andReturnTrue();
 
-        $this->assertSame($cached, $service->getUserProfile([$userId, 'goodToken']));
+        $repoMock->shouldReceive('findById')
+            ->once()
+            ->with($userId)
+            ->andReturn($cachedProfile);
+
+        $clientMock->shouldNotReceive('getUserById');
+        $repoMock->shouldNotReceive('insert');
+
+        $service = new StreamerService(
+            $repoMock,
+            $authMock,
+            $clientMock
+        );
+
+        $result = $service->getUserProfile($params);
+
+        $this->assertSame($cachedProfile, $result);
     }
 
     /** @test */
     public function whenApiReturnsEmptyThrowsUserNotFoundException()
     {
         $userId = 999;
+        $goodToken = 'goodToken';
+        $params = [$userId, $goodToken];
 
-        $repo   = $this->mock(StreamerRepositoryInterface::class);
-        $auth   = $this->mock(AuthService::class);
-        $twitch = $this->mock(TwitchClientInterface::class);
+        $repoMock = $this->mock(StreamerRepositoryInterface::class);
+        $authMock = $this->mock(AuthService::class);
+        $clientMock = $this->mock(TwitchClientInterface::class);
 
-        $auth->shouldReceive('validateAccessToken')
-            ->once()->with('goodToken')->andReturnTrue();
-        $repo->shouldReceive('findById')
-            ->once()->with($userId)->andReturnNull();
-        $twitch->shouldReceive('getUserById')
-            ->once()->with($userId)->andReturn([]);
-        $repo->shouldNotReceive('insert');
+        $authMock->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($goodToken)
+            ->andReturnTrue();
 
-        $service = new StreamerService($repo, $auth, $twitch);
+        $repoMock->shouldReceive('findById')
+            ->once()
+            ->with($userId)
+            ->andReturnNull();
+
+        $clientMock->shouldReceive('getUserById')
+            ->once()
+            ->with($userId)
+            ->andReturn([]);
+
+        $repoMock->shouldNotReceive('insert');
+
+        $service = new StreamerService(
+            $repoMock,
+            $authMock,
+            $clientMock
+        );
 
         $this->expectException(UserNotFoundException::class);
-        $service->getUserProfile([$userId, 'goodToken']);
+        $service->getUserProfile($params);
     }
 
     /** @test */
     public function notCachedFetchesFormatsAndCachesProfile()
     {
         $userId = 100;
-        $apiUser = [
-            'id'              => (string) $userId,
-            'user_name'       => 'test',
-            'display_name'    => 'Test',
-            'created_at'      => '2024-01-15T12:34:56Z',
+        $goodToken = 'goodToken';
+        $params = [$userId, $goodToken];
+
+        $apiResponse = [
+            'id'                => (string) $userId,
+            'user_name'         => 'test',
+            'display_name'      => 'Test',
+            'created_at'        => '2024-01-15T12:34:56Z',
             'profile_image_url' => 'img',
         ];
 
-        $expected = $apiUser;
-        $expected['created_at'] = '2024-01-15 12:34:56';
+        $formattedProfile = $apiResponse;
+        $formattedProfile['created_at'] = '2024-01-15 12:34:56';
 
-        $repo   = $this->mock(StreamerRepositoryInterface::class);
-        $auth   = $this->mock(AuthService::class);
-        $twitch = $this->mock(TwitchClientInterface::class);
+        $repoMock = $this->mock(StreamerRepositoryInterface::class);
+        $authMock = $this->mock(AuthService::class);
+        $clientMock = $this->mock(TwitchClientInterface::class);
 
-        $auth->shouldReceive('validateAccessToken')
-            ->once()->with('goodToken')->andReturnTrue();
-        $repo->shouldReceive('findById')
-            ->once()->with($userId)->andReturnNull();
-        $twitch->shouldReceive('getUserById')
-            ->once()->with($userId)->andReturn([$apiUser]);
-        $repo->shouldReceive('insert')
-            ->once()->with($expected);
+        $authMock->shouldReceive('validateAccessToken')
+            ->once()
+            ->with($goodToken)
+            ->andReturnTrue();
 
-        $service = new StreamerService($repo, $auth, $twitch);
+        $repoMock->shouldReceive('findById')
+            ->once()
+            ->with($userId)
+            ->andReturnNull();
 
-        $profile = $service->getUserProfile([$userId, 'goodToken']);
+        $clientMock->shouldReceive('getUserById')
+            ->once()
+            ->with($userId)
+            ->andReturn([$apiResponse]);
 
-        $this->assertSame($expected, $profile);
+        $repoMock->shouldReceive('insert')
+            ->once()
+            ->with($formattedProfile);
+
+        $service = new StreamerService(
+            $repoMock,
+            $authMock,
+            $clientMock
+        );
+
+        $retrieved = $service->getUserProfile($params);
+
+        $this->assertSame($formattedProfile, $retrieved);
     }
 }

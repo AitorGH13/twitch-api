@@ -11,16 +11,16 @@ use Exception;
 
 class StreamerService
 {
-    private StreamerRepositoryInterface $repo;
+    private StreamerRepositoryInterface $streamerRepository;
     private AuthService $authService;
     private TwitchClientInterface $twitchClient;
 
     public function __construct(
-        StreamerRepositoryInterface $repo,
+        StreamerRepositoryInterface $streamerRepository,
         AuthService $authService,
         TwitchClientInterface $twitchClient
     ) {
-        $this->repo = $repo;
+        $this->streamerRepository = $streamerRepository;
         $this->authService = $authService;
         $this->twitchClient = $twitchClient;
     }
@@ -44,7 +44,7 @@ class StreamerService
             throw new UnauthorizedException();
         }
 
-        $cachedProfile = $this->repo->findById($userId);
+        $cachedProfile = $this->streamerRepository->findById($userId);
         if ($cachedProfile) {
             return $cachedProfile;
         }
@@ -58,7 +58,7 @@ class StreamerService
         $profile['created_at'] = (new DateTime($profile['created_at']))
             ->format('Y-m-d H:i:s');
 
-        $this->repo->insert($profile);
+        $this->streamerRepository->insert($profile);
 
         return $profile;
     }
