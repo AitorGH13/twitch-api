@@ -16,7 +16,7 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
     /** @test */
     public function invalidTokenThrowsUnauthorizedException()
     {
-        $repoMock = $this->mock(TopOfTheTopsRepositoryInterface::class);
+        $repositoryMock = $this->mock(TopOfTheTopsRepositoryInterface::class);
         $authMock = $this->mock(AuthService::class);
         $clientMock = $this->mock(TwitchClientInterface::class);
 
@@ -27,10 +27,10 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
             ->with($invalidAccessToken)
             ->andReturnFalse();
 
-        $repoMock->shouldNotReceive('getCacheMeta');
+        $repositoryMock->shouldNotReceive('getCacheMeta');
 
         $topOfTheTopsService = new TopOfTheTopsService(
-            $repoMock,
+            $repositoryMock,
             $authMock,
             $clientMock
         );
@@ -42,7 +42,7 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
     /** @test */
     public function whenClientReturnsEmptyGamesThrowsNoGamesFoundException()
     {
-        $repoMock = $this->mock(TopOfTheTopsRepositoryInterface::class);
+        $repositoryMock = $this->mock(TopOfTheTopsRepositoryInterface::class);
         $authMock = $this->mock(AuthService::class);
         $clientMock = $this->mock(TwitchClientInterface::class);
 
@@ -55,11 +55,11 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
             ->with($validAccessToken)
             ->andReturnTrue();
 
-        $repoMock->shouldReceive('getCacheMeta')
+        $repositoryMock->shouldReceive('getCacheMeta')
             ->once()
             ->andReturnNull();
 
-        $repoMock->shouldReceive('clearCache')
+        $repositoryMock->shouldReceive('clearCache')
             ->once();
 
         $clientMock->shouldReceive('getTopGames')
@@ -68,7 +68,7 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
             ->andReturn([]);
 
         $topOfTheTopsService = new TopOfTheTopsService(
-            $repoMock,
+            $repositoryMock,
             $authMock,
             $clientMock
         );
@@ -80,7 +80,7 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
     /** @test */
     public function whenFirstGameHasNoVideosThrowsNoVideosFoundException()
     {
-        $repoMock = $this->mock(TopOfTheTopsRepositoryInterface::class);
+        $repositoryMock = $this->mock(TopOfTheTopsRepositoryInterface::class);
         $authMock = $this->mock(AuthService::class);
         $clientMock = $this->mock(TwitchClientInterface::class);
 
@@ -100,11 +100,11 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
             ->with($validAccessToken)
             ->andReturnTrue();
 
-        $repoMock->shouldReceive('getCacheMeta')
+        $repositoryMock->shouldReceive('getCacheMeta')
             ->once()
             ->andReturnNull();
 
-        $repoMock->shouldReceive('clearCache')
+        $repositoryMock->shouldReceive('clearCache')
             ->once();
 
         $clientMock->shouldReceive('getTopGames')
@@ -118,7 +118,7 @@ class TopOfTheTopsServiceTest extends BaseUnitTestCase
             ->andReturn([]);
 
         $topOfTheTopsService = new TopOfTheTopsService(
-            $repoMock,
+            $repositoryMock,
             $authMock,
             $clientMock
         );

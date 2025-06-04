@@ -15,7 +15,7 @@ class StreamerServiceTest extends BaseUnitTestCase
     /** @test */
     public function invalidTokenThrowsUnauthorized()
     {
-        $repoMock = $this->mock(StreamerRepositoryInterface::class);
+        $repositoryMock = $this->mock(StreamerRepositoryInterface::class);
         $authMock = $this->mock(AuthService::class);
         $clientMock = $this->mock(TwitchClientInterface::class);
 
@@ -28,10 +28,10 @@ class StreamerServiceTest extends BaseUnitTestCase
             ->with($badToken)
             ->andReturnFalse();
 
-        $repoMock->shouldNotReceive('findById');
+        $repositoryMock->shouldNotReceive('findById');
 
         $service = new StreamerService(
-            $repoMock,
+            $repositoryMock,
             $authMock,
             $clientMock
         );
@@ -52,7 +52,7 @@ class StreamerServiceTest extends BaseUnitTestCase
 
         $params = [$userId, $goodToken];
 
-        $repoMock = $this->mock(StreamerRepositoryInterface::class);
+        $repositoryMock = $this->mock(StreamerRepositoryInterface::class);
         $authMock = $this->mock(AuthService::class);
         $clientMock = $this->mock(TwitchClientInterface::class);
 
@@ -61,16 +61,16 @@ class StreamerServiceTest extends BaseUnitTestCase
             ->with($goodToken)
             ->andReturnTrue();
 
-        $repoMock->shouldReceive('findById')
+        $repositoryMock->shouldReceive('findById')
             ->once()
             ->with($userId)
             ->andReturn($cachedProfile);
 
         $clientMock->shouldNotReceive('getUserById');
-        $repoMock->shouldNotReceive('insert');
+        $repositoryMock->shouldNotReceive('insert');
 
         $service = new StreamerService(
-            $repoMock,
+            $repositoryMock,
             $authMock,
             $clientMock
         );
@@ -87,7 +87,7 @@ class StreamerServiceTest extends BaseUnitTestCase
         $goodToken = 'goodToken';
         $params = [$userId, $goodToken];
 
-        $repoMock = $this->mock(StreamerRepositoryInterface::class);
+        $repositoryMock = $this->mock(StreamerRepositoryInterface::class);
         $authMock = $this->mock(AuthService::class);
         $clientMock = $this->mock(TwitchClientInterface::class);
 
@@ -96,7 +96,7 @@ class StreamerServiceTest extends BaseUnitTestCase
             ->with($goodToken)
             ->andReturnTrue();
 
-        $repoMock->shouldReceive('findById')
+        $repositoryMock->shouldReceive('findById')
             ->once()
             ->with($userId)
             ->andReturnNull();
@@ -106,10 +106,10 @@ class StreamerServiceTest extends BaseUnitTestCase
             ->with($userId)
             ->andReturn([]);
 
-        $repoMock->shouldNotReceive('insert');
+        $repositoryMock->shouldNotReceive('insert');
 
         $service = new StreamerService(
-            $repoMock,
+            $repositoryMock,
             $authMock,
             $clientMock
         );
@@ -136,7 +136,7 @@ class StreamerServiceTest extends BaseUnitTestCase
         $formattedProfile = $apiResponse;
         $formattedProfile['created_at'] = '2024-01-15 12:34:56';
 
-        $repoMock = $this->mock(StreamerRepositoryInterface::class);
+        $repositoryMock = $this->mock(StreamerRepositoryInterface::class);
         $authMock = $this->mock(AuthService::class);
         $clientMock = $this->mock(TwitchClientInterface::class);
 
@@ -145,7 +145,7 @@ class StreamerServiceTest extends BaseUnitTestCase
             ->with($goodToken)
             ->andReturnTrue();
 
-        $repoMock->shouldReceive('findById')
+        $repositoryMock->shouldReceive('findById')
             ->once()
             ->with($userId)
             ->andReturnNull();
@@ -155,12 +155,12 @@ class StreamerServiceTest extends BaseUnitTestCase
             ->with($userId)
             ->andReturn([$apiResponse]);
 
-        $repoMock->shouldReceive('insert')
+        $repositoryMock->shouldReceive('insert')
             ->once()
             ->with($formattedProfile);
 
         $service = new StreamerService(
-            $repoMock,
+            $repositoryMock,
             $authMock,
             $clientMock
         );
