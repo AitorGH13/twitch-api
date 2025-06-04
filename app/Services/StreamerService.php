@@ -4,23 +4,23 @@ namespace App\Services;
 
 use App\Exceptions\UnauthorizedException;
 use App\Exceptions\UserNotFoundException;
-use App\Manager\TwitchManager;
-use App\Repository\StreamerRepository;
+use App\Interfaces\TwitchClientInterface;
+use App\Interfaces\StreamerRepositoryInterface;
 use DateTime;
 use Exception;
 
 class StreamerService
 {
-    private StreamerRepository $repo;
+    private StreamerRepositoryInterface $streamerRepository;
     private AuthService $authService;
-    private TwitchManager $twitchClient;
+    private TwitchClientInterface $twitchClient;
 
     public function __construct(
-        StreamerRepository $repo,
+        StreamerRepositoryInterface $streamerRepository,
         AuthService $authService,
-        TwitchManager $twitchClient
+        TwitchClientInterface $twitchClient
     ) {
-        $this->repo = $repo;
+        $this->streamerRepository = $streamerRepository;
         $this->authService = $authService;
         $this->twitchClient = $twitchClient;
     }
@@ -44,7 +44,7 @@ class StreamerService
             throw new UnauthorizedException();
         }
 
-        $cachedProfile = $this->repo->findById($userId);
+        $cachedProfile = $this->streamerRepository->findById($userId);
         if ($cachedProfile) {
             return $cachedProfile;
         }
@@ -58,7 +58,7 @@ class StreamerService
         $profile['created_at'] = (new DateTime($profile['created_at']))
             ->format('Y-m-d H:i:s');
 
-        $this->repo->insert($profile);
+        $this->streamerRepository->insert($profile);
 
         return $profile;
     }

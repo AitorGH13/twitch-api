@@ -37,9 +37,17 @@ make stop
 ```bash
 make clean
 ```
-- Para **ejecutar los tests** con PHPUnit, ejecuta el siguiente comando:
+- Para **ejecutar los tests unitarios** con PHPUnit, ejecuta el siguiente comando:
 ```bash
-make test
+make unit
+```
+- Para **ejecutar los tests de integración** con PHPUnit, ejecuta el siguiente comando:
+```bash
+make integration
+```
+- Para **ejecutar todos los tests** con PHPUnit, ejecuta el siguiente comando:
+```bash
+make tests
 ```
 - Para **abrir una terminal** dentro del contenedor app, ejecuta el siguiente comando:
 ```bash

@@ -6,7 +6,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Middleware\AuthMiddleware;
-use App\Validators\EnrichedStreamsRequestValidator;
+use App\Validators\EnrichedStreamsValidator;
 use App\Services\EnrichedStreamsService;
 use App\Exceptions\InvalidLimitException;
 use App\Exceptions\UnauthorizedException;
@@ -14,7 +14,7 @@ use App\Exceptions\UnauthorizedException;
 class EnrichedStreamsController extends BaseController
 {
     public function __construct(
-        private readonly EnrichedStreamsRequestValidator $validator,
+        private readonly EnrichedStreamsValidator $validator,
         private readonly EnrichedStreamsService $service
     ) {
         $this->middleware(AuthMiddleware::class);

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Validators\TokenRequestValidator;
+use App\Validators\TokenValidator;
 use App\Services\TokenService;
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
@@ -16,7 +16,7 @@ use Random\RandomException;
 class TokenController extends BaseController
 {
     public function __construct(
-        private readonly TokenRequestValidator $validator,
+        private readonly TokenValidator $validator,
         private readonly TokenService $service
     ) {
     }

@@ -2,10 +2,11 @@
 
 namespace App\Repository;
 
+use App\Interfaces\TopOfTheTopsRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use stdClass;
 
-class TopOfTheTopsRepository
+final class TopOfTheTopsRepository implements TopOfTheTopsRepositoryInterface
 {
     public function getCacheMeta(): ?stdClass
     {
