@@ -7,7 +7,7 @@
 # Instalación
 1. Clona y accede al repositorio:
 ```bash
-git clone https://github.com/AitorGH13/twitchapi.git ; cd twitchapi
+git clone https://github.com/AitorGH13/twitch-api.git ; cd twitch-api
 ```
 2. Instala las dependencias mediante composer:
 ```bash
