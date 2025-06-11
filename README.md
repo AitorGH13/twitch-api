@@ -93,5 +93,3 @@ curl -X GET "http://localhost:8000/analytics/streams" \
 curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=3" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
-> [!NOTE]
-> Puedes probar la API desplegada en un servidor remoto reemplazando `localhost:8000` por `twitchapi.duckdns.org`.
