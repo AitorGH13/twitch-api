@@ -7,7 +7,7 @@
 # Instalación
 1. Clona y accede al repositorio:
 ```bash
-git clone https://github.com/AitorGH13/twitchapi.git ; cd twitchapi
+git clone https://github.com/AitorGH13/twitch-api.git ; cd twitch-api
 ```
 2. Instala las dependencias mediante composer:
 ```bash
@@ -93,5 +93,3 @@ curl -X GET "http://localhost:8000/analytics/streams" \
 curl -X GET "http://localhost:8000/analytics/streams/enriched?limit=3" \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 ```
-> [!NOTE]
-> Puedes probar la API desplegada en un servidor remoto reemplazando `localhost:8000` por `twitchapi.duckdns.org`.
